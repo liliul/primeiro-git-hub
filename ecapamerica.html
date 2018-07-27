@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Capitão America Escudo</title>
+	<style type="text/css">
+		body{margin: 0;padding: 0;}
+		.circulo{margin: auto;border-radius: 50%;display: flex;align-items: center;justify-content: center;border: 2px solid #3c404f;background: linear-gradient(to right, var(--color1), var(--color2), var(--color1));}
+		/*id dos circulos*/
+		#circulo1{margin:auto;width: 256px;height: 256px;--color1:red;--color2:black;}
+		#circulo2{width: 206px;height: 206px;--color1:white;--color2:#dddddd;}
+		#circulo3{width: 156px;height: 156px;--color1:red;--color2:black;}
+		#circulo4{width: 106px;height: 106px;--color1:blue;--color2:#02264d;}
+		#star{border-left: 50px solid transparent;border-right: 50px solid transparent;border-bottom: 35px solid white;transform:rotate(180DEG);  }
+		#star:before{position: absolute;border-left: 50px solid transparent;border-right: 50px solid transparent;border-bottom: 35px solid white;transform:rotate(70DEG);content: "";left: -50px;}
+		#star:after{position: absolute;border-left: 50px solid transparent;border-right: 50px solid transparent;border-bottom: 35px solid white;transform:rotate(-70DEG);content: "";left: -48.8px;top: 0.1px;}
+		.divt{width: 100%;height: 600px;background-color: rebeccapurple; }
+		.p{text-align: center;}
+	</style>
+</head>
+<body>
+	
+<div class="divt">
+	<div class="p">Top ++
+		<div id="circulo1" class="circulo">
+			<div id="circulo2" class="circulo">
+				<div id="circulo3" class="circulo">
+					<div id="circulo4" class="circulo">
+						<div id="star">
+							
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+	var a = prompt("nome");
+	
+</script>
+	
+</body>
+</html>
