@@ -32,26 +32,26 @@ exports.getUserById = (req, res) => {
 };
 
 // Adicionar um novo usuário
-exports.createUser = (req, res) => {
-    const db = getDatabase();
-    const { name, email } = req.body;
-    if (!name || !email) {
-        res.status(400).json({ error: "Nome e email são obrigatórios." });
-        return;
-    }
+// exports.createUser = (req, res) => {
+//     const db = getDatabase();
+//     const { name, email } = req.body;
+//     if (!name || !email) {
+//         res.status(400).json({ error: "Nome e email são obrigatórios." });
+//         return;
+//     }
 
-    db.run("INSERT INTO users (name, email) VALUES (?, ?)", [name, email], function (err) {
-        if (err) {
-            if (err.message.includes('SQLITE_CONSTRAINT_UNIQUE')) {
-                res.status(409).json({ error: "Email já cadastrado." });
-            } else {
-                res.status(500).json({ error: err.message });
-            }
-            return;
-        }
-        res.status(201).json({ message: "Usuário adicionado com sucesso.", id: this.lastID });
-    });
-};
+//     db.run("INSERT INTO users (name, email) VALUES (?, ?)", [name, email], function (err) {
+//         if (err) {
+//             if (err.message.includes('SQLITE_CONSTRAINT_UNIQUE')) {
+//                 res.status(409).json({ error: "Email já cadastrado." });
+//             } else {
+//                 res.status(500).json({ error: err.message });
+//             }
+//             return;
+//         }
+//         res.status(201).json({ message: "Usuário adicionado com sucesso.", id: this.lastID });
+//     });
+// };
 
 // Atualizar um usuário
 exports.updateUser = (req, res) => {

@@ -10,7 +10,7 @@ router.use(authMiddleware); // Todas as rotas abaixo precisarão de um token vá
 // Rotas para /users
 router.get('/', userController.getAllUsers); // GET /users
 router.get('/:id', userController.getUserById); // GET /users/:id
-router.post('/', userController.createUser); // POST /users
+// router.post('/', userController.createUser); // POST /users
 router.put('/:id', userController.updateUser); // PUT /users/:id
 router.delete('/:id', userController.deleteUser); // DELETE /users/:id
 
