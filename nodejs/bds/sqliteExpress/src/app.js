@@ -3,6 +3,9 @@
 const express = require('express');
 const { connectDatabase, closeDatabase } = require('./config/database'); // Importa funções do DB
 const userRoutes = require('./routes/userRoutes'); // Importa as rotas de usuário
+const authRoutes = require('./routes/authRoutes');
+
+require('dotenv').config(); // Certifique-se de que esta linha esteja no topo!
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -14,6 +17,7 @@ app.use(express.json());
 connectDatabase()
     .then(() => {
         // --- Rotas da API ---
+        app.use('/auth', authRoutes); // Rotas de autenticação (ex: /auth/register, /auth/login)
         app.use('/users', userRoutes); // Usa as rotas de usuário sob o prefixo /users
 
         // Rota de teste simples para a raiz
