@@ -1,4 +1,4 @@
-// src/controllers/userController.js
+const bcrypt = require('bcryptjs');
 
 const { getDatabase } = require('../config/database');
 
@@ -58,8 +58,8 @@ exports.updateUser = (req, res) => {
     const db = getDatabase();
     const { id } = req.params;
     const { name, email, password } = req.body;
-    console.log('pass: ',password);
-    
+    console.log('pass: ', password);
+
     if (!name && !email && !password) {
         res.status(400).json({ error: "Pelo menos 'name' ou 'email' deve ser fornecido para atualização." });
         return;
@@ -67,7 +67,7 @@ exports.updateUser = (req, res) => {
 
     let updateFields = [];
     let updateValues = [];
-    
+
     if (name) {
         updateFields.push("name = ?");
         updateValues.push(name);
@@ -78,8 +78,11 @@ exports.updateUser = (req, res) => {
     }
 
     if (password) {
+        // Hash da senha
+        const hashedPassword = bcrypt.hashSync(password, 10); // 10 é o salt rounds
+
         updateFields.push("password = ?");
-        updateValues.push(password);
+        updateValues.push(hashedPassword);
     }
 
     const query = `UPDATE users SET ${updateFields.join(', ')} WHERE id = ?`;
