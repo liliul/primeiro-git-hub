@@ -57,14 +57,17 @@ exports.getUserById = (req, res) => {
 exports.updateUser = (req, res) => {
     const db = getDatabase();
     const { id } = req.params;
-    const { name, email } = req.body;
-    if (!name && !email) {
+    const { name, email, password } = req.body;
+    console.log('pass: ',password);
+    
+    if (!name && !email && !password) {
         res.status(400).json({ error: "Pelo menos 'name' ou 'email' deve ser fornecido para atualização." });
         return;
     }
 
     let updateFields = [];
     let updateValues = [];
+    
     if (name) {
         updateFields.push("name = ?");
         updateValues.push(name);
@@ -74,8 +77,15 @@ exports.updateUser = (req, res) => {
         updateValues.push(email);
     }
 
+    if (password) {
+        updateFields.push("password = ?");
+        updateValues.push(password);
+    }
+
     const query = `UPDATE users SET ${updateFields.join(', ')} WHERE id = ?`;
     updateValues.push(id);
+
+    console.log('fi: ', updateFields, 'up: ', updateValues);
 
     db.run(query, updateValues, function (err) {
         if (err) {
