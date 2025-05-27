@@ -1,6 +1,7 @@
 // src/app.js
 
 const express = require('express');
+const cors = require('cors');
 const { connectDatabase, closeDatabase } = require('./config/database'); // Importa funções do DB
 const userRoutes = require('./routes/userRoutes'); // Importa as rotas de usuário
 const authRoutes = require('./routes/authRoutes');
@@ -12,6 +13,7 @@ const PORT = process.env.PORT || 3000;
 
 // Middleware para parsear JSON no corpo das requisições
 app.use(express.json());
+app.use(cors());
 
 // --- Conexão com o Banco de Dados ---
 connectDatabase()
