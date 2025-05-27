@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Frontend Simples com JWT</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+        }
+
+        input[type="email"],
+        input[type="password"],
+        input[type="text"] {
+            width: calc(100% - 22px);
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        button {
+            padding: 10px 15px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        #response,
+        #usersList {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #eee;
+            background-color: #f9f9f9;
+            white-space: pre-wrap;
+        }
+
+        .token-display {
+            background-color: #e9e9e9;
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 10px;
+            word-wrap: break-word;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Autenticação e Acesso a Rotas Protegidas</h1>
+
+        <section id="auth-section">
+            <h2>Registro / Login</h2>
+            <input type="email" id="email" placeholder="Email">
+            <input type="password" id="password" placeholder="Senha">
+            <input type="text" id="name" placeholder="Nome (apenas para registro)">
+            <button onclick="registerUser()">Registrar</button>
+            <button onclick="loginUser()">Login</button>
+            <button onclick="logoutUser()">Logout</button>
+            <div class="token-display" id="currentTokenDisplay"></div>
+        </section>
+
+        <hr>
+
+        <section id="protected-section">
+            <h2>Acesso a Dados Protegidos</h2>
+            <button onclick="getUsers()">Buscar Usuários (Protegido)</button>
+            <button onclick="getProducts()">Buscar Produtos (Protegido)</button>
+            <button onclick="getAdminDashboard()">Acessar Admin Dashboard (Admin)</button>
+            <button onclick="tryCreateProduct()">Criar Produto (Admin)</button>
+        </section>
+
+        <hr>
+
+        <h2>Resposta do Servidor:</h2>
+        <div id="response">Aguardando...</div>
+
+        <h2>Lista de Usuários:</h2>
+        <div id="usersList">Nenhum usuário carregado.</div>
+    </div>
+
+    <script>
+        const API_BASE_URL = 'http://localhost:3000';
+        const responseDiv = document.getElementById('response');
+        const usersListDiv = document.getElementById('usersList');
+        const currentTokenDisplay = document.getElementById('currentTokenDisplay');
+
+        // Função auxiliar para exibir o token atual
+        function updateTokenDisplay() {
+            const token = localStorage.getItem('jwtToken');
+            if (token) {
+                currentTokenDisplay.textContent = 'Token JWT: ' + token.substring(0, 30) + '... (armazenado)';
+                currentTokenDisplay.style.backgroundColor = '#d4edda'; // Verde claro
+            } else {
+                currentTokenDisplay.textContent = 'Nenhum token JWT armazenado.';
+                currentTokenDisplay.style.backgroundColor = '#f8d7da'; // Vermelho claro
+            }
+        }
+
+        // Inicializa o display do token ao carregar a página
+        updateTokenDisplay();
+
+        // --- Funções de Autenticação ---
+
+        async function registerUser() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const name = document.getElementById('name').value;
+
+            try {
+                const res = await fetch(`${API_BASE_URL}/auth/register`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ name, email, password })
+                });
+                const data = await res.json();
+                responseDiv.textContent = JSON.stringify(data, null, 2);
+                if (res.ok) {
+                    alert('Usuário registrado com sucesso! Agora faça o login.');
+                }
+            } catch (error) {
+                responseDiv.textContent = 'Erro ao registrar: ' + error.message;
+            }
+        }
+
+        async function loginUser() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            try {
+                const res = await fetch(`${API_BASE_URL}/auth/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email, password })
+                });
+                const data = await res.json();
+                responseDiv.textContent = JSON.stringify(data, null, 2);
+
+                if (res.ok && data.token) {
+                    localStorage.setItem('jwtToken', data.token); // Armazena o token!
+                    alert('Login bem-sucedido! Token armazenado.');
+                    updateTokenDisplay();
+                } else {
+                    alert('Falha no login: ' + (data.message || data.error));
+                }
+            } catch (error) {
+                responseDiv.textContent = 'Erro ao fazer login: ' + error.message;
+            }
+        }
+
+        function logoutUser() {
+            localStorage.removeItem('jwtToken'); // Remove o token
+            alert('Logout realizado. Token removido.');
+            responseDiv.textContent = 'Logout bem-sucedido.';
+            usersListDiv.textContent = 'Nenhum usuário carregado.';
+            updateTokenDisplay();
+        }
+
+        // --- Funções para Acessar Rotas Protegidas ---
+
+        async function requestWithAuth(url, method = 'GET', body = null) {
+            const token = localStorage.getItem('jwtToken');
+            if (!token) {
+                alert('Você precisa estar logado para acessar esta rota!');
+                responseDiv.textContent = 'Erro: Token JWT não encontrado. Faça o login.';
+                return null;
+            }
+
+            const headers = {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}` // ADICIONA O TOKEN AQUI!
+            };
+
+            try {
+                const options = {
+                    method: method,
+                    headers: headers
+                };
+                if (body) {
+                    options.body = JSON.stringify(body);
+                }
+
+                const res = await fetch(url, options);
+                const data = await res.json();
+
+                if (!res.ok) {
+                    // Trata erros de autenticação/autorização
+                    if (res.status === 401 || res.status === 403) {
+                        alert(`Erro de autenticação/autorização (${res.status}): ${data.message || data.error}`);
+                        logoutUser(); // Força logout se o token for inválido/expirado
+                    }
+                    responseDiv.textContent = `Erro ${res.status}: ${JSON.stringify(data, null, 2)}`;
+                    return null;
+                }
+
+                responseDiv.textContent = JSON.stringify(data, null, 2);
+                return data;
+
+            } catch (error) {
+                responseDiv.textContent = 'Erro na requisição: ' + error.message;
+                return null;
+            }
+        }
+
+        async function getUsers() {
+            const data = await requestWithAuth(`${API_BASE_URL}/users`);
+            if (data && data.data) {
+                usersListDiv.innerHTML = data.data.map(user => `<li>${user.name} (${user.email})</li>`).join('');
+            } else {
+                usersListDiv.textContent = 'Não foi possível carregar usuários.';
+            }
+        }
+
+        async function getProducts() {
+            const data = await requestWithAuth(`${API_BASE_URL}/products`);
+            if (data && data.data) {
+                usersListDiv.innerHTML = data.data.map(p => `<li>${p.name} (R$${p.price})</li>`).join('');
+            } else {
+                usersListDiv.textContent = 'Não foi possível carregar produtos.';
+            }
+        }
+
+        async function getAdminDashboard() {
+            await requestWithAuth(`${API_BASE_URL}/api/admin/dashboard`);
+        }
+
+        async function tryCreateProduct() {
+            const productName = prompt('Nome do produto:');
+            const productPrice = parseFloat(prompt('Preço do produto:'));
+
+            if (productName && !isNaN(productPrice)) {
+                await requestWithAuth(`${API_BASE_URL}/products`, 'POST', {
+                    name: productName,
+                    price: productPrice
+                });
+            } else {
+                alert('Nome e preço do produto são obrigatórios.');
+            }
+        }
+
+    </script>
+</body>
+
+</html>
