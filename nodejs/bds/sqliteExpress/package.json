@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon src/app.js"
+    "back": "nodemon src/app.js",
+    "front": "cd frontend/ && live-server --port=8080 --no-browser",
+    "dev": "concurrently \"yarn back\" \"yarn front\""
   },
   "keywords": [],
   "author": "",
@@ -18,6 +20,7 @@
     "sqlite3": "^5.1.7"
   },
   "devDependencies": {
+    "concurrently": "^9.1.2",
     "nodemon": "^3.1.10"
   }
 }
