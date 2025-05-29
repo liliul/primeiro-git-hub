@@ -229,7 +229,7 @@
         async function getUsers() {
             const data = await requestWithAuth(`${API_BASE_URL}/users`);
             if (data && data.data) {
-                usersListDiv.innerHTML = data.data.map(user => `<li>${user.name} (${user.email})</li>`).join('');
+                usersListDiv.innerHTML = data.data.map(user => `<li>${user.name} (${user.email}) <button onclick="deletar(${user.id})">Delete</button></li>`).join('');
             } else {
                 usersListDiv.textContent = 'Não foi possível carregar usuários.';
             }
@@ -244,6 +244,37 @@
 
             const data = await requestWithAuth(`${API_BASE_URL}/users/${id}`);
         }
+
+        async function deletar(id) {
+            const data = await requestWithAuth(`${API_BASE_URL}/users/${id}`, 'DELETE');
+        }
+
+        // async function getProducts() {
+        //     const data = await requestWithAuth(`${API_BASE_URL}/products`);
+        //     if (data && data.data) {
+        //         usersListDiv.innerHTML = data.data.map(p => `<li>${p.name} (R$${p.price})</li>`).join('');
+        //     } else {
+        //         usersListDiv.textContent = 'Não foi possível carregar produtos.';
+        //     }
+        // }
+
+        // async function getAdminDashboard() {
+        //     await requestWithAuth(`${API_BASE_URL}/api/admin/dashboard`);
+        // }
+
+        // async function tryCreateProduct() {
+        //     const productName = prompt('Nome do produto:');
+        //     const productPrice = parseFloat(prompt('Preço do produto:'));
+
+        //     if (productName && !isNaN(productPrice)) {
+        //         await requestWithAuth(`${API_BASE_URL}/products`, 'POST', {
+        //             name: productName,
+        //             price: productPrice
+        //         });
+        //     } else {
+        //         alert('Nome e preço do produto são obrigatórios.');
+        //     }
+        // }
 
     </script>
 </body>
