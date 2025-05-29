@@ -21,7 +21,8 @@
 
         input[type="email"],
         input[type="password"],
-        input[type="text"] {
+        input[type="text"],
+        input[type="number"] {
             width: calc(100% - 22px);
             padding: 10px;
             margin-bottom: 10px;
@@ -80,10 +81,13 @@
 
         <section id="protected-section">
             <h2>Acesso a Dados Protegidos</h2>
+            <input type="number" id="id-values" placeholder="ID numero (apenas para buscar um usuario)">
+            <br>
             <button onclick="getUsers()">Buscar Usuários (Protegido)</button>
-            <button onclick="getProducts()">Buscar Produtos (Protegido)</button>
+            <button onclick="getId()">Buscar um Usuario por id (Protegido)</button>
+            <!-- <button onclick="getProducts()">Buscar Produtos (Protegido)</button>
             <button onclick="getAdminDashboard()">Acessar Admin Dashboard (Admin)</button>
-            <button onclick="tryCreateProduct()">Criar Produto (Admin)</button>
+            <button onclick="tryCreateProduct()">Criar Produto (Admin)</button> -->
         </section>
 
         <hr>
@@ -231,31 +235,14 @@
             }
         }
 
-        async function getProducts() {
-            const data = await requestWithAuth(`${API_BASE_URL}/products`);
-            if (data && data.data) {
-                usersListDiv.innerHTML = data.data.map(p => `<li>${p.name} (R$${p.price})</li>`).join('');
-            } else {
-                usersListDiv.textContent = 'Não foi possível carregar produtos.';
-            }
-        }
+        async function getId() {
+            const idValues = document.getElementById('id-values').value;
 
-        async function getAdminDashboard() {
-            await requestWithAuth(`${API_BASE_URL}/api/admin/dashboard`);
-        }
+            if (idValues === "") return;
 
-        async function tryCreateProduct() {
-            const productName = prompt('Nome do produto:');
-            const productPrice = parseFloat(prompt('Preço do produto:'));
+            const id = idValues;
 
-            if (productName && !isNaN(productPrice)) {
-                await requestWithAuth(`${API_BASE_URL}/products`, 'POST', {
-                    name: productName,
-                    price: productPrice
-                });
-            } else {
-                alert('Nome e preço do produto são obrigatórios.');
-            }
+            const data = await requestWithAuth(`${API_BASE_URL}/users/${id}`);
         }
 
     </script>
