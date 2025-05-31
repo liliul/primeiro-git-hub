@@ -85,6 +85,7 @@
             <br>
             <button onclick="getUsers()">Buscar Usuários (Protegido)</button>
             <button onclick="getId()">Buscar um Usuario por id (Protegido)</button>
+            <button onclick="update()">Atualizar</button>
             <!-- <button onclick="getProducts()">Buscar Produtos (Protegido)</button>
             <button onclick="getAdminDashboard()">Acessar Admin Dashboard (Admin)</button>
             <button onclick="tryCreateProduct()">Criar Produto (Admin)</button> -->
@@ -249,6 +250,24 @@
             const data = await requestWithAuth(`${API_BASE_URL}/users/${id}`, 'DELETE');
         }
 
+        async function update() {
+            const idValues = document.getElementById('id-values').value;
+            if (idValues === "") return;
+
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const name = document.getElementById('name').value;
+            
+            if (!name && password && !email) {
+                return
+            }
+
+            const data = await requestWithAuth(`${API_BASE_URL}/users/${idValues}`, 'PUT', {
+                name: name,
+                email: email, 
+                password: password
+            });
+        }
         // async function getProducts() {
         //     const data = await requestWithAuth(`${API_BASE_URL}/products`);
         //     if (data && data.data) {
