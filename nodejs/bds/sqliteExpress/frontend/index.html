@@ -70,6 +70,8 @@
             <h2>Registro / Login</h2>
             <input type="email" id="email" placeholder="Email">
             <input type="password" id="password" placeholder="Senha">
+            <button style="margin-bottom: 5px;" id="ver-password">ver senha</button>
+            
             <input type="text" id="name" placeholder="Nome (apenas para registro)">
             <button onclick="registerUser()">Registrar</button>
             <button onclick="loginUser()">Login</button>
@@ -268,6 +270,19 @@
                 password: password
             });
         }
+
+        function verSenha() {
+            document.getElementById('ver-password').addEventListener('click', () => {
+                const tipo = document.getElementById('password')
+
+                if (tipo.type === 'password'){
+                    tipo.type = 'text'
+                } else {
+                    tipo.type = 'password'
+                }
+            })
+        }
+        verSenha()
         // async function getProducts() {
         //     const data = await requestWithAuth(`${API_BASE_URL}/products`);
         //     if (data && data.data) {
