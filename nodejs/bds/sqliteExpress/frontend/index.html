@@ -9,6 +9,7 @@
         body {
             font-family: Arial, sans-serif;
             margin: 20px;
+            background-color: #212121;
         }
 
         .container {
@@ -17,6 +18,8 @@
             padding: 20px;
             border: 1px solid #ccc;
             border-radius: 8px;
+
+            background-color: white;
         }
 
         input[type="email"],
@@ -71,7 +74,7 @@
             <input type="email" id="email" placeholder="Email">
             <input type="password" id="password" placeholder="Senha">
             <button style="margin-bottom: 5px;" id="ver-password">ver senha</button>
-            
+
             <input type="text" id="name" placeholder="Nome (apenas para registro)">
             <button onclick="registerUser()">Registrar</button>
             <button onclick="loginUser()">Login</button>
@@ -259,14 +262,14 @@
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
             const name = document.getElementById('name').value;
-            
+
             if (!name && password && !email) {
                 return
             }
 
             const data = await requestWithAuth(`${API_BASE_URL}/users/${idValues}`, 'PUT', {
                 name: name,
-                email: email, 
+                email: email,
                 password: password
             });
         }
@@ -275,7 +278,7 @@
             document.getElementById('ver-password').addEventListener('click', () => {
                 const tipo = document.getElementById('password')
 
-                if (tipo.type === 'password'){
+                if (tipo.type === 'password') {
                     tipo.type = 'text'
                 } else {
                     tipo.type = 'password'
