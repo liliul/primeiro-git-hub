@@ -1,4 +1,4 @@
-// import tecnologia from '../hook/tecnologia.js';
+import { userConfig } from "../config";
 
 /**
  * @function
@@ -14,7 +14,7 @@ export function Header() {
 	    <div class="user-info">
 	      <div class="c-img">
 	        <div class="img">
-	            <img id="avatar" >
+	            <img id="avatar" src="${!userConfig.profileLogo.profile ? userConfig.profileLogo.profileDefault : userConfig.profileLogo.profile}" >
 	          
 	        </div>
 	        
@@ -47,7 +47,7 @@ export function Header() {
 	      </div>
 	    </div>
 
-        `
-	    // ${tecnologia()}
+        `;
+
         document.querySelector('#app').insertAdjacentElement('afterbegin', headContainer);
 }

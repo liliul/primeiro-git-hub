@@ -2,6 +2,11 @@ const textoCor     = "#fa7f72";
 const cardHoverCor = "#E9967A";
 const txtPskills   = "#111111";
 
+const profileLogo = { 
+    profile: '',
+    profileDefault: './assets/artista-1.png'
+}
+
 const cardInfos = [
     {
         title: "Testando cards infos",
@@ -25,5 +30,6 @@ export const userConfig = {
     textoCor,
     cardHoverCor,
     txtPskills,
+    profileLogo,
     cardInfos
 }
