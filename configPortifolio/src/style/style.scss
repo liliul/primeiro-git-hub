@@ -49,6 +49,36 @@ body {
 //     overflow: hidden;
 //     object-fit: fill;
 // }
+
+// modal
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: grid;
+    place-items: center;
+    z-index: 1000;
+}
+
+.modal {
+    background: white;
+    padding: 2rem;
+    border-radius: 10px;
+    max-width: 400px;
+    text-align: center;
+    color: black;
+}
+
+.modal img {
+    margin: 1rem 0;
+    max-width: 100%;
+}
+
+// fim do modal
+
 a {
     color: inherit;
     text-decoration: none;
