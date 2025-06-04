@@ -7,6 +7,18 @@ const profileLogo = {
     profileDefault: './assets/artista-1.png'
 }
 
+const skillsTech = [
+    'Javascript',
+    'html/css/sass',
+    'node',
+    'typescript',
+    'php',
+    'react',
+    'firebase',
+    'git/github',
+    'docker/compose'      
+];
+
 const cardInfos = [
     {
         title: "Testando cards infos",
@@ -31,5 +43,6 @@ export const userConfig = {
     cardHoverCor,
     txtPskills,
     profileLogo,
+    skillsTech,
     cardInfos
 }
