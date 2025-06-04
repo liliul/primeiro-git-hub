@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Merriweather+Sans:wght@400;500;700&display=swap');
 @import './mediaDesktop.scss';
-@import './mediaTablet.scss';
+// @import './mediaTablet.scss';
 
 * {
     margin: 0;
@@ -42,6 +42,13 @@ body {
     color: var(--text-color);
 }
 
+@mixin border-div(){
+    border-radius: 19px;
+    background: var(--bg-cards);
+    box-shadow: 3px 3px 5px rgba(0, 0, 0, .5);
+}
+
+
 // styles global
 // img {
 //     width: 100%;
@@ -57,19 +64,18 @@ body {
     left: 0;
     width: 100vw;
     height: 100vh;
-    background-color: rgba(0, 0, 0, 0.6);
+    background-color: rgba(0, 0, 0, 0.4);
     display: grid;
     place-items: center;
     z-index: 1000;
 }
 
 .modal {
-    background: white;
+    @include border-div();
     padding: 2rem;
-    border-radius: 10px;
-    max-width: 400px;
+    margin: 1rem;
     text-align: center;
-    color: black;
+    color: var(--text-color);
 }
 
 .modal img {
@@ -87,26 +93,26 @@ a {
     color: var(--bg-techs);
 }
 
-@mixin border-div(){
-    border-radius: 19px;
-    background: var(--bg-cards);
-    box-shadow: 3px 3px 5px rgba(0, 0, 0, .5);
+.spanWrap {
+    display: flex;
+    flex-wrap: wrap;
 }
 
-
-@media screen and (max-width: 550px) {
+@media screen and (max-width: 800px) {
     .container {
-        
-       
+        width: 100%;
+
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+
+        padding: 20px;
 
         .head {
-            max-width: 450px;
             height: auto;
 
             @include border-div();
             padding: 30px;
-            margin: 20px;
-
 
             .user-info {
                 display: flex;
@@ -220,12 +226,13 @@ a {
             
             .menu {
                 @include border-div();  
-                max-width: 450px;
+                max-width: 100%;
                 height: auto;
                 padding: 10px;
                 display: flex;
                 padding: 30px;
-                margin: 20px;
+                margin: 20px 0px 20px 0px;
+
                 .m-ul {
                    
                     list-style: none;
@@ -249,7 +256,7 @@ a {
 
 
                 .text-github {
-                    margin: 0px 20px 8px 20px;
+                    // margin: 0px 20px 8px 20px;
                     @include border-div();
                     padding: 15px 30px;
                     text-align: center;
@@ -259,7 +266,7 @@ a {
                 .card {
                     @include border-div();
                     padding: 30px;
-                    margin: 20px;
+                    margin: 20px 0px 20px 0px;
 
 
                     .s-desc {
@@ -305,13 +312,13 @@ a {
             
             .icon-rede {
                 @include border-div();
-                margin: 20px 20px 20px 20px;
+                // margin: 20px 0px 20px 0px;
                 padding: 30px;
 
                 .text-footer {
                     text-align: center;
                     color: var(--bg-techs);
-                    margin-bottom: 15px;
+                    // margin-bottom: 15px;
                 }
 
 

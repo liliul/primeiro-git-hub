@@ -25,6 +25,7 @@ export class Card {
     techDiv.classList.add('tech');
 
     const span = document.createElement('span');
+    span.classList.add('spanWrap');
     if (this.languages.length > 0) {
       span.textContent = this.languages.join(' ');
       Card.applyTechColors(span);
