@@ -10,7 +10,7 @@ export function Card(title, descrition, snapshot, linguages) {
 
         <img src='${snapshot}' width="100" height="100">
 
-        <div>
+        <div id="tech">
             <span>${ linguages != '' ? linguages.join(' ') : 'sem linguagens'}</span>
         </div>
 
@@ -18,4 +18,18 @@ export function Card(title, descrition, snapshot, linguages) {
     `;
 
     document.getElementById('cards').appendChild(section);
+
+
+function coresTech() {
+    const cores = ['red', 'orange', 'blue', 'purple', 'green'];
+
+    const container = document.querySelector('#tech span');
+    const palavras = container.textContent.split(' ');
+
+    container.innerHTML = palavras.map((palavra, i) => {
+        const cor = cores[i % cores.length]; // usa cores ciclicamente
+        return `<span style="color: ${cor}; margin-right: 6px;">${palavra}</span>`;
+    }).join(' ');
+}
+coresTech()
 }
