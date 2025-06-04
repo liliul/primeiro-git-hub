@@ -22,7 +22,7 @@ export function Header() {
 	        </div>
 	        
 	        <div class="nome-user">
-	            <h1 id="userNome"></h1>
+	            <h1 id="userNome">${!userConfig.nomeBio.name ? 'Sem nome' : userConfig.nomeBio.name}</h1>
 	        </div>
 	      </div>
 
@@ -30,6 +30,7 @@ export function Header() {
 	          <div class="bio">
 	              <h2>Bio</h2>
 	              <p id="bio">
+				  	${!userConfig.nomeBio.bio ? 'Sem bio' : userConfig.nomeBio.bio}
 	              </p>
 	          </div>
 

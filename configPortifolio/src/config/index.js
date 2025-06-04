@@ -7,6 +7,16 @@ const profileLogo = {
     profileDefault: './assets/artista-1.png'
 }
 
+const nomeBio = {
+    name: 'Liliul', 
+    bio: `
+        Meu nome é Liliul e sou desenvolvedor Full Stack. 
+        Crio aplicações web completas utilizando JavaScript, Node.js,
+        MySQL e Docker, com foco em desempenho e organização. 
+        Confira meus projetos ou entre em contato para colaborarmos!
+    `
+}
+
 const skillsTech = [
     'Javascript',
     'html/css/sass',
@@ -43,6 +53,7 @@ export const userConfig = {
     cardHoverCor,
     txtPskills,
     profileLogo,
+    nomeBio,
     skillsTech,
     cardInfos
 }
