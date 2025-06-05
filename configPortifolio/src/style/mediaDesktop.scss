@@ -4,7 +4,7 @@
     box-shadow: 3px 3px 5px rgba(0, 0, 0, .5);
 }
 
-@media (min-width: 800px) {
+@media (min-width: 801px) {
     
     .container {
         max-width: 1120px;
@@ -68,23 +68,8 @@
                         }
                         p {
                             margin-top: 5px;
-                            font-size: clamp(.3em,.3em + 1vw,1em);
-                        }
-                    }
-
-                    .links {
-                        display: flex;
-                        gap: 15px;
-                        margin: 15px 0px 0px 30px;
-
-                        a {
-                            .i-link {
-                                width: 28px;
-                                height: 28px;
-                                
-                                
-                            }
-
+                            margin-left: 5px;
+                            font-size: clamp(.3em, .3em + 1vw, 1em);
                         }
                     }
                 }
@@ -114,7 +99,7 @@
                     .item-skills {
                         background-color: var(--bg-techs);
                         border-radius: 10px;
-                        padding: 5px 8px;
+                        padding: 10px;
 
                         p {
                             font-size: clamp(.2em,.3em + 1vw,.6em);

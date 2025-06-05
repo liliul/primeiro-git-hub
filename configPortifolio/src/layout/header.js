@@ -33,21 +33,6 @@ export function Header() {
 				  	${!userConfig.nomeBio.bio ? 'Sem bio' : userConfig.nomeBio.bio}
 	              </p>
 	          </div>
-
-	          <div class="links">
-	            <a id="link-github" href="#">
-	                <div class="i-link" title="link para o github">
-	                    
-                    
-	                </div>
-	            </a>
-
-	            <a id="link-blog" href="#">
-	                <div class="i-link" title="link para o blog">
-	                    
-                    </div>
-	            </a>
-	          </div>
 	      </div>
 	    </div>
 

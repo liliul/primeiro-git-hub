@@ -20,7 +20,7 @@ export class MenuContatos {
 		            
 		            <div>
 		                <span class="text">github</span>
-		                <span id="following" class="text numStyle">liliul</span>
+		                <a href="https://www.github.com/liliul" target="_blank" class="text numStyle">liliul</a>
 		            </div>
 		           </li>
 
@@ -31,7 +31,18 @@ export class MenuContatos {
 		            
 		            <div>
 		                <span class="text">Linkedin</span>
-		                <span id="repo-public" class="text numStyle">@Liliul</span>
+		                <a href="https://www.linkedin.com/in/liliu-lililzers-5bb4b8189" target="_blank" class="text numStyle">@Liliu</a>
+		            </div>
+		           </li>
+
+        		   <li class="m-li">
+		            <div>
+		                <img class="iconMenuSize" src="./assets/mail.svg">
+                    </div>
+		            
+		            <div>
+		                <span class="text">Email</span>
+		                <span class="text numStyle">@liliuContato</span>
 		            </div>
 		           </li>
 		          

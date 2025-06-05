@@ -18,7 +18,7 @@ export function Main() {
 		    <!-- card -->
 		    <section id="cards" class="cards-container">
 		        <div class="text-github">
-		            <h1>Repositorios GitHub</h1>
+		            <h1>Projetos</h1>
 		        </div>
 
 		    </section>

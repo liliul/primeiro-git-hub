@@ -164,20 +164,8 @@ a {
                             color: var(--bg-techs);
                         }
                         p {
-                            font-size: clamp(.3em,.5em + 1vw,1.4em);
-                        }
-                    }
-
-                    .links {
-                        display: flex;
-                        gap: 15px;
-
-                        margin: 15px 0px 0px 0px;
-                        a {
-                            .i-link {
-                                width: 24px;
-                                height: 24px;
-                            }
+                            font-size: clamp(.3em, .6em + 1vw, 1.4em);
+                            margin-left: 5px;
                         }
                     }
                 }
@@ -201,17 +189,17 @@ a {
                 .skill {
                     margin-top: 15px;
                     display: grid;
-                    grid-template-columns: auto auto auto;
+                    grid-template-columns: repeat(auto-fit, minmax(100px, auto));
                     
                     gap: 10px;
 
                     .item-skills {
                         background-color: var(--bg-techs);
                         border-radius: 10px;
-                        padding: 3px 0px;
+                        padding: 10px;
 
                         p {
-                            font-size: clamp(.1em,.3em + 1vw,.6em);
+                            font-size: clamp(.1em,0.9em + 1vw,.6em);
                             text-align: center;
                             color: var(--text-p-skills);
                             font-weight: var(--bold);
