@@ -3,11 +3,37 @@
 <head>
   <meta charset="UTF-8">
   <title>{{ title }}</title>
-  <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="./style.css">
 </head>
 <body>
   <main>
-    {{ content | safe }}
+    <div id="app">
+	{{ content | safe }}
+    </div>
   </main>
+
+<script>
+  async function navigateTo(url) {
+    const res = await fetch(url);
+    const text = await res.text();
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(text, 'text/html');
+    const newContent = doc.querySelector('#app').innerHTML;
+    document.querySelector('#app').innerHTML = newContent;
+    history.pushState(null, '', url);
+  }
+
+  document.addEventListener('click', (e) => {
+    if (e.target.matches('[data-link]')) {
+      e.preventDefault();
+      const url = e.target.getAttribute('href');
+      navigateTo(url);
+    }
+  });
+
+  window.addEventListener('popstate', () => {
+    navigateTo(location.pathname);
+  });
+</script>	
 </body>
 </html>

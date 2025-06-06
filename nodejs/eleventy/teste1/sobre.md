@@ -1,6 +1,7 @@
 ---
 layout: layout.njk
 title: Página Sobre
+permalink: "/sobre/index.html"
 ---
 
 # Bem-vindo, Sobre o eleventy.
