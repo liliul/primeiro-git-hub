@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>{{ title }}</title>
+  <link rel="stylesheet" href="/public/styles.css" />
+</head>
+<body>
+  {% include "nav.njk" %}
+  <main id="app">
+    {{ content | safe }}
+  </main>
+
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/navigo/7.1.3/navigo.min.js"></script>
+  <script type="module" src="/main.js"></script>
+</body>
+</html>
