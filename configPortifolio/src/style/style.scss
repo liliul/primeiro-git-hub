@@ -18,13 +18,13 @@
 
     /* Fonts */
 
-    --h1-font-size:1.5rem;
+    --h1-font-size: 1.5rem;
     --h2-font-size: 1.25rem;
     --h3-font-size: 1.125rem;
     --normal-font-size: .938rem;
     --small-font-size: .813rem;
     --smaller-font-size: .75rem;
-    
+
     --font-family: 'Merriweather Sans', sans-serif;
 
     /* Font Weight */
@@ -42,7 +42,7 @@ body {
     color: var(--text-color);
 }
 
-@mixin border-div(){
+@mixin border-div() {
     border-radius: 19px;
     background: var(--bg-cards);
     box-shadow: 3px 3px 5px rgba(0, 0, 0, .5);
@@ -89,6 +89,7 @@ a {
     color: inherit;
     text-decoration: none;
 }
+
 .numStyle {
     color: var(--bg-techs);
 }
@@ -97,6 +98,7 @@ a {
     display: flex;
     flex-wrap: wrap;
 }
+
 .iconMenuSize {
     width: 18px;
     height: 18px;
@@ -121,33 +123,34 @@ a {
             .user-info {
                 display: flex;
                 flex-direction: column;
-                
+
 
                 .c-img {
-                    display:flex;
+                    display: flex;
                     flex-direction: column;
                     align-items: center;
+
                     .img {
                         max-width: 100px;
                         max-height: 100px;
-                        
-                        
+
+
                         @include border-div();
                         overflow: hidden;
-    
+
                         img {
                             width: 100%;
                             height: 100%;
                             overflow: hidden;
                             object-fit: fill;
                         }
-    
+
                     }
                 }
 
                 .nome-user {
                     margin-top: 15px;
-    
+
                     h1 {
                         font-size: medium;
                         color: var(--bg-techs);
@@ -158,11 +161,12 @@ a {
 
                     .bio {
                         margin-top: 20px;
-    
+
                         h2 {
                             font-size: medium;
                             color: var(--bg-techs);
                         }
+
                         p {
                             font-size: clamp(.3em, .6em + 1vw, 1.4em);
                             margin-left: 5px;
@@ -190,8 +194,10 @@ a {
                     margin-top: 15px;
                     display: grid;
                     grid-template-columns: repeat(auto-fit, minmax(100px, auto));
-                    
+
                     gap: 10px;
+
+                    list-style-type: none;
 
                     .item-skills {
                         background-color: var(--bg-techs);
@@ -199,7 +205,7 @@ a {
                         padding: 10px;
 
                         p {
-                            font-size: clamp(.1em,0.9em + 1vw,.6em);
+                            font-size: clamp(.1em, 0.9em + 1vw, .6em);
                             text-align: center;
                             color: var(--text-p-skills);
                             font-weight: var(--bold);
@@ -215,9 +221,9 @@ a {
 
             display: flex;
             flex-direction: column;
-            
+
             .menu {
-                @include border-div();  
+                @include border-div();
                 max-width: 100%;
                 height: auto;
                 padding: 10px;
@@ -226,10 +232,11 @@ a {
                 margin: 20px 0px 20px 0px;
 
                 .m-ul {
-                   
+
                     list-style: none;
-                    
+
                     height: auto;
+
                     .m-li {
                         display: flex;
                         margin: 10px 0px;
@@ -237,7 +244,7 @@ a {
                         .text {
                             font-size: small;
                             padding-left: 15px;
-                        }                    
+                        }
                     }
                 }
             }
@@ -275,10 +282,11 @@ a {
                             margin-right: 10px;
                         }
                     }
+
                     .lang {
                         color: var(--bg-lang);
                         font-size: var(--normal-font-size);
-                        
+
                         &::before {
                             content: "";
                             display: inline-block;
@@ -294,14 +302,14 @@ a {
             }
 
 
-           
+
         }
-        
+
 
         .footer {
             width: 100%;
             height: auto;
-            
+
             .icon-rede {
                 @include border-div();
                 // margin: 20px 0px 20px 0px;
@@ -317,7 +325,7 @@ a {
                 .icons {
                     display: flex;
                     justify-content: space-between;
-                    
+
 
                     a {
 
@@ -328,8 +336,8 @@ a {
                     }
                 }
 
-               
+
             }
         }
-    }    
+    }
 }

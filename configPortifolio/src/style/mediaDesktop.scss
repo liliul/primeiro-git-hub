@@ -1,21 +1,21 @@
-@mixin border-div(){
+@mixin border-div() {
     border-radius: 19px;
     background: var(--bg-cards);
     box-shadow: 3px 3px 5px rgba(0, 0, 0, .5);
 }
 
 @media (min-width: 801px) {
-    
+
     .container {
         max-width: 1120px;
         margin: 0 auto;
         padding: 20px;
 
-        
+
 
         .head {
             width: 100%;
-            padding: 20px  40px;
+            padding: 20px 40px;
             display: flex;
             flex-direction: row;
             justify-content: space-between;
@@ -24,7 +24,7 @@
 
             .user-info {
                 display: flex;
-                
+
 
                 .img {
                     width: 110px;
@@ -33,17 +33,18 @@
                     @include border-div();
                     overflow: hidden;
 
-                    img{
+                    img {
                         width: 100%;
                         height: 100%;
                         overflow: hidden;
                         object-fit: fill;
                     }
                 }
-    
+
                 .nome-user {
                     max-width: 110px;
                     margin-top: 15px;
+
                     h1 {
                         width: 100%;
                         font-size: medium;
@@ -54,18 +55,19 @@
                 }
 
                 .info-rede {
-                    
+
 
                     .bio {
-                    
+
                         max-width: 520px;
                         margin: 0px 0px 0px 30px;
-    
+
                         h2 {
                             font-size: medium;
 
                             color: var(--bg-techs);
                         }
+
                         p {
                             margin-top: 5px;
                             margin-left: 5px;
@@ -96,16 +98,18 @@
 
                     gap: 10px;
 
+                    list-style-type: none;
+
                     .item-skills {
                         background-color: var(--bg-techs);
                         border-radius: 10px;
                         padding: 10px;
 
                         p {
-                            font-size: clamp(.2em,.3em + 1vw,.6em);
+                            font-size: clamp(.2em, .3em + 1vw, .6em);
                             text-align: center;
                             color: var(--text-p-skills);
-                            
+
                             font-weight: var(--bold);
                         }
                     }
@@ -117,28 +121,29 @@
 
 
 
-// inicio do main
+        // inicio do main
         .content {
             width: 100%;
             height: auto;
 
             display: flex;
-            
+
             margin-top: 30px;
-            
+
             .menu {
-                @include border-div();  
+                @include border-div();
                 width: 350px;
                 height: 340px;
                 display: flex;
                 padding: 30px;
-               
+
 
                 .m-ul {
-                
+
                     list-style: none;
-                    
+
                     height: auto;
+
                     .m-li {
                         display: flex;
                         margin: 10px 0px;
@@ -146,13 +151,13 @@
                         .text {
                             font-size: small;
                             padding-left: 15px;
-                        }                    
+                        }
                     }
                 }
             }
 
 
-// inicio card
+            // inicio card
             .cards-container {
                 width: 100%;
                 height: auto;
@@ -195,6 +200,7 @@
                             margin-right: 10px;
                         }
                     }
+
                     .lang {
                         color: var(--bg-lang);
                         font-size: var(--normal-font-size);
@@ -215,11 +221,11 @@
 
         }
 
-// inicio do footer
+        // inicio do footer
         .footer {
             width: 100%;
             height: auto;
-            
+
             .icon-rede {
                 @include border-div();
                 padding: 30px;
@@ -230,14 +236,14 @@
                     margin-bottom: 15px;
                 }
 
-                
+
                 .icons {
-                   display: flex;
-                   justify-content: space-between;
-               
-                   max-width: 500px;
-                   margin: 0 auto;
-                    
+                    display: flex;
+                    justify-content: space-between;
+
+                    max-width: 500px;
+                    margin: 0 auto;
+
 
                     a {
 
@@ -246,7 +252,7 @@
                             height: 24px;
                         }
                     }
-               }
+                }
             }
         }
     }

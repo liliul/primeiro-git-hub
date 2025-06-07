@@ -8,15 +8,15 @@ export class SkillsTech {
     renderSkillsTech() {
 
         this.skills.forEach((sk) => {
-            const divSkills = document.createElement('div');
-            divSkills.classList.add('item-skills');
-            
-            divSkills.innerHTML = `    
+            const liSkills = document.createElement('li');
+            liSkills.classList.add('item-skills');
+
+            liSkills.innerHTML = `    
                 <p>${sk}</p>
             `;
-            
-            document.getElementById('skills-tech-id').appendChild(divSkills);
+
+            document.getElementById('skills-tech-id').appendChild(liSkills);
         })
-        
+
     }
 }
