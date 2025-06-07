@@ -11,7 +11,9 @@ export function Main() {
 	mainContainer.innerHTML = `
 		   <!-- aside menu -->
 		    <aside class="menu">
-		        
+		    	<div class="txt-h1">
+					<h1>Contatos</h1>
+				</div>
 		    </aside>
 
 

@@ -1,5 +1,3 @@
-// import redesSocial from '../hook/redesSocial.js';
-
 /**
  * @function
  * @type {string} Footer
@@ -7,16 +5,14 @@
  */
 
 export function Footer() {
-	const footerContainer = document.createElement('footer');
-	footerContainer.classList.add('footer');
+    const footerContainer = document.createElement('footer');
+    footerContainer.classList.add('footer');
 
-	footerContainer.innerHTML = `
+    footerContainer.innerHTML = `
         <div class="icon-rede">
-            <h2 class="text-footer">Redes social</h2>
-            
-            </div>
-            `
-            // ${redesSocial()}
+            <h2 class="text-footer">&copy; 2023 Meu Site de Uma Página</h2>    
+        </div>
+        `;
 
-	document.querySelector('#app').appendChild(footerContainer);
+    document.querySelector('#app').appendChild(footerContainer);
 }
