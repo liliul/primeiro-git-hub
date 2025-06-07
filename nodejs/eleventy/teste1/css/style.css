@@ -1,0 +1,25 @@
+ .menu {
+     border-radius: 19px;
+     background: var(--bg-cards);
+     box-shadow: 3px 3px 5px rgba(0, 0, 0, .5);
+
+     width: 350px;
+     height: 340px;
+
+     padding: 30px;
+ }
+
+ .m-ul {
+     list-style: none;
+     height: auto;
+ }
+
+ .m-li {
+     display: flex;
+     margin: 10px 0px;
+ }
+
+ .text {
+     font-size: small;
+     padding-left: 15px;
+ }
