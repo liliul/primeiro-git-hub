@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Site com Eleventy + Navigo</title>
+</head>
+<body>
+  <nav>
+    <a href="/" data-navigo>Home</a>
+    <a href="/sobre" data-navigo>Sobre</a>
+    <a href="/contato" data-navigo>Contato</a>
+    <a href="/produto" data-navigo>Produtos</a>
+  </nav>
+
+  <main id="app">
+    <!-- O conteúdo será carregado aqui via Navigo -->
+  </main>
+
+  <script src="https://unpkg.com/navigo"></script>
+  <script src="/js/router.js" type="module"></script>
+</body>
+</html>
