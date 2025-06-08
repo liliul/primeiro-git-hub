@@ -1,6 +1,6 @@
 const root = null;
-const useHash = false;
-const router = new Navigo(root, useHash);
+const useHash = true;
+const router = new Navigo(root, { hash: useHash });
 
 async function loadPage(page) {
   const res = await fetch(`/pages/${page}.html`);
