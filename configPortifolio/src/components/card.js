@@ -25,15 +25,15 @@ export class Card {
     const techDiv = document.createElement('div');
     techDiv.classList.add('tech');
 
-    const span = document.createElement('span');
-    span.classList.add('spanWrap');
+    const divSpans = document.createElement('div');
+    divSpans.classList.add('spansWrap');
     if (this.languages.length > 0) {
-      span.textContent = this.languages.join(' ');
-      Card.applyTechColors(span);
+      divSpans.textContent = this.languages.join(' ');
+      Card.applyTechColors(divSpans);
     } else {
-      span.textContent = 'sem linguagens';
+      divSpans.textContent = 'sem linguagens';
     }
-    techDiv.appendChild(span);
+    techDiv.appendChild(divSpans);
 
     const button = document.createElement('button');
     button.textContent = 'Preview';
