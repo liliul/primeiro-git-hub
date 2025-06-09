@@ -82,11 +82,31 @@ body {
     margin: 1rem;
     text-align: center;
     color: var(--text-color);
+
+    position: relative;
 }
 
 .modal img {
     margin: 1rem 0;
     max-width: 100%;
+}
+
+.s-fechar-modal {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: none;
+
+    background-color: var(--body-bg-color);
+    color: var(--bg-techs);
+}
+
+.s-fechar-modal:hover {
+    opacity: .8;
 }
 
 // fim do modal

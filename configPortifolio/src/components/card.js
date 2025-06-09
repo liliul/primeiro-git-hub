@@ -68,11 +68,11 @@ export class Card {
     modal.classList.add('modal');
 
     modal.innerHTML = `
+      <button id="fechar-modal" class="s-fechar-modal">X</button>
       <h2>${title}</h2>
       <p>${description}</p>
       <img src="${snapshot}" width="200" height="200">
       <p><strong>Tecnologias:</strong> ${languages.join(', ') || 'sem linguagens'}</p>
-      <button id="fechar-modal">Fechar</button>
     `;
 
     overlay.appendChild(modal);
