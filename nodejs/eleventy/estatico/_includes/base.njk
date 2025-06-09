@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="/public/styles.css" /> {# Caminho relativo a _site #}
+</head>
+<body>
+    {# Se você tiver uma navegação que leve a seções ou conteudos dentro do index.html #}
+    {% include "nav.njk" %}
+
+    <main id="app">
+        {# O conteúdo de src/index.njk será injetado aqui primeiro #}
+        {{ content | safe }}
+    </main>
+
+    {# Seus scripts JavaScript #}
+    <script src="/main.js"></script> {# Caminho relativo a _site #}
+</body>
+</html>
