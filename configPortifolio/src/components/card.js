@@ -1,9 +1,10 @@
 export class Card {
-  constructor(title, description, snapshot, languages = []) {
+  constructor(title, description, snapshot, languages = [], iframe) {
     this.title = title;
     this.description = description;
     this.snapshot = snapshot;
     this.languages = languages;
+    this.iframe = iframe;
   }
 
   render() {
@@ -38,7 +39,7 @@ export class Card {
     button.textContent = 'Preview';
 
     button.addEventListener('click', () =>
-      Card.openModal(this.title, this.description, this.snapshot, this.languages)
+      Card.openModal(this.iframe)
     );
 
     section.append(h1, p, img, techDiv, button);
@@ -57,7 +58,7 @@ export class Card {
       .join('');
   }
 
-  static openModal(title, description, snapshot, languages) {
+  static openModal(iframe) {
     const existing = document.querySelector('.modal');
     if (existing) existing.remove();
 
@@ -69,10 +70,8 @@ export class Card {
 
     modal.innerHTML = `
       <button id="fechar-modal" class="s-fechar-modal">X</button>
-      <h2>${title}</h2>
-      <p>${description}</p>
-      <img src="${snapshot}" width="200" height="200">
-      <p><strong>Tecnologias:</strong> ${languages.join(', ') || 'sem linguagens'}</p>
+
+      ${!iframe ? 'voce nao tem um iframe' : `<iframe class="iframe-modal" src="${iframe}" width="100%" height="100%"></iframe>`}
     `;
 
     overlay.appendChild(modal);

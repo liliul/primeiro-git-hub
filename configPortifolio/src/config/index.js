@@ -1,14 +1,14 @@
-const textoCor     = "#fa7f72";
+const textoCor = "#fa7f72";
 const cardHoverCor = "#E9967A";
-const txtPskills   = "#111111";
+const txtPskills = "#111111";
 
-const profileLogo = { 
+const profileLogo = {
     profile: '',
     profileDefault: './assets/artista-1.png'
 }
 
 const nomeBio = {
-    name: 'Liliul', 
+    name: 'Liliul',
     bio: `
         Meu nome é Liliul e sou desenvolvedor Full Stack. 
         Crio aplicações web completas utilizando JavaScript, Node.js,
@@ -26,7 +26,7 @@ const skillsTech = [
     'react',
     'firebase',
     'git/github',
-    'docker/compose'      
+    'docker/compose'
 ];
 
 const cardInfos = [
@@ -35,16 +35,27 @@ const cardInfos = [
         description: "cards user teste infos teste",
         snapshot: "./assets/artista-1.png",
         linguages: [
-            'javascript','html','css/sass','firebase','typescript'
-        ]
+            'javascript', 'html', 'css/sass', 'firebase', 'typescript'
+        ],
+        iframe: 'https://climatempo-6f654.web.app/'
     },
     {
         title: "Testando cards infos",
         description: "cards user teste infos teste",
         snapshot: "./assets/artista-1.png",
         linguages: [
-            
-        ]
+
+        ],
+        iframe: 'https://naruto-classico.firebaseapp.com/'
+    },
+    {
+        title: "Testando cards infos",
+        description: "cards user teste infos teste",
+        snapshot: "./assets/artista-1.png",
+        linguages: [
+            'tailwindcss', 'html', 'firebase'
+        ],
+        iframe: 'https://liliul.github.io/blogr-landing-page/'
     }
 ]
 
