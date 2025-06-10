@@ -57,6 +57,24 @@ body {
 //     object-fit: fill;
 // }
 
+.circle {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+}
+.circle::before {
+    content: ' ';
+    display: block;
+    width: 8px;
+    height: 8px;
+    background-color: #75D7EC;
+    border-radius: 50%;
+
+    // padding: 5px;
+    margin-left: 6px;
+
+}
+
 .txt-h1 {
     color: var(--bg-techs);
     text-align: center;

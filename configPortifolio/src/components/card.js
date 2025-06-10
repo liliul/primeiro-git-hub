@@ -26,7 +26,7 @@ export class Card {
     techDiv.classList.add('tech');
 
     const divSpans = document.createElement('div');
-    divSpans.classList.add('spansWrap');
+    divSpans.classList.add('spanWrap');
     if (this.languages.length > 0) {
       divSpans.textContent = this.languages.join(' ');
       Card.applyTechColors(divSpans);
@@ -53,7 +53,7 @@ export class Card {
     spanElement.innerHTML = palavras
       .map((palavra, i) => {
         const cor = cores[i % cores.length];
-        return `<span style="color: ${cor}; margin-right: 6px;">${palavra}</span>`;
+        return `<span class="circle" style="color: ${cor};">${palavra}</span>`;
       })
       .join('');
   }
