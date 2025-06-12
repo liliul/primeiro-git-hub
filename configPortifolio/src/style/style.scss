@@ -57,6 +57,14 @@ body {
 //     object-fit: fill;
 // }
 
+.fechar-svg {
+    width: 25px;
+    height: 25px;
+}
+.fechar-svg path {
+    fill: var(--bg-techs);
+}
+
 .circle {
     display: flex;
     align-items: center;
