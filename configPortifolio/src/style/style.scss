@@ -57,10 +57,12 @@ body {
 //     object-fit: fill;
 // }
 
+
 .fechar-svg {
     width: 25px;
     height: 25px;
 }
+
 .fechar-svg path {
     fill: var(--bg-techs);
 }
@@ -70,6 +72,7 @@ body {
     align-items: center;
     gap: 2px;
 }
+
 .circle::before {
     content: ' ';
     display: block;
@@ -165,7 +168,6 @@ a {
         height: 100%;
 
         border: none;
-        border-radius: 8px;
     }
 
 
@@ -306,6 +308,24 @@ a {
                     .m-li {
                         display: flex;
                         margin: 10px 0px;
+
+                        .m-li-contato {
+                            display: flex;
+                            align-items: center;
+                            flex-wrap: wrap;
+
+                            svg {
+                                margin-left: 15px;
+                            }
+                        }
+
+                        &:hover {
+                            .m-li-contato {
+                                svg {
+                                    fill: var(--bg-techs);
+                                }
+                            }
+                        }
 
                         .text {
                             font-size: small;

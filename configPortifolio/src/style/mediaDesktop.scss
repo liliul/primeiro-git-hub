@@ -209,6 +209,23 @@
                         display: flex;
                         margin: 10px 0px;
 
+                        .m-li-contato {
+                            display: flex;
+                            align-items: center;
+
+                            svg {
+                                margin-left: 15px;
+                            }
+                        }
+
+                        &:hover {
+                            .m-li-contato {
+                                svg {
+                                    fill: var(--bg-techs);
+                                }
+                            }
+                        }
+
                         .text {
                             font-size: small;
                             padding-left: 15px;
