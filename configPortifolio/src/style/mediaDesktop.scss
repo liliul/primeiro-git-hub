@@ -253,10 +253,13 @@
                     @include border-div();
                     padding: 30px;
                     margin: 0px 0px 20px 20px;
+                    transform-origin: center center;
 
                     &:hover {
-                        transform: scale(1.1);
-                        transition: all 500ms;
+                        will-change: transform;
+                        transform: scale(.9);
+                        transition: transform 0.6s ease;
+                                               
                         // background-color: #464658;
                         // color:#75D7EC;
                         color: var(--card-hover-cor);
