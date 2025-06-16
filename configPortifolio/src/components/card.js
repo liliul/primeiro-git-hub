@@ -47,7 +47,9 @@ export class Card {
   }
 
   static applyTechColors(spanElement) {
-    const cores = ['red', 'orange', 'blue', 'purple', 'green'];
+    // const cores = ['red', 'orange', 'blue', 'purple', 'green'];
+    const cores = ['#ff667c', '#dd423e', '#a2a384', '#eac388', '#c5ad4b'];
+
     const palavras = spanElement.textContent.split(' ');
 
     spanElement.innerHTML = palavras
