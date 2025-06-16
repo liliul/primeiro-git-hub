@@ -55,7 +55,7 @@ export class Card {
     spanElement.innerHTML = palavras
       .map((palavra, i) => {
         const cor = cores[i % cores.length];
-        return `<span class="circle" style="color: ${cor};">${palavra}</span>`;
+        return `<span class="circle" style="--circle-color: ${cor};">${palavra}</span>`;
       })
       .join('');
   }

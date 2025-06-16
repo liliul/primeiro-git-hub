@@ -71,6 +71,8 @@ body {
     display: flex;
     align-items: center;
     gap: 2px;
+
+    color: var(--circle-color);
 }
 
 .circle::before {
@@ -78,7 +80,7 @@ body {
     display: block;
     width: 8px;
     height: 8px;
-    background-color: #75D7EC;
+    background-color: var(--circle-color, #75D7EC);
     border-radius: 50%;
 
     // padding: 5px;
