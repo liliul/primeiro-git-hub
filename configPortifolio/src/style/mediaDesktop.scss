@@ -266,6 +266,34 @@
                         font-weight: var(--bold);
                     }
 
+                      h1 {
+                        margin-bottom: 10px;
+                        font-size: var(--h1-font-size);
+                    }
+
+                    p {
+                        margin-bottom: 20px;
+                        font-size: var(--normal-font-size);
+                    }
+
+                    .tech {
+                        margin: 10px 0px;
+                    }
+
+                    button {
+                        margin-top: 8px;
+                        padding: 8px 25px;
+                        font-size: var(--small-font-size);
+                        font-family: var(--font-family);
+                        font-weight: var(--bold);
+
+                        border: none;
+                        border-radius: 8px;
+
+                        background-color: var(--body-bg-color);
+                        color: var(--bg-techs);
+                        box-shadow: 3px 3px 5px rgba(0, 0, 0, .5);
+                    }
 
                     .s-desc {
                         margin: 10px 0px;
