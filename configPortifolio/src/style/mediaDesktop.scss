@@ -259,14 +259,14 @@
                         will-change: transform;
                         transform: scale(.9);
                         transition: transform 0.6s ease;
-                                               
+
                         // background-color: #464658;
                         // color:#75D7EC;
                         color: var(--card-hover-cor);
                         font-weight: var(--bold);
                     }
 
-                      h1 {
+                    h1 {
                         margin-bottom: 10px;
                         font-size: var(--h1-font-size);
                     }
@@ -340,9 +340,9 @@
                 padding: 30px;
 
                 .text-footer {
+                    font-size: var(--small-font-size);
                     text-align: center;
                     color: var(--bg-techs);
-                    margin-bottom: 15px;
                 }
 
 
