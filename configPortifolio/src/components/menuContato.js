@@ -9,6 +9,6 @@ export class MenuContatos {
 		    ${this.contatos}
 		`;
 
-		document.querySelector('.menu').appendChild(ul);
+		document.querySelector('#menu-contatos').appendChild(ul);
 	}
 }

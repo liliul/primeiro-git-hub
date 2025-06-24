@@ -11,13 +11,13 @@ export function Main() {
 	mainContainer.innerHTML = `
 		  <div class="">
 		 	 <!-- aside menu -->
-				<aside class="menu">
+				<aside id="menu-contatos" class="menu">
 					<div class="txt-h1">
 						<h1>Contatos</h1>
 					</div>
 				</aside> 
 
-				<aside class="menu">
+				<aside id="menu-experiencias" class="menu">
 					<div class="txt-h1">
 						<h1>Experiência</h1>
 					</div>
