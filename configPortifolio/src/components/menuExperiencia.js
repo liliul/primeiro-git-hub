@@ -1,6 +1,18 @@
-export class MenuExperiencia {
+class interfaceExperiencia {
     constructor() {
+        this.img = ""
+        this.nome = ""
+        this.data = ""
+        this.oquefaz = ""
+        this.competencia = ""
+        this.atuacao = ""
+        this.fezoque = ""
+    }
+}
 
+export class MenuExperiencia extends interfaceExperiencia {
+    constructor() {
+        super()
     }
 
     build() {
@@ -10,27 +22,27 @@ export class MenuExperiencia {
     html() {
         const div = document.createElement('div')
         div.classList.add('c-experinecia')
-        
+
         div.innerHTML = `
             <div class="experiencia">
                 <header class="ex-header">
-                    <img src="./assets/globe.svg" alt="globe" class="ex-img">
+                    <img src="${this.img}" alt="globe" class="ex-img">
 
                     <div class="ex-info">
-                        <h1>liliul fundação brasil</h1>
-                        <span>mai de 2020 - set de 2022</span>
+                        <h1>${this.nome}</h1>
+                        <span>${this.data}</span>
                     </div>
                 </header>
 
                 <section class="ex-conteudo">
                     <ul class="ex-ul">
                         <li class="ex-li">
-                            <h2>o que faz: <span>desenvolvi uma fetuare no frontend</span></h2>
-                            <p>copetencias: <span>typescript react next</span></p>
+                            <h2>o que faz: <span>${this.oquefaz}</span></h2>
+                            <p>copetencias: <span>${this.competencia}</span></p>
 
                             <div class="ex-sub-infos">
-                                <h3>atuação na empresa: <span>desenvolvedor pleno</span></h3>
-                                <p>fez o que: <span>frontend</span></p>
+                                <h3>atuação na empresa: <span>${this.atuacao}</span></h3>
+                                <p>fez o que: <span>${this.fezoque}</span></p>
                             </div>
                         </li>
                     </ul>

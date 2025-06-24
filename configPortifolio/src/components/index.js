@@ -23,5 +23,17 @@ menuContato.renderMenuContatos()
  * experiencias
  */
 
+const experiencia = userConfig.experienciaMenu
 const menuExperiencia = new MenuExperiencia()
-menuExperiencia.build()
+
+experiencia.map((item) => {
+    menuExperiencia.img = item.img 
+    menuExperiencia.nome = item.nome 
+    menuExperiencia.data = item.data
+    menuExperiencia.oquefaz = item.oquefaz
+    menuExperiencia.competencia = item.competencia
+    menuExperiencia.atuacao = item.atuacao
+    menuExperiencia.fezoque = item.fezoque
+    menuExperiencia.build()
+})
+
