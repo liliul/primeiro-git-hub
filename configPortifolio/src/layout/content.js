@@ -9,12 +9,20 @@ export function Main() {
 	mainContainer.classList.add('content');
 
 	mainContainer.innerHTML = `
-		   <!-- aside menu -->
-		    <aside class="menu">
-		    	<div class="txt-h1">
-					<h1>Contatos</h1>
-				</div>
-		    </aside>
+		  <div class="">
+		 	 <!-- aside menu -->
+				<aside class="menu">
+					<div class="txt-h1">
+						<h1>Contatos</h1>
+					</div>
+				</aside> 
+
+				<aside class="menu">
+					<div class="txt-h1">
+						<h1>Experiência</h1>
+					</div>
+				</aside>
+		  </div>
 
 
 		    <!-- card -->
