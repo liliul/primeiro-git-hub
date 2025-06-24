@@ -1,5 +1,6 @@
 import { Card } from "./card.js";
 import { MenuContatos } from './menuContato.js';
+import { MenuExperiencia } from "./menuExperiencia.js";
 
 import { userConfig } from "../config/index.js";
 
@@ -17,3 +18,10 @@ arrayInfos.map((infos) => {
  */
 const menuContato = new MenuContatos(userConfig.contatosMenu)
 menuContato.renderMenuContatos()
+
+/**
+ * experiencias
+ */
+
+const menuExperiencia = new MenuExperiencia()
+menuExperiencia.build()

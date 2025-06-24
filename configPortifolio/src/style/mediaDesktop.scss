@@ -232,6 +232,93 @@
                         }
                     }
                 }
+
+
+                .c-experinecia {
+                    overflow-y: auto;
+                    height: 300px;
+                    // overflow: scroll;
+                    scrollbar-color: var(--body-bg-color) var(--bg-cards);
+                    scrollbar-width: thin;
+                    
+                    .experiencia {
+                        margin-bottom: 30px;
+                    
+                        .ex-header {
+                            display: flex;
+                            gap: 15px;
+
+                            .ex-img {
+                                @include border-div();
+                                width: 55px;
+                                height: 55px;
+                            }
+
+                            .ex-info {
+                                
+                                h1 {
+                                    font-size: var(--h3-font-size);
+                                    margin-bottom: 1px;
+                                }
+
+                                span {
+                                    font-size: .65rem;
+                                }
+                            }
+                        }
+
+                        .ex-conteudo {
+                            margin-top: 10px;
+                            margin-left: 10px;
+
+                            .ex-ul {
+                                list-style-type: none;
+
+                                .ex-li {
+                                    
+                                    h2 {
+                                        font-size: var(--normal-font-size);
+                                        margin-bottom: 3px;
+
+                                        span {
+                                            font-size: var(--smaller-font-size);
+                                            font-weight: 100;
+                                        }
+                                    }
+
+                                    p {
+                                        font-size: var(--normal-font-size);
+
+                                        span {
+                                            font-size: var(--smaller-font-size);
+                                        }
+                                    }
+
+                                    .ex-sub-infos {
+                                        margin-top: 15px;
+
+                                        h3 {
+                                            font-size: var(--normal-font-size);
+                                            margin-bottom: 3px;
+                                            font-weight: 100;
+
+                                            span {
+                                                font-size: var(--smaller-font-size);
+                                            }
+                                        }
+
+                                        p {
+                                            font-size: var(--normal-font-size);
+                                            span {
+                                                font-size: var(--smaller-font-size);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             }
 
 
