@@ -232,12 +232,19 @@
                         }
                     }
                 }
+            }
 
+            .menu-experiencia {
+                @include border-div();
+                width: 300px;
+                height: fit-content;
 
-                .c-experinecia {
+                padding: 30px;
+                margin-bottom: 20px;
+
+                .c-experiencia {
+                    height: 400px;
                     overflow-y: auto;
-                    height: 300px;
-                    // overflow: scroll;
                     scrollbar-color: var(--body-bg-color) var(--bg-cards);
                     scrollbar-width: thin;
                     

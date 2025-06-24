@@ -17,10 +17,12 @@ export function Main() {
 					</div>
 				</aside> 
 
-				<aside id="menu-experiencias" class="menu">
+				<aside id="menu-experiencias" class="menu-experiencia">
 					<div class="txt-h1">
 						<h1>Experiência</h1>
 					</div>
+
+					<section id="c-experinecia" class="c-experiencia"></section>
 				</aside>
 		  </div>
 

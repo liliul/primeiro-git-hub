@@ -21,10 +21,10 @@ export class MenuExperiencia extends interfaceExperiencia {
 
     html() {
         const div = document.createElement('div')
-        div.classList.add('c-experinecia')
+        div.classList.add('experiencia')
 
         div.innerHTML = `
-            <div class="experiencia">
+          
                 <header class="ex-header">
                     <img src="${this.img}" alt="globe" class="ex-img">
 
@@ -47,9 +47,9 @@ export class MenuExperiencia extends interfaceExperiencia {
                         </li>
                     </ul>
                 </section>
-            </div>
+           
         `
 
-        document.querySelector('#menu-experiencias').appendChild(div)
+        document.querySelector('#c-experinecia').appendChild(div)
     }
 }

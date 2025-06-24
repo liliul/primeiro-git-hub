@@ -335,11 +335,19 @@ a {
                         }
                     }
                 }
+            }
 
-                .c-experinecia {
-                    overflow-y: auto;
+            .menu-experiencia {
+                @include border-div();
+                max-width: 100%;
+                height: fit-content;
+
+                padding: 30px;
+                margin-bottom: 20px;
+
+                .c-experiencia {
                     height: 300px;
-                    // overflow: scroll;
+                    overflow-y: auto;
                     scrollbar-color: var(--body-bg-color) var(--bg-cards);
                     scrollbar-width: thin;
                     
@@ -422,7 +430,6 @@ a {
                     }
                 }
             }
-
 
 
             .cards-container {
