@@ -1,6 +1,7 @@
 import { Card } from "./card.js";
 import { MenuContatos } from './menuContato.js';
 import { MenuExperiencia } from "./menuExperiencia.js";
+import { SkillsTech } from "./skillsTech.js";
 
 import { userConfig } from "../config/index.js";
 
@@ -27,8 +28,8 @@ const experiencia = userConfig.experienciaMenu
 const menuExperiencia = new MenuExperiencia()
 
 experiencia.map((item) => {
-    menuExperiencia.img = item.img 
-    menuExperiencia.nome = item.nome 
+    menuExperiencia.img = item.img
+    menuExperiencia.nome = item.nome
     menuExperiencia.data = item.data
     menuExperiencia.oquefaz = item.oquefaz
     menuExperiencia.competencia = item.competencia
@@ -37,3 +38,10 @@ experiencia.map((item) => {
     menuExperiencia.build()
 })
 
+
+/**
+ * skills
+*/
+
+const skillsTech = new SkillsTech();
+skillsTech.renderSkillsTech()

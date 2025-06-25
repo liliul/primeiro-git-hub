@@ -1,7 +1,4 @@
 import { userConfig } from "../config";
-import { SkillsTech } from "../hook/skillsTech";
-
-const skillsTech = new SkillsTech();
 
 /**
  * @function
@@ -43,6 +40,4 @@ export function Header() {
         `;
 
 	document.querySelector('#app').insertAdjacentElement('afterbegin', headContainer);
-
-	skillsTech.renderSkillsTech()
 }
