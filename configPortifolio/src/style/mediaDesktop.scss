@@ -286,10 +286,11 @@
                                     h2 {
                                         font-size: var(--normal-font-size);
                                         margin-bottom: 3px;
-
+                                        
                                         span {
                                             font-size: var(--smaller-font-size);
                                             font-weight: 100;
+                                            color: var(--bg-techs);
                                         }
                                     }
 
@@ -298,6 +299,7 @@
 
                                         span {
                                             font-size: var(--smaller-font-size);
+                                            color: var(--bg-techs);
                                         }
                                     }
 
@@ -311,6 +313,7 @@
 
                                             span {
                                                 font-size: var(--smaller-font-size);
+                                                color: var(--bg-techs);
                                             }
                                         }
 
@@ -318,6 +321,7 @@
                                             font-size: var(--normal-font-size);
                                             span {
                                                 font-size: var(--smaller-font-size);
+                                                color: var(--bg-techs);
                                             }
                                         }
                                     }
