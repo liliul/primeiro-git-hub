@@ -9,7 +9,7 @@ export function Main() {
 	mainContainer.classList.add('content');
 
 	mainContainer.innerHTML = `
-		  <div class="">
+		  <div>
 		 	 <!-- aside menu -->
 				<aside id="menu-contatos" class="menu">
 					<div class="txt-h1">
