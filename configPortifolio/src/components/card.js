@@ -1,4 +1,5 @@
 import OpenModalPreview from "../hook/openModalPreview";
+import AplicarCoresTech from "../hook/aplicarCoresTech";
 
 export class Card {
   constructor(title, description, snapshot, languages = [], iframe) {
@@ -31,7 +32,7 @@ export class Card {
     divSpans.classList.add('spanWrap');
     if (this.languages.length > 0) {
       divSpans.textContent = this.languages.join(' ');
-      Card.applyTechColors(divSpans);
+      AplicarCoresTech.applyTechColors(divSpans);
     } else {
       divSpans.textContent = 'sem linguagens';
     }
@@ -48,18 +49,18 @@ export class Card {
     document.getElementById('cards').appendChild(section);
   }
 
-  static applyTechColors(spanElement) {
-    const cores = ['#ff667c', '#dd423e', '#a2a384', '#eac388', '#c5ad4b'];
+  // static applyTechColors(spanElement) {
+  //   const cores = ['#ff667c', '#dd423e', '#a2a384', '#eac388', '#c5ad4b'];
 
-    const palavras = spanElement.textContent.split(' ');
+  //   const palavras = spanElement.textContent.split(' ');
 
-    spanElement.innerHTML = palavras
-      .map((palavra, i) => {
-        const cor = cores[i % cores.length];
-        return `<span class="circle" style="--circle-color: ${cor};">${palavra}</span>`;
-      })
-      .join('');
-  }
+  //   spanElement.innerHTML = palavras
+  //     .map((palavra, i) => {
+  //       const cor = cores[i % cores.length];
+  //       return `<span class="circle" style="--circle-color: ${cor};">${palavra}</span>`;
+  //     })
+  //     .join('');
+  // }
 
   // static openModal(iframe) {
   //   const existing = document.querySelector('.modal');
