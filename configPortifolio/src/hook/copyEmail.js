@@ -1,6 +1,7 @@
 export class CopyEmail {
     static copy() {
-        document.getElementById('button-copy').addEventListener('click', () => {
+        document.getElementById('button-copy').addEventListener('click', (event) => {
+            event.preventDefault()
             const copyEmail = document.getElementById('copy-email').textContent;
 
             navigator.clipboard.writeText(copyEmail).then(() => {
