@@ -1,3 +1,5 @@
+import { CopyEmail } from "../hook/copyEmail";
+
 export class MenuContatos {
 	constructor(contatoStringHtml) {
 		this.contatos = contatoStringHtml;
@@ -10,5 +12,7 @@ export class MenuContatos {
 		`;
 
 		document.querySelector('#menu-contatos').appendChild(ul);
+
+		CopyEmail.copy();
 	}
 }
