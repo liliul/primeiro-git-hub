@@ -1,3 +1,5 @@
+import AlertCustom from "./alertCustom";
+
 export class CopyEmail {
     static copy() {
         document.getElementById('button-copy').addEventListener('click', (event) => {
@@ -5,8 +7,12 @@ export class CopyEmail {
             const copyEmail = document.getElementById('copy-email').textContent;
 
             navigator.clipboard.writeText(copyEmail).then(() => {
-                alert('Copiado com sucesso!');
-            }).catch((e) => console.log('erro', e))
+                // alert('Copiado com sucesso!');
+                AlertCustom.menssagem('Email copiado com sucesso!')
+            }).catch((e) => {
+                console.log('erro copiar: ', e);
+                // AlertCustom('Email não copiado!');
+            })
         })
     }
 }
