@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "start": "eleventy --serve",
-    "build": "eleventy",
+    "build": "ELEVENTY_ENV=production eleventy",
     "test": "echo && exit 1"
   },
   "keywords": [],
@@ -12,6 +12,9 @@
   "license": "ISC",
   "description": "",
   "devDependencies": {
-    "@11ty/eleventy": "^3.1.2"
+    "@11ty/eleventy": "^3.1.2",
+    "clean-css": "^5.3.3",
+    "html-minifier": "^4.0.0",
+    "terser": "^5.43.1"
   }
 }
