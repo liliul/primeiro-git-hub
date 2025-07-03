@@ -1,6 +1,255 @@
-<main>
-    <h1>Conteúdo principal da página.</h1>
-    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel, ipsam suscipit, facere aspernatur laboriosam
-        numquam totam quas incidunt at corporis,
-        expedita aperiam ea ipsa quibusdam adipisci ducimus voluptatibus dolorem quidem.</p>
+<main class="content">
+    <div>
+        <!-- aside menu -->
+        <aside id="menu-contatos" class="menu">
+            <div class="txt-h1">
+                <h1>Contatos</h1>
+            </div>
+            <ul class="m-ul">
+
+                <li class="m-li">
+                    <div>
+                        <img class="iconMenuSize" src="./assets/map-pin.svg">
+                    </div>
+
+                    <div class="m-li-contato">
+                        <span class="text">Localidade</span>
+                        <span id="followers" class="text numStyle">Brasil</span>
+                    </div>
+                </li>
+
+                <li class="m-li">
+                    <div>
+                        <img class="iconMenuSize" src="./assets/github.svg">
+                    </div>
+
+                    <div class="m-li-contato">
+                        <span class="text">github</span>
+                        <a href="https://www.github.com/liliul" target="_blank" class="text ">
+                            <p>liliul</p>
+
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" width="16"
+                                height="16">
+                                <path
+                                    d="M15 1v6h-2V4.41L7.41 10 6 8.59 11.59 3H9V1zm-4 10a1 1 0 01-1 1H5a1 1 0 01-1-1V6a1 1 0 011-1h2V3H5a3 3 0 00-3 3v5a3 3 0 003 3h5a3 3 0 003-3V9h-2z">
+                                </path>
+                            </svg>
+                        </a>
+
+                    </div>
+                </li>
+
+                <li class="m-li">
+                    <div>
+                        <img class="iconMenuSize" src="./assets/linkedin.svg">
+                    </div>
+
+                    <div class="m-li-contato">
+                        <span class="text">Linkedin</span>
+                        <a href="https://www.linkedin.com/in/liliu-lililzers-5bb4b8189" target="_blank" class="text">
+                            <p>@Liliu</p>
+
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" width="16"
+                                height="16">
+                                <path
+                                    d="M15 1v6h-2V4.41L7.41 10 6 8.59 11.59 3H9V1zm-4 10a1 1 0 01-1 1H5a1 1 0 01-1-1V6a1 1 0 011-1h2V3H5a3 3 0 00-3 3v5a3 3 0 003 3h5a3 3 0 003-3V9h-2z">
+                                </path>
+                            </svg>
+                        </a>
+                    </div>
+                </li>
+
+                <li class="m-li">
+                    <div>
+                        <img class="iconMenuSize" src="./assets/mail.svg">
+                    </div>
+
+                    <div class="m-li-contato">
+                        <span class="text">Email</span>
+                        <a id="button-copy" href="#" class="text">
+                            <p id="copy-email">@liliuContato</p>
+
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" width="16"
+                                height="16">
+                                <path
+                                    d="M15 1v6h-2V4.41L7.41 10 6 8.59 11.59 3H9V1zm-4 10a1 1 0 01-1 1H5a1 1 0 01-1-1V6a1 1 0 011-1h2V3H5a3 3 0 00-3 3v5a3 3 0 003 3h5a3 3 0 003-3V9h-2z">
+                                </path>
+                            </svg>
+                        </a>
+                    </div>
+                </li>
+
+                <li class="m-li">
+                    <div>
+                        <img class="iconMenuSize" src="./assets/folder.svg">
+                    </div>
+
+                    <div class="m-li-contato">
+                        <span class="text">Curriculo</span>
+                        <a href="#" target="_blank" class="text">
+                            <p>liliu</p>
+
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" width="16"
+                                height="16">
+                                <path
+                                    d="M15 1v6h-2V4.41L7.41 10 6 8.59 11.59 3H9V1zm-4 10a1 1 0 01-1 1H5a1 1 0 01-1-1V6a1 1 0 011-1h2V3H5a3 3 0 00-3 3v5a3 3 0 003 3h5a3 3 0 003-3V9h-2z">
+                                </path>
+                            </svg>
+                        </a>
+                    </div>
+                </li>
+
+            </ul>
+        </aside>
+
+        <aside id="menu-experiencias" class="menu-experiencia">
+            <div class="txt-h1">
+                <h1>Experiência</h1>
+            </div>
+
+            <section id="c-experinecia" class="c-experiencia">
+                <div class="experiencia">
+
+                    <header class="ex-header">
+                        <img src="./assets/globe.svg" alt="globe" class="ex-img">
+
+                        <div class="ex-info">
+                            <h1>Liliul Fundação Brasil</h1>
+                            <span>mai de 2020 - set de 2022</span>
+                        </div>
+                    </header>
+
+                    <section class="ex-conteudo">
+                        <ul class="ex-ul">
+                            <li class="ex-li">
+                                <h2>o que faz: <span>Desenvolvi uma feature no frontend</span></h2>
+                                <p>copetencias: <span>TypeScript, React, Next.js</span></p>
+
+                                <div class="ex-sub-infos">
+                                    <h3>atuação na empresa: <span>Pleno Desenvolvedor</span></h3>
+                                    <p>fez o que: <span>Frontend</span></p>
+                                </div>
+                            </li>
+                        </ul>
+                    </section>
+
+                </div>
+                <div class="experiencia">
+
+                    <header class="ex-header">
+                        <img src="./assets/artista-1.png" alt="globe" class="ex-img">
+
+                        <div class="ex-info">
+                            <h1>Google alfa.</h1>
+                            <span>jun de 2023 - out de 2025</span>
+                        </div>
+                    </header>
+
+                    <section class="ex-conteudo">
+                        <ul class="ex-ul">
+                            <li class="ex-li">
+                                <h2>o que faz: <span>Desenvolvimento de data center e ia</span></h2>
+                                <p>copetencias: <span>Rust, GoLang, C/C++, Linux</span></p>
+
+                                <div class="ex-sub-infos">
+                                    <h3>atuação na empresa: <span>Sinior Desenvolvedor</span></h3>
+                                    <p>fez o que: <span>Backend linux server inteligencia artificial.</span></p>
+                                </div>
+                            </li>
+                        </ul>
+                    </section>
+
+                </div>
+                <div class="experiencia">
+
+                    <header class="ex-header">
+                        <img src="./assets/globe.svg" alt="globe" class="ex-img">
+
+                        <div class="ex-info">
+                            <h1>Google alfa.</h1>
+                            <span>jun de 2023 - out de 2025</span>
+                        </div>
+                    </header>
+
+                    <section class="ex-conteudo">
+                        <ul class="ex-ul">
+                            <li class="ex-li">
+                                <h2>o que faz: <span>Desenvolvimento de data center e ia</span></h2>
+                                <p>copetencias: <span>Rust, GoLang, C/C++, Linux</span></p>
+
+                                <div class="ex-sub-infos">
+                                    <h3>atuação na empresa: <span>Sinior Desenvolvedor</span></h3>
+                                    <p>fez o que: <span>Backend linux server inteligencia artificial.</span></p>
+                                </div>
+                            </li>
+                        </ul>
+                    </section>
+
+                </div>
+                <div class="experiencia">
+
+                    <header class="ex-header">
+                        <img src="./assets/globe.svg" alt="globe" class="ex-img">
+
+                        <div class="ex-info">
+                            <h1>Google alfa.</h1>
+                            <span>jun de 2023 - out de 2025</span>
+                        </div>
+                    </header>
+
+                    <section class="ex-conteudo">
+                        <ul class="ex-ul">
+                            <li class="ex-li">
+                                <h2>o que faz: <span>Desenvolvimento de data center e ia</span></h2>
+                                <p>copetencias: <span>Rust, GoLang, C/C++, Linux</span></p>
+
+                                <div class="ex-sub-infos">
+                                    <h3>atuação na empresa: <span>Sinior Desenvolvedor</span></h3>
+                                    <p>fez o que: <span>Backend linux server inteligencia artificial.</span></p>
+                                </div>
+                            </li>
+                        </ul>
+                    </section>
+
+                </div>
+            </section>
+        </aside>
+    </div>
+
+
+    <!-- card -->
+    <section id="cards" class="cards-container">
+        <div class="text-github">
+            <h1>Projetos</h1>
+        </div>
+
+        <section class="card">
+            <h1>Testando cards infos</h1>
+            <p>cards user teste infos teste</p><img src="./assets/artista-1.png" width="100" height="100">
+            <div class="tech">
+                <div class="spanWrap"><span class="circle" style="--circle-color: #ff667c;">javascript</span><span
+                        class="circle" style="--circle-color: #dd423e;">html</span><span class="circle"
+                        style="--circle-color: #a2a384;">css/sass</span><span class="circle"
+                        style="--circle-color: #eac388;">firebase</span><span class="circle"
+                        style="--circle-color: #c5ad4b;">typescript</span></div>
+            </div><button>Preview</button>
+        </section>
+        <section class="card">
+            <h1>Testando cards infos</h1>
+            <p>cards user teste infos teste</p><img src="./assets/artista-1.png" width="100" height="100">
+            <div class="tech">
+                <div class="spanWrap">sem linguagens</div>
+            </div><button>Preview</button>
+        </section>
+        <section class="card">
+            <h1>Testando cards infos</h1>
+            <p>cards user teste infos teste</p><img src="./assets/artista-1.png" width="100" height="100">
+            <div class="tech">
+                <div class="spanWrap"><span class="circle" style="--circle-color: #ff667c;">tailwindcss</span><span
+                        class="circle" style="--circle-color: #dd423e;">html</span><span class="circle"
+                        style="--circle-color: #a2a384;">firebase</span></div>
+            </div><button>Preview</button>
+        </section>
+    </section>
+
 </main>
