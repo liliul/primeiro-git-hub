@@ -46,6 +46,7 @@ module.exports = function (eleventyConfig) {
   // Pass through fonts and images
   eleventyConfig.addPassthroughCopy("fonts");
   eleventyConfig.addPassthroughCopy("img");
+  eleventyConfig.addPassthroughCopy("assets");
 
   return {
     dir: {
