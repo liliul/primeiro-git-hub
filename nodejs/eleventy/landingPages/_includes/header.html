@@ -7,7 +7,7 @@
 
             <div class="nome-user">
 
-                {% if config.simonao %}
+                {% if config.nome and config.nome != "" %}
                     <h1>{{ config.nome }}</h1>
                 {% else %}
                     <p>Nenhum nome</p>
@@ -19,14 +19,13 @@
         <div class="info-rede">
             <div class="bio">
                 <h2>Bio</h2>
-                <p>
 
-                    Meu nome é Liliul e sou desenvolvedor Full Stack.
-                    Crio aplicações web completas utilizando JavaScript, Node.js,
-                    MySQL e Docker, com foco em desempenho e organização.
-                    Confira meus projetos ou entre em contato para colaborarmos!
+                    {% if config.bio and config.bio != "" %}
+                        <p>{{ config.bio }}</p>
+                    {% else %}
+                        <p>Nenhum bio</p>    
+                    {% endif %}
 
-                </p>
             </div>
         </div>
     </div>
@@ -35,33 +34,13 @@
         <h2>Tecnologias</h2>
 
         <ul id="skills-tech-id" class="skill">
-            <li class="item-skills">
-                <p>Javascript</p>
-            </li>
-            <li class="item-skills">
-                <p>html/css/sass</p>
-            </li>
-            <li class="item-skills">
-                <p>node</p>
-            </li>
-            <li class="item-skills">
-                <p>typescript</p>
-            </li>
-            <li class="item-skills">
-                <p>php</p>
-            </li>
-            <li class="item-skills">
-                <p>react</p>
-            </li>
-            <li class="item-skills">
-                <p>firebase</p>
-            </li>
-            <li class="item-skills">
-                <p>git/github</p>
-            </li>
-            <li class="item-skills">
-                <p>docker/compose</p>
-            </li>
+
+            {% for lang in config.skillsTech %}
+                <li class="item-skills">
+                    <p>{{ lang }}</p>
+                </li>
+            {% endfor %}
+            
         </ul>
     </div>
 </header>
