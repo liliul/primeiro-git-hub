@@ -6,7 +6,13 @@
             </div>
 
             <div class="nome-user">
-                <h1>Liliul</h1>
+
+                {% if config.simonao %}
+                    <h1>{{ config.nome }}</h1>
+                {% else %}
+                    <p>Nenhum nome</p>
+                {% endif %}
+
             </div>
         </div>
 
