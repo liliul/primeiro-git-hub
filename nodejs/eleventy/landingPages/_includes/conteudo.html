@@ -108,110 +108,36 @@
             </div>
 
             <section id="c-experinecia" class="c-experiencia">
-                <div class="experiencia">
 
-                    <header class="ex-header">
-                        <img src="./assets/globe.svg" alt="globe" class="ex-img">
+                {% for experiencia in config.experienciaMenu %}
+                    <div class="experiencia">
 
-                        <div class="ex-info">
-                            <h1>Liliul Fundação Brasil</h1>
-                            <span>mai de 2020 - set de 2022</span>
-                        </div>
-                    </header>
+                        <header class="ex-header">
+                            <img src="{{ experiencia.img }}" alt="{{ experiencia.nome }}" class="ex-img">
 
-                    <section class="ex-conteudo">
-                        <ul class="ex-ul">
-                            <li class="ex-li">
-                                <h2>o que faz: <span>Desenvolvi uma feature no frontend</span></h2>
-                                <p>copetencias: <span>TypeScript, React, Next.js</span></p>
+                            <div class="ex-info">
+                                <h1>{{ experiencia.nome}}</h1>
+                                <span>{{ experiencia.data}}</span>
+                            </div>
+                        </header>
 
-                                <div class="ex-sub-infos">
-                                    <h3>atuação na empresa: <span>Pleno Desenvolvedor</span></h3>
-                                    <p>fez o que: <span>Frontend</span></p>
-                                </div>
-                            </li>
-                        </ul>
-                    </section>
+                        <section class="ex-conteudo">
+                            <ul class="ex-ul">
+                                <li class="ex-li">
+                                    <h2>o que faz: <span>{{ experiencia.oquefaz}}</span></h2>
+                                    <p>copetencias: <span>{{ experiencia.competencia}}</span></p>
 
-                </div>
-                <div class="experiencia">
+                                    <div class="ex-sub-infos">
+                                        <h3>atuação na empresa: <span>{{ experiencia.atuacao }}</span></h3>
+                                        <p>fez o que: <span>{{ experiencia.fezoque}}</span></p>
+                                    </div>
+                                </li>
+                            </ul>
+                        </section>
 
-                    <header class="ex-header">
-                        <img src="./assets/artista-1.png" alt="globe" class="ex-img">
-
-                        <div class="ex-info">
-                            <h1>Google alfa.</h1>
-                            <span>jun de 2023 - out de 2025</span>
-                        </div>
-                    </header>
-
-                    <section class="ex-conteudo">
-                        <ul class="ex-ul">
-                            <li class="ex-li">
-                                <h2>o que faz: <span>Desenvolvimento de data center e ia</span></h2>
-                                <p>copetencias: <span>Rust, GoLang, C/C++, Linux</span></p>
-
-                                <div class="ex-sub-infos">
-                                    <h3>atuação na empresa: <span>Sinior Desenvolvedor</span></h3>
-                                    <p>fez o que: <span>Backend linux server inteligencia artificial.</span></p>
-                                </div>
-                            </li>
-                        </ul>
-                    </section>
-
-                </div>
-                <div class="experiencia">
-
-                    <header class="ex-header">
-                        <img src="./assets/globe.svg" alt="globe" class="ex-img">
-
-                        <div class="ex-info">
-                            <h1>Google alfa.</h1>
-                            <span>jun de 2023 - out de 2025</span>
-                        </div>
-                    </header>
-
-                    <section class="ex-conteudo">
-                        <ul class="ex-ul">
-                            <li class="ex-li">
-                                <h2>o que faz: <span>Desenvolvimento de data center e ia</span></h2>
-                                <p>copetencias: <span>Rust, GoLang, C/C++, Linux</span></p>
-
-                                <div class="ex-sub-infos">
-                                    <h3>atuação na empresa: <span>Sinior Desenvolvedor</span></h3>
-                                    <p>fez o que: <span>Backend linux server inteligencia artificial.</span></p>
-                                </div>
-                            </li>
-                        </ul>
-                    </section>
-
-                </div>
-                <div class="experiencia">
-
-                    <header class="ex-header">
-                        <img src="./assets/globe.svg" alt="globe" class="ex-img">
-
-                        <div class="ex-info">
-                            <h1>Google alfa.</h1>
-                            <span>jun de 2023 - out de 2025</span>
-                        </div>
-                    </header>
-
-                    <section class="ex-conteudo">
-                        <ul class="ex-ul">
-                            <li class="ex-li">
-                                <h2>o que faz: <span>Desenvolvimento de data center e ia</span></h2>
-                                <p>copetencias: <span>Rust, GoLang, C/C++, Linux</span></p>
-
-                                <div class="ex-sub-infos">
-                                    <h3>atuação na empresa: <span>Sinior Desenvolvedor</span></h3>
-                                    <p>fez o que: <span>Backend linux server inteligencia artificial.</span></p>
-                                </div>
-                            </li>
-                        </ul>
-                    </section>
-
-                </div>
+                    </div>
+                {% endfor%}
+                
             </section>
         </aside>
     </div>
