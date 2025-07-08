@@ -41,3 +41,51 @@ class OpenModalPreview {
   }
 }
 
+class CopyEmail {
+    static copy() {
+        document.getElementById('button-copy').addEventListener('click', (event) => {
+            event.preventDefault()
+            
+            const copyEmail = document.getElementById('copy-email').textContent;
+
+            navigator.clipboard.writeText(copyEmail).then(() => {
+
+                AlertCustom.menssagem('Email copiado com sucesso!')
+
+              }).catch((e) => {
+
+                console.log('erro copiar: ', e);
+                
+                AlertCustom.menssagem('Erro ao copiar email.')
+            })
+        })
+    }
+}
+
+class AlertCustom {
+    static menssagem(menssagem) {
+        if (document.querySelector('.alert-custom')) return;
+
+        const div = document.createElement('div');
+        div.classList.add('alert-custom');
+
+        div.innerHTML = `
+            <button id="close-alert-custom">x</button>
+            <h1>${menssagem}</h1>
+        `;
+
+        document.querySelector('body').appendChild(div);
+        
+        document.getElementById('close-alert-custom').addEventListener('click', () => {
+            document.querySelector('.alert-custom').remove();
+        })
+        
+        setTimeout(() => {
+            if (document.body.contains(div)) {
+                div.remove();
+            }
+        }, 5000);   
+    }
+}
+
+CopyEmail.copy()
