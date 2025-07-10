@@ -149,7 +149,28 @@
             <h1>Projetos</h1>
         </div>
 
-        <section class="card">
+        {% for cards in config.cardInfos %}
+            <section class="card">
+                <h1>{{ cards.title }}</h1>
+                <p>{{ cards.description}}</p>
+                <img src="{{ cards.snapshot }}" width="100" height="100" alt="{{ cards.title }}">
+                <div class="tech">
+                    <div class="spanWrap">
+                        {% if cards.linguagens | length > 0 %}
+
+                            {% for lang in cards.linguagens %}
+                                <span class="circle">{{ lang }}</span>
+                            {% endfor %}
+                            
+                        {% else %}
+                            <p class="sem-linguagens">Sem tecnologias</p>
+                        {% endif %}
+                    </div>
+                </div><button class="js-open-modal" data-url="{{ cards.iframe }}">Preview</button>
+            </section>
+        {% endfor %}
+
+        <!-- <section class="card">
             <h1>Testando cards infos</h1>
             <p>cards user teste infos teste</p><img src="./assets/artista-1.png" width="100" height="100">
             <div class="tech">
@@ -175,7 +196,7 @@
                         class="circle" style="--circle-color: #dd423e;">html</span><span class="circle"
                         style="--circle-color: #a2a384;">firebase</span></div>
             </div><button class="js-open-modal" data-url="https://naruto-classico.firebaseapp.com/">Preview</button>
-        </section>
+        </section> -->
     </section>
 
 </main>

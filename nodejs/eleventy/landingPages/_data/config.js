@@ -64,5 +64,34 @@ module.exports = {
 			atuacao: 'Desenvolvedor Sinior Backend',
 			fezoque: 'Sistema de video aulas com player customizado.'
 		}
+	],
+	cardInfos: [
+		{
+			title: "Clima Tempo",
+			description: "ClimaTempo com leaflet map e openweathermap e temas",
+			snapshot: "./assets/artista-1.png",
+			linguagens: [
+				'javascript', 'html', 'css/sass', 'firebase'
+			],
+			iframe: 'https://climatempo-6f654.web.app/'
+		},
+		{
+			title: "Testando cards infos	",
+			description: "cards user teste infos teste",
+			snapshot: "./assets/artista-1.png",
+			linguagens: [
+
+			],
+			iframe: 'https://naruto-classico.firebaseapp.com/'
+		},
+		{
+			title: "Testando cards infos",
+			description: "cards user teste infos teste",
+			snapshot: "./assets/artista-1.png",
+			linguagens: [
+				'tailwindcss', 'html', 'firebase'
+			],
+			iframe: 'https://liliul.github.io/blogr-landing-page/'
+		}
 	]
 };
