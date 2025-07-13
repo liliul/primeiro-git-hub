@@ -528,6 +528,9 @@ a {
   display: flex;
   flex-wrap: wrap;
 }
+.spanLang {
+  margin-right: 5px;
+}
 
 .iconMenuSize {
   width: 18px;
