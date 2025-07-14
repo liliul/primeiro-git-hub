@@ -7,6 +7,7 @@ module.exports = {
         MySQL e Docker, com foco em desempenho e organização. 
         Confira meus projetos ou entre em contato para colaborarmos!
     `,
+	location: "Brasil",
     skillsTech: [
 	'Javascript',
 	'html/css/sass',

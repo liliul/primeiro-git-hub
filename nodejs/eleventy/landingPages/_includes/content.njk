@@ -14,7 +14,13 @@
 
                     <div class="m-li-contato">
                         <span class="text">Localidade</span>
-                        <span id="followers" class="text numStyle">Brasil</span>
+                        <span id="followers" class="text numStyle">
+                            {% if config.location | length > 0 %}
+                                {{ config.location }}
+                            {% else %}
+                                sem localidade
+                            {% endif %}
+                        </span>
                     </div>
                 </li>
 
@@ -125,7 +131,7 @@
                             <ul class="ex-ul">
                                 <li class="ex-li">
                                     <h2>o que faz: <span>{{ experiencia.oquefaz}}</span></h2>
-                                    <p>copetencias: <span>{{ experiencia.competencia}}</span></p>
+                                    <p>competência: <span>{{ experiencia.competencia}}</span></p>
 
                                     <div class="ex-sub-infos">
                                         <h3>atuação na empresa: <span>{{ experiencia.atuacao }}</span></h3>
