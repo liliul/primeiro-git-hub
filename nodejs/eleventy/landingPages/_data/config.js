@@ -8,6 +8,8 @@ module.exports = {
         Confira meus projetos ou entre em contato para colaborarmos!
     `,
 	location: "Brasil",
+	githubnome: "liliul",
+	githublink: "https://www.github.com/liliul",
     skillsTech: [
 	'Javascript',
 	'html/css/sass',
