@@ -1,9 +1,9 @@
 class CopyEmail {
     static copy() {
-        document.getElementById('button-copy').addEventListener('click', (event) => {
+        document.getElementById('copy-email').addEventListener('click', (event) => {
             event.preventDefault()
             
-            const copyEmail = document.getElementById('copy-email').textContent;
+            const copyEmail = event.currentTarget.dataset.emailgithub;
 
             navigator.clipboard.writeText(copyEmail).then(() => {
 

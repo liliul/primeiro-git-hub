@@ -10,6 +10,8 @@ module.exports = {
 	location: "Brasil",
 	githubnome: "liliul",
 	githublink: "https://www.github.com/liliul",
+	emailnome: "@liliuContato",
+	email: "liliugithub@gmail.com",
     skillsTech: [
 	'Javascript',
 	'html/css/sass',

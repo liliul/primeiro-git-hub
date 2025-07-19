@@ -102,16 +102,51 @@
 
                     <div class="m-li-contato">
                         <span class="text">Email</span>
-                        <a id="button-copy" href="#" class="text">
-                            <p id="copy-email">@liliuContato</p>
 
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" width="16"
-                                height="16">
-                                <path
-                                    d="M15 1v6h-2V4.41L7.41 10 6 8.59 11.59 3H9V1zm-4 10a1 1 0 01-1 1H5a1 1 0 01-1-1V6a1 1 0 011-1h2V3H5a3 3 0 00-3 3v5a3 3 0 003 3h5a3 3 0 003-3V9h-2z">
-                                </path>
-                            </svg>
-                        </a>
+                        {% if config.email | length > 0 %}
+
+                            <a id="button-copy" href="#" class="text">
+                                <p 
+                                    id="copy-email" 
+                                    data-emailgithub="{{ config.email }}"
+                                    role="button"
+                                    tabindex="0"
+                                    aria-label="Copiar e-mail para a área de transferência"
+                                >
+                                 {{ config.emailnome }}    
+                                </p>
+
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" width="16"
+                                    height="16">
+                                    <path
+                                        d="M15 1v6h-2V4.41L7.41 10 6 8.59 11.59 3H9V1zm-4 10a1 1 0 01-1 1H5a1 1 0 01-1-1V6a1 1 0 011-1h2V3H5a3 3 0 00-3 3v5a3 3 0 003 3h5a3 3 0 003-3V9h-2z">
+                                    </path>
+                                </svg>
+                            </a>
+
+                        {% else %}
+
+                             <a id="button-copy" href="#" class="text">
+                                <p 
+                                    id="copy-email" 
+                                    data-emailgithub="#"
+                                    role="button"
+                                    tabindex="0"
+                                    aria-label="Copiar e-mail para a área de transferência"
+                                    >
+                                    @TagEmail
+                                </p>
+
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" width="16"
+                                    height="16">
+                                    <path
+                                        d="M15 1v6h-2V4.41L7.41 10 6 8.59 11.59 3H9V1zm-4 10a1 1 0 01-1 1H5a1 1 0 01-1-1V6a1 1 0 011-1h2V3H5a3 3 0 00-3 3v5a3 3 0 003 3h5a3 3 0 003-3V9h-2z">
+                                    </path>
+                                </svg>
+                            </a>
+
+                        {% endif %}
+                        
                     </div>
                 </li>
 
