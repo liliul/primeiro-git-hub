@@ -12,6 +12,8 @@ module.exports = {
 	githublink: "https://www.github.com/liliul",
 	emailnome: "@liliuContato",
 	email: "liliugithub@gmail.com",
+	curriculonome: "liliu",
+	curriculolink: "https://www.github.com/liliul",
     skillsTech: [
 	'Javascript',
 	'html/css/sass',
