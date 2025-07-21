@@ -10,6 +10,8 @@ module.exports = {
 	location: "Brasil",
 	githubnome: "liliul",
 	githublink: "https://www.github.com/liliul",
+	linkedinlink: "https://www.linkedin.com/in/liliu-lililzers-5bb4b8189",
+	linkedinnome: "@Liliu",
 	emailnome: "@liliuContato",
 	email: "liliugithub@gmail.com",
 	curriculonome: "liliu",
