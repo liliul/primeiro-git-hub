@@ -85,8 +85,8 @@ module.exports = {
 			iframe: 'https://climatempo-6f654.web.app/'
 		},
 		{
-			title: "Testando cards infos	",
-			description: "cards user teste infos teste",
+			title: "LanginPage Naruto",
+			description: "Langinpage criada para testar hospedagem gratuita do firebase.",
 			snapshot: "./assets/artista-1.png",
 			linguagens: [
 
@@ -94,8 +94,8 @@ module.exports = {
 			iframe: 'https://naruto-classico.firebaseapp.com/'
 		},
 		{
-			title: "Testando cards infos",
-			description: "cards user teste infos teste",
+			title: "LanginPage Blgor",
+			description: "Langinpage responsivel sem framework",
 			snapshot: "./assets/artista-1.png",
 			linguagens: [
 				'tailwindcss', 'html', 'firebase'
