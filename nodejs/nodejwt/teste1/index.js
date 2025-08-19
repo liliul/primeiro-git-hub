@@ -7,31 +7,42 @@ const { expressjwt } = require('express-jwt');
 const app = express();
 const port = 3000;
 
+const db = require('./src/conexao');
+
 app.use(express.json());
 
 // Chave secreta do JWT (deve ser mantida em segredo!)
 const jwtSecret = process.env.JWT_SECRET || 'uma-chave-secreta-muito-forte';
 
-// Dados de exemplo (em um projeto real, seriam de um banco de dados)
-const users = [
-  { id: 1, username: 'li', role: 'user' },
-  { id: 2, username: 'admin', role: 'admin' }
-];
 
-// --- Rota de Autenticação (Login) ---
+// teste do banco de dados
+app.get("/", (req, res) => {
+  db.query("SELECT * FROM usuario", (err, results) => {
+    if (err) return res.status(500).json(err);
+    res.json(results);
+  });
+});
+
 app.post('/login', (req, res) => {
-  const { username } = req.body;
-  const user = users.find(u => u.username === username);
-    console.log(user);
-    
-  if (!user) {
-    return res.status(401).json({ message: 'Credenciais inválidas' });
-  }
+  db.query("SELECT * FROM usuario", (err, results) => {
+    if (err) return res.status(500).json(err);
 
-  // Gera o token JWT com o ID e o papel do usuário
-  const token = jwt.sign({ id: user.id, role: user.role }, jwtSecret, { expiresIn: '1h' });
+      const { username } = req.body;
+   
 
-  res.json({ token });
+      const user = results.find(u => u.username === username);
+        console.log(user);
+        
+      if (!user) {
+        return res.status(401).json({ message: 'Credenciais inválidas' });
+      }
+
+      // Gera o token JWT com o ID e o papel do usuário
+      const token = jwt.sign({ id: user.id, role: user.role }, jwtSecret, { expiresIn: '1h' });
+
+      res.json({ token });
+  });
+
 });
 
 // --- Middleware de Autenticação (verifica o token) ---
@@ -63,7 +74,7 @@ app.get('/profile', authMiddleware, (req, res) => {
 // Rota protegida apenas para admins
 app.get('/admin', authMiddleware, adminMiddleware, (req, res) => {
   // A requisição só chega aqui se o usuário for autenticado e admin
-  res.json({ message: 'Você está na área de admin.' });
+  res.json({ message: `Você está na área de admin. ${req.auth.id}` });
 });
 
 // testando 
