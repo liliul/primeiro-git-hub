@@ -85,6 +85,45 @@ app.get('/nokia', authMiddleware, adminMiddleware, (req, res) => {
   res.json({ message: 'Site da Nokia Smartphones.' });
 });
 
+app.post('/criarusuariologin/', authMiddleware, adminMiddleware, (req, res) => {
+  const {username, role } = req.body
+  console.log(username, role);
+
+  if (!username || !role) res.status(400).json({ message: "Erro username e role vazio"})
+  
+  db.query("INSERT INTO usuario (username, role) VALUES (?, ?)", [username, role], (err, result) => {
+    if (err) return res.status(500).json({ message: "Erro ao adicionar usuario." })
+
+    res.json({ message: "Usuario adiconado com sucesso!", userId: result.insertId })
+  })
+})
+
+app.put('/login/:id', authMiddleware, adminMiddleware, (req, res) => {
+  const { id } = req.params
+  const { username, role } = req.body
+
+  db.query("UPDATE usuario SET username = ?, role = ? WHERE id = ?", [username, role, id], (err, result) => {
+    if (err) return res.status(500).json({ error: err.message })
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ message: "Usuario nao encontrado" })
+    }
+
+    res.json({ message: "Usuario atualizado como sucesso!"})
+  })
+
+})
+
+app.delete('/login/:id', authMiddleware, adminMiddleware, (req, res) => {
+  const { id } = req.params
+  
+  db.query("DELETE FROM usuario WHERE id = ?",[id], (err, result) => {
+    if (err) return res.status(500).json({ error: err.message })
+
+    res.json({ message: `Usuario deletado com sucesso.` })
+  })
+})
+
 app.listen(port, () => {
   console.log(`Servidor rodando na porta ${port}`);
 });
