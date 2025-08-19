@@ -10,6 +10,7 @@ const port = 3000;
 const db = require('./src/conexao');
 
 app.use(express.json());
+app.use(express.static("public"));
 
 // Chave secreta do JWT (deve ser mantida em segredo!)
 const jwtSecret = process.env.JWT_SECRET || 'uma-chave-secreta-muito-forte';
@@ -67,7 +68,7 @@ const adminMiddleware = (req, res, next) => {
 app.get('/profile', authMiddleware, (req, res) => {
   // A requisição só chega aqui se o token for válido
   console.log(req.auth.id);
-  
+
   res.json({ message: `Bem-vindo, usuário ${req.auth.id}` });
 });
 
