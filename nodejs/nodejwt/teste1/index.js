@@ -24,6 +24,12 @@ app.get("/", (req, res) => {
     res.json(results);
   });
 });
+app.get("/get", (req, res) => {
+  db.query("SELECT * FROM usuario", (err, results) => {
+    if (err) return res.status(500).json(err);
+    res.json(results);
+  });
+});
 
 
 // registro
