@@ -40,15 +40,19 @@ app.post('/cadastrar', async (req, res) => {
 })
 
 app.post('/login', (req, res) => {
-  db.query("SELECT * FROM usuario", (err, results) => {
+  db.query("SELECT * FROM usuario", async (err, results) => {
     if (err) return res.status(500).json(err);
 
-      const { username } = req.body;
+      const { username, passworld } = req.body;
    
-
       const user = results.find(u => u.username === username);
-        console.log(user);
-        
+      const compararPassworld = await bcrypt.compare(passworld, user.passworld)
+        console.log(compararPassworld);
+
+      if (!compararPassworld){
+        return res.status(401).json({ massage: 'Senha invalida' })
+      }  
+      
       if (!user) {
         return res.status(401).json({ message: 'Credenciais inválidas' });
       }
