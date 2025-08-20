@@ -4,6 +4,7 @@ require('dotenv').config(); // Carrega as variáveis de ambiente
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const { expressjwt } = require('express-jwt');
+const bcrypt = require('bcrypt');
 const app = express();
 const port = 3000;
 
@@ -23,6 +24,20 @@ app.get("/", (req, res) => {
     res.json(results);
   });
 });
+
+
+// registro
+app.post('/cadastrar', async (req, res) => {
+  const { username, passworld, role, date } = req.body
+  const hashPassworld = await bcrypt.hash(passworld, 10)
+  console.log(username, hashPassworld, role, date);
+  
+  db.query("INSERT INTO usuario (username, passworld, role, date) VALUES (?, ?, ?, ?)", [username, hashPassworld, role, date], (err, result) => {
+    if (err) return res.status(401).json({ message: 'Erro na cadastro.', error: err.message })
+      
+    res.json({ message: 'Cadastro com sucesso!' })
+  })
+})
 
 app.post('/login', (req, res) => {
   db.query("SELECT * FROM usuario", (err, results) => {
