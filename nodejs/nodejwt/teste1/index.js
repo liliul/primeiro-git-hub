@@ -108,11 +108,11 @@ app.patch('/newrole/:id', authMiddleware, adminMiddleware, (req, res) => {
   })
 })
 
-app.put('/login/:id', authMiddleware, adminMiddleware, (req, res) => {
+app.put('/updateuser/:id', authMiddleware, adminMiddleware, (req, res) => {
   const { id } = req.params
-  const { username, role } = req.body
+  const { username } = req.body
 
-  db.query("UPDATE usuario SET username = ?, role = ? WHERE id = ?", [username, role, id], (err, result) => {
+  db.query("UPDATE usuario SET username = ? WHERE id = ?", [username, id], (err, result) => {
     if (err) return res.status(500).json({ error: err.message })
 
     if (result.affectedRows === 0) {
@@ -124,7 +124,7 @@ app.put('/login/:id', authMiddleware, adminMiddleware, (req, res) => {
 
 })
 
-app.delete('/login/:id', authMiddleware, adminMiddleware, (req, res) => {
+app.delete('/deleteuser/:id', authMiddleware, adminMiddleware, (req, res) => {
   const { id } = req.params
   
   db.query("DELETE FROM usuario WHERE id = ?",[id], (err, result) => {

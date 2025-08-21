@@ -11,7 +11,7 @@ const newRoleInput = document.getElementById('newRole');
 const updateUserForm = document.getElementById('updateUserForm');
 const updateUserIdInput = document.getElementById('updateUserId');
 const updateUsernameInput = document.getElementById('updateUsername');
-const updateRoleInput = document.getElementById('updateRole');
+// const updateRoleInput = document.getElementById('updateRole');
 const deleteUserForm = document.getElementById('deleteUserForm');
 const deleteUserIdInput = document.getElementById('deleteUserId');
 const responseMessageDiv = document.getElementById('responseMessage');
@@ -116,20 +116,20 @@ updateUserForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     const id = updateUserIdInput.value;
     const username = updateUsernameInput.value;
-    const role = updateRoleInput.value;
+    // const role = updateRoleInput.value;
     const body = {};
     if (username) body.username = username;
-    if (role) body.role = role;
+    // if (role) body.role = role;
     
-    await makeAuthenticatedRequest(`/login/${id}`, 'PUT', body);
+    await makeAuthenticatedRequest(`/updateuser/${id}`, 'PUT', body);
     updateUserIdInput.value = '';
     updateUsernameInput.value = '';
-    updateRoleInput.value = '';
+    // updateRoleInput.value = '';
 });
 
 deleteUserForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     const id = deleteUserIdInput.value;
-    await makeAuthenticatedRequest(`/login/${id}`, 'DELETE');
+    await makeAuthenticatedRequest(`/deleteuser/${id}`, 'DELETE');
     deleteUserIdInput.value = '';
 });
