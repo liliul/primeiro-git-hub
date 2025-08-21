@@ -50,23 +50,30 @@ app.post('/login', (req, res) => {
     if (err) return res.status(500).json(err);
 
       const { username, passworld } = req.body;
-   
-      const user = results.find(u => u.username === username);
-      const compararPassworld = await bcrypt.compare(passworld, user.passworld)
-        console.log(compararPassworld);
 
-      if (!compararPassworld){
-        return res.status(401).json({ massage: 'Senha invalida' })
-      }  
+      if (!username || !passworld || undefined) return res.status(401).json({ message: 'Nome ou senha invalida' }) 
+
+      console.log('p',passworld, username)
       
+      const user = results.find(u => u.username === username);
       if (!user) {
         return res.status(401).json({ message: 'Credenciais inválidas' });
       }
+      
+      try {
+        const compararPassworld = await bcrypt.compare(passworld, user.passworld)
+        console.log('c',compararPassworld);
 
-      // Gera o token JWT com o ID e o papel do usuário
-      const token = jwt.sign({ id: user.id, role: user.role }, jwtSecret, { expiresIn: '1h' });
+        if (!compararPassworld){
+          return res.status(401).json({ massage: 'Senha invalida bcrypt' })
+        }  
+      
+        const token = jwt.sign({ id: user.id, role: user.role }, jwtSecret, { expiresIn: '1h' });
+        res.json({ token });
 
-      res.json({ token });
+      } catch(err) {
+        return res.status(500).json({ message: 'Erro na comparação bcrypt', err: err.message })
+      }
   });
 
 });
