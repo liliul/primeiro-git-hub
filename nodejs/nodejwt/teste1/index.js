@@ -101,6 +101,11 @@ app.patch('/newrole/:id', authMiddleware, adminMiddleware, (req, res) => {
   const { id } = req.params
   const { role } = req.body
   console.log('id', id);
+  
+  const virifiRoles = ['admin','user']
+  if(!virifiRoles.includes(role))    {
+    return res.status(401).json({ message: 'Nome da role errado. correto ex: admin ou user' })
+  }
 
   if (!id || !role) res.status(400).json({ message: "Erro role vazio"})
   
