@@ -90,16 +90,21 @@ const adminMiddleware = (req, res, next) => {
 
 // --- Rotas Protegidas ---
 
-app.post('/criarusuariologin/', authMiddleware, adminMiddleware, (req, res) => {
-  const {username, role } = req.body
-  console.log(username, role);
+app.patch('/newrole/:id', authMiddleware, adminMiddleware, (req, res) => {
+  const { id } = req.params
+  const { role } = req.body
+  console.log('id', id);
 
-  if (!username || !role) res.status(400).json({ message: "Erro username e role vazio"})
+  if (!id || !role) res.status(400).json({ message: "Erro role vazio"})
   
-  db.query("INSERT INTO usuario (username, role) VALUES (?, ?)", [username, role], (err, result) => {
-    if (err) return res.status(500).json({ message: "Erro ao adicionar usuario." })
+  db.query("UPDATE usuario SET role = ? WHERE id = ?", [role, id], (err, result) => {
+    if (err) return res.status(500).json({ message: "Erro ao alterar role." })
 
-    res.json({ message: "Usuario adiconado com sucesso!", userId: result.insertId })
+    
+    console.log('patch');
+    
+
+    res.json({ message: "Roles Alterada com sucesso!",})
   })
 })
 

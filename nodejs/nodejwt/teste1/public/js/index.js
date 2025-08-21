@@ -6,6 +6,7 @@ const adminBtn = document.getElementById('adminBtn');
 const nokiaBtn = document.getElementById('nokiaBtn');
 const createUserForm = document.getElementById('createUserForm');
 const newUsernameInput = document.getElementById('newUsername');
+const newUsernameInputId = document.getElementById('newUsernameId');
 const newRoleInput = document.getElementById('newRole');
 const updateUserForm = document.getElementById('updateUserForm');
 const updateUserIdInput = document.getElementById('updateUserId');
@@ -102,11 +103,13 @@ nokiaBtn.addEventListener('click', () => {
 
 createUserForm.addEventListener('submit', async (e) => {
     e.preventDefault();
-    const username = newUsernameInput.value;
+    const id = newUsernameInputId.value;
+    // const username = newUsernameInput.value;
     const role = newRoleInput.value;
-    await makeAuthenticatedRequest('/criarusuariologin/', 'POST', { username, role });
-    newUsernameInput.value = ''; // Limpa o campo
-    newRoleInput.value = '';     // Limpa o campo
+    await makeAuthenticatedRequest(`/newrole/${id}`, 'PATCH', { role });
+    newUsernameInputId.value = '';
+    // newUsernameInput.value = ''; 
+    newRoleInput.value = ''; 
 });
 
 updateUserForm.addEventListener('submit', async (e) => {
