@@ -25,10 +25,18 @@ app.get("/", (req, res) => {
   });
 });
 app.get("/get", (req, res) => {
-  db.query("SELECT * FROM usuario", (err, results) => {
+  db.query("SELECT id, username, role FROM usuario", (err, results) => {
     if (err) return res.status(500).json(err);
     res.json(results);
   });
+});
+
+app.get("/git", async (req, res) => {
+  const githubUser = await fetch('https://api.github.com/users/liliul')
+  const data = await githubUser.json()
+
+  res.json({message: data})
+  
 });
 
 
