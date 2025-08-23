@@ -5,17 +5,34 @@ const express = require('express');
 const jwt = require('jsonwebtoken');
 const { expressjwt } = require('express-jwt');
 const bcrypt = require('bcrypt');
+const path = require('path');
+const rateLimit = require('express-rate-limit');
+const helmet = require('helmet');
+const cors = require('cors');
 const app = express();
 const port = 3000;
 
 const db = require('./src/conexao');
+const { router } = require('./src/utils/router');
 
 app.use(express.json());
-app.use(express.static("public"));
+
+// app.use(helmet());
+// app.use(cors());
+
+app.use(express.static('public'));
 
 // Chave secreta do JWT (deve ser mantida em segredo!)
 const jwtSecret = process.env.JWT_SECRET || 'uma-chave-secreta-muito-forte';
 
+
+// const loginLimiter = rateLimit({
+//   windowMs: 15 * 60 * 1000,
+//   max: 2,
+//   message: { message: 'Muitas tentativas. Tente novamente em 15 minutos.' }
+// });
+
+app.use('/', router)
 
 // teste do banco de dados
 app.get("/", (req, res) => {
