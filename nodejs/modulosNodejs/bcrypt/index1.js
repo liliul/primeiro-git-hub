@@ -1,4 +1,5 @@
 const bcrypt = require('bcrypt')
+const crypto = require('crypto')
 
 let senha = 'NarutoUchiha'
 let compareSenha = 'NarutoUchiha'
@@ -18,3 +19,4 @@ const hash = bcrypt.hash(senha, salts, (err, hash) => {
 })
 
 console.log(bcrypt);
+console.log('c', crypto.randomBytes(3))

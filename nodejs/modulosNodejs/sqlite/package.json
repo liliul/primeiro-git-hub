@@ -1,0 +1,17 @@
+{
+  "name": "sqlite",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "p1": "node --watch src/primeiroDB",
+    "exper": "node --watch src/expressPerson/index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "express": "^5.1.0",
+    "sqlite3": "^5.1.7"
+  }
+}
