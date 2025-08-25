@@ -40,5 +40,38 @@ router.get('/search', (req, res) => {
     })
 })
 
+router.delete('/deletandoperson/:id', (req, res) => {
+    const { id } = req.params
+    db.serialize(() => {
+        const stmt = db.prepare('DELETE FROM person WHERE id = ?')
+        stmt.run(id, (err) => {
+            if (err) {
+                res.status(401).json({ message: 'Erro ao deleta person', erro: err.message })
+            } else {
+                res.status(200).json({ message: `ID ${id} excluido.`, row: this.changes })
+            }
+        })
+
+        stmt.finalize()
+    })
+})
+
+router.put('/atualizarperson/:id', (req, res) => {
+    const { id } = req.params
+    const { nome, anime } = req.body
+    db.serialize(() => {
+        const stmt = db.prepare("UPDATE person SET nome = ?, anime = ? WHERE id = ?")
+        stmt.run(nome, anime, id, (err) => {
+            if (err) {
+                res.status(401).json({ message: 'Erro ao atualizar persons' })
+            } else {
+                res.status(200).json({ message: `ID ${id} atualizado com sucesso!`, row: this.changes })
+            }
+        })
+
+        stmt.finalize()
+    })
+})
+
 
 module.exports = { router }
