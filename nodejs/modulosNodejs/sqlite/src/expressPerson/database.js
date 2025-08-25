@@ -16,4 +16,10 @@ db.serialize(() => {
     console.log('Tabela "anime" criada ou já existente!');
 });
 
+db.serialize(() => {
+    db.run("CREATE TABLE IF NOT EXISTS anime (id INTEGER PRIMARY KEY AUTOINCREMENT, nome_anime TEXT, pais_origem TEXT)");
+
+    console.log('Tabela "anime" criada ou já existente!');
+});
+
 module.exports = db
