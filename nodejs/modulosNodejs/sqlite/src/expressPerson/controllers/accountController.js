@@ -37,26 +37,59 @@ class AccountController {
     }
 
     login(req, res) {
-        const { username, password} = req.body
+        const { nome, senha } = req.body
 
-         if (!username || !password)
-            return res.status(400).json({ message: 'Usuário e senha obrigatórios' });
+        if (!nome || !senha) return res.status(400).json({ message: 'Erro usuário e senha obrigatórios' });
 
-        const mockUser = { id: 1, username: 'liliul', password: '123' };
+        this.db.get('SELECT * FROM account WHERE nome = ? ', [nome], (err, user) => {
+            if (err) {
+            console.error(err);
+            return res.status(500).json({ message: 'Erro interno do servidor' });
+            }
+
+            if (!user) {
+            return res.status(401).json({ message: 'Usuário não encontrado' });
+            }
+
+            bcrypt.compare(senha, user.senha, (err, results) => {
+                if (err) {
+                    return res.status(500).json({ message: 'Erro ao comparar senha'})
+                }
+                if (!results) {
+                    return res.status(401).json({ message: 'Erro na senha'})
+                }
+
+                
+                const payload = { userId: user.id, username: user.nome };
+                const token = jwt.sign(payload, process.env.JWT_SECRET, {
+                    expiresIn: parseInt(process.env.JWT_EXPIRES)
+                });
+
+                res.json({ token })
+            })
+        })
         
-       if (username !== mockUser.username || password !== mockUser.password)
-            return res.status(401).json({ message: 'Credenciais inválidas' });
-
-        const payload = { userId: mockUser.id, username: mockUser.username };
-        const token = jwt.sign(payload, process.env.JWT_SECRET, {
-            expiresIn: parseInt(process.env.JWT_EXPIRES)
-        });
-        res.json({ token })
     }
 
-    clientes(req, res) { 
-        console.log("Retornou todos clientes!");
-        res.json([{id:1,nome:'liliul github'}]);
+    clientes(req, res) {
+        const results = []
+        this.db.serialize(() => {
+            this.db.each("SELECT id, nome, sobrenome, pais FROM account", (err, user) => {
+                if (err) {
+                    res.status(401).json({message: 'Erro ao consultar dados:', erro: err.message})
+                } 
+
+                results.push(user);
+            });
+
+            this.db.get("SELECT COUNT(*) as count FROM account", (err, countUser) => {
+                if (err) {
+                    return res.status(401).json({ message: 'Erro ao contar dados:', erro: err.message });
+                }
+
+                res.status(200).json({ message: 'Busca de registro', data: results, total: countUser.count });
+            });
+        }) 
     }
 
     naruto(req, res) { 
