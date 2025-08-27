@@ -14,5 +14,6 @@ accountRouter.post('/login/', accountController.login.bind(accountController))
 accountRouter.get('/clientes/', authenticateToken, authorizeRoles('admin', 'master'), accountController.clientes.bind(accountController))
 accountRouter.put('/addroles/:id/roles', authenticateToken, authorizeRoles('master'), accountController.addRoles.bind(accountController))
 
+accountRouter.delete('/deleteregistro/:id', authenticateToken, authorizeRoles('master'), accountController.deleteRegistro.bind(accountController))
 
 module.exports = accountRouter

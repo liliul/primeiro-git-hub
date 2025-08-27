@@ -135,10 +135,24 @@ class AccountController {
                 return res.status(200).json({ message: `Role '${role}' atribuída ao usuário com ID ${id}` })
                 }
             )
-        })
+        })   
+    }
 
-       
-        
+    deleteRegistro(req, res) {
+        const { id } = req.params
+
+        this.db.serialize(() => {
+            const stmt = this.db.prepare('DELETE FROM account WHERE id = ?')
+            stmt.run(id, (err) => {
+                 if (err) {
+                    res.status(401).json({ message: 'Erro ao deleta registro', erro: err.message })
+                } else {
+                    res.status(200).json({ message: `ID ${id} excluido.`, row: this.changes })
+                }
+            })
+
+            stmt.finalize()
+        })
     }
 }
 
