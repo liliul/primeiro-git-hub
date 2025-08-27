@@ -11,7 +11,7 @@ const db = new sqlite3.Database(path.join(__dirname, '../../db/person.db'), (err
 });
 
 db.serialize(() => {
-    db.run("CREATE TABLE IF NOT EXISTS account (id INTEGER PRIMARY KEY AUTOINCREMENT, nome TEXT, sobrenome TEXT, senha TEXT, pais TEXT)");
+    db.run("CREATE TABLE IF NOT EXISTS account (id INTEGER PRIMARY KEY AUTOINCREMENT, nome TEXT, sobrenome TEXT, senha TEXT, pais TEXT, role TEXT)");
 
     console.log('Tabela "account" criada ou já existente!');
 });
