@@ -2,7 +2,8 @@ const express = require('express')
 const db = require('./database')
 const { router } = require('./router')
 const routerAnime = require('./routers/animeRouter')
-    
+const accountRouter = require('./routers/accountRouter')
+
 const app = express()
 const port = 3000
 
@@ -11,6 +12,7 @@ app.use(express.json())
 
 app.use('/', router)
 app.use('/animes/v1/', routerAnime)
+app.use('/account/', accountRouter)
 
 process.on('SIGINT', () => {
     console.log('Fechando o servidor...');
