@@ -1,7 +1,7 @@
 const express = require('express')
 const AccountController = require('../controllers/accountController');
 const db = require('../database')
-const authenticateToken = require('../midlleware/auth')
+const authenticateToken = require('../middleware/auth')
 
 const accountRouter = express.Router()
 const accountController = new AccountController(db)
