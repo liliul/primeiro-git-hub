@@ -21,6 +21,25 @@ router.post('/register', async (req, res) => {
 
 router.post('/login', async (req, res) => {
   const { username, password } = req.body;
+
+   if (username === process.env.SUPERADMIN_USERNAME) {
+    const isValid = await bcrypt.compare(password, process.env.SUPERADMIN_PASSWORD);
+    if (!isValid) {
+      return res.status(400).json({ error: 'Senha incorreta.' });
+    }
+
+    const superUser = {
+      id: 'superadmin',
+      username,
+      role: 'superadmin'
+    };
+
+    const accessToken = generateAccessToken(superUser);
+    const refreshToken = generateRefreshToken(superUser);
+
+    return res.json({ accessToken, refreshToken });
+  }
+
   const user = await User.findOne({ username });
   if (!user) return res.status(400).json({ error: 'Usuário não encontrado.' });
 
@@ -44,9 +63,26 @@ router.post('/refresh-token', async (req, res) => {
   try {
     const payload = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET);
 
+    if (payload.id === 'superadmin') {
+      const superUser = {
+        _id: 'superadmin',
+        username: process.env.SUPERADMIN_USERNAME,
+        role: process.env.SUPERADMIN_ROLE
+      };
+
+      const newAccessToken = generateAccessToken(superUser);
+      const newRefreshToken = generateRefreshToken(superUser);
+
+      return res.json({ accessToken: newAccessToken, refreshToken: newRefreshToken });
+    }
+
     const user = await User.findById(payload.id);
     if (!user || !user.refreshTokens.includes(refreshToken)) {
       return res.status(403).json({ error: 'Token inválido' });
+    }
+
+    if (!user.refreshTokens.includes(refreshToken)) {
+      return res.status(403).json({ error: 'Refresh token não registrado' });
     }
 
     // Gera novos tokens

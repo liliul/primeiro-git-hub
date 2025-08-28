@@ -3,6 +3,7 @@ const express = require('express');
 const authMiddleware = require('./middleware/auth');
 const roleMiddleware = require('./middleware/role');
 const connectDB = require('./config/db');
+const authorizeRoles = require('../../sqlite/src/expressPerson/middleware/authRoles');
 
 const app = express();
 app.use(express.json());
@@ -25,5 +26,11 @@ app.get('/admin', authMiddleware, roleMiddleware('admin'), (req, res) => {
 app.get('/moderador-ou-admin', authMiddleware, roleMiddleware(['admin', 'moderador']), (req, res) => {
   res.json({ message: 'Bem-vindo, moderador ou admin!' });
 });
+
+app.get('/painel-super', authMiddleware, authorizeRoles('superadmin'), (req, res) => {
+    res.json({ message: 'Acesso ao painel de controle completo', data: [{id: 1, nome: 'super adimin'}] });
+  }
+);
+
 
 app.listen(3000, () => console.log('Servidor rodando na porta 3000'));
