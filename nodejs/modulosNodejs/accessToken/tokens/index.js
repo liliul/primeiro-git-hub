@@ -1,9 +1,13 @@
+require('dotenv').config();
 const express = require('express');
 const authMiddleware = require('./middleware/auth');
 const roleMiddleware = require('./middleware/role');
+const connectDB = require('./config/db');
 
 const app = express();
 app.use(express.json());
+
+connectDB();
 
 app.use('/api/auth', require('./routes/auth'));
 
