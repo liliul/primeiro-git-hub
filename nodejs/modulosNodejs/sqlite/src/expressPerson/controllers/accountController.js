@@ -1,6 +1,7 @@
 require("dotenv-safe").config();
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt")
+const logger = require("../logs/logger")
 
 class AccountController {
     constructor(db) {
@@ -41,8 +42,10 @@ class AccountController {
     login(req, res) {
         const { nome, senha } = req.body
 
-        if (!nome || !senha) return res.status(400).json({ message: 'Erro usuário e senha obrigatórios' });
-
+        if (!nome || !senha) {
+            logger.warn(`LOGS erro no nome: ${nome} ou senha: ${senha}`)
+            return res.status(400).json({ message: 'Erro usuário e senha obrigatórios' });
+        }
         this.db.get('SELECT * FROM account WHERE nome = ? ', [nome], (err, user) => {
             if (err) {
             console.error(err);
@@ -67,6 +70,7 @@ class AccountController {
                     expiresIn: parseInt(process.env.JWT_EXPIRES)
                 });
 
+                logger.info(`LOGS login success! ${user.nome}`)
                 res.json({ token })
             })
         })
