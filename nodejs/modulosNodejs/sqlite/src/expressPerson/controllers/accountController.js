@@ -97,11 +97,27 @@ class AccountController {
             });
         }) 
     }
+    clientesID(req, res) {
+        const { id } = req.params
+
+        this.db.get("SELECT * FROM account WHERE id = ?", [id], (err, user) => {
+            if (err) {
+                return res.status(401).json({ message: 'Erro ao contar dados:', erro: err.message });
+            }
+
+            res.status(200).json({ message: 'Busca de registro', data: user });
+        }); 
+    }
 
     addRoles(req, res) {
         const { id } = req.params 
         const { role } = req.body
-    
+
+        const usuario = req.user?.username || 'desconhecido'
+        const roles = req.user?.role || 'role-desconhecido'
+        console.error(usuario, roles);
+        
+
         if (!role) {
             return res.status(400).json({ message: 'Role é obrigatória' })
         }
@@ -118,6 +134,7 @@ class AccountController {
 
         this.db.get('SELECT role FROM account WHERE id = ?', [id], (err, user) => {
             if (err) {
+                logger.error(`[SELECT] erro ao buscar usuario: ${id}`)
                 return res.status(500).json({ message: 'Erro ao buscar usuário', erro: err.message })
             }
 
@@ -129,7 +146,7 @@ class AccountController {
                 return res.status(403).json({ message: 'Você não tem permissão para alterar o papel de um administrador mestre' })
             }
 
-            this.db.run('UPDATE account SET role = ? WHERE id = ?', [role, id], function (err) {
+            this.db.run('UPDATE account SET role = ? WHERE id = ?', [role, id], function (err, user) {
                 if (err) {
                     return res.status(500).json({ message: 'Erro ao atualizar role', erro: err })
                 }
@@ -137,6 +154,8 @@ class AccountController {
                 if (this.changes === 0) {
                     return res.status(404).json({ message: 'Usuário não encontrado' })
                 }
+                
+                logger.warn(`[PUT] Usuário ${usuario} - ${roles} atualizou role do usuario  ID ${id} - IP: ${req.ip}`);
 
                 return res.status(200).json({ message: `Role '${role}' atribuída ao usuário com ID ${id}` })
                 }
