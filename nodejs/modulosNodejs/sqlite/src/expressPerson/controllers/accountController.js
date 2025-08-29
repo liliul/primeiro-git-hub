@@ -1,7 +1,7 @@
 require("dotenv-safe").config();
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt")
-const logger = require("../logs/logger")
+const logger = require("../logger/logger")
 
 class AccountController {
     constructor(db) {
@@ -43,7 +43,6 @@ class AccountController {
         const { nome, senha } = req.body
 
         if (!nome || !senha) {
-            logger.warn(`LOGS erro no nome: ${nome} ou senha: ${senha}`)
             return res.status(400).json({ message: 'Erro usuário e senha obrigatórios' });
         }
         this.db.get('SELECT * FROM account WHERE nome = ? ', [nome], (err, user) => {
@@ -61,6 +60,7 @@ class AccountController {
                     return res.status(500).json({ message: 'Erro ao comparar senha'})
                 }
                 if (!results) {
+                    logger.error(`LOGS erro ao comparar senha: ${senha}`)
                     return res.status(401).json({ message: 'Erro na senha'})
                 }
 
@@ -113,6 +113,8 @@ class AccountController {
         if (req.user.role === 'master' && parseInt(req.user.id) === parseInt(id)) {
             return res.status(403).json({ message: 'O administrador mestre não pode alterar o próprio papel.' });
         }
+        
+        logger.info(`LOGS auterando roles ${role}`)
 
         this.db.get('SELECT role FROM account WHERE id = ?', [id], (err, user) => {
             if (err) {
@@ -149,8 +151,10 @@ class AccountController {
             const stmt = this.db.prepare('DELETE FROM account WHERE id = ?')
             stmt.run(id, (err) => {
                  if (err) {
-                    res.status(401).json({ message: 'Erro ao deleta registro', erro: err.message })
+                    logger.error(`LOGS erro deletar registro account: ${err.message}`);
+                    return res.status(401).json({ message: 'Erro ao deleta registro', erro: err.message })
                 } else {
+                    logger.warn(`LOGS Account excluido com successo ID: ${id}`);
                     res.status(200).json({ message: `ID ${id} excluido.`, row: this.changes })
                 }
             })
