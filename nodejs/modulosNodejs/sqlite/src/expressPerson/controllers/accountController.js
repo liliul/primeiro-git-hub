@@ -113,7 +113,7 @@ class AccountController {
         if (req.user.role === 'master' && parseInt(req.user.id) === parseInt(id)) {
             return res.status(403).json({ message: 'O administrador mestre não pode alterar o próprio papel.' });
         }
-        
+
         logger.info(`LOGS auterando roles ${role}`)
 
         this.db.get('SELECT role FROM account WHERE id = ?', [id], (err, user) => {
@@ -146,15 +146,17 @@ class AccountController {
 
     deleteRegistro(req, res) {
         const { id } = req.params
-
+        const usuarioExcluindo = req.user?.username || 'desconhecido'
+        const roleExcluindo = req.user?.role || 'role-desconhecido'
+        
         this.db.serialize(() => {
             const stmt = this.db.prepare('DELETE FROM account WHERE id = ?')
             stmt.run(id, (err) => {
                  if (err) {
-                    logger.error(`LOGS erro deletar registro account: ${err.message}`);
+                    logger.error(`[DELETE][ERRO] Usuário ${usuarioExcluindo} role ${roleExcluindo} tentou excluir ID ${id} - IP: ${req.ip} - Erro: ${err.message}`)
                     return res.status(401).json({ message: 'Erro ao deleta registro', erro: err.message })
                 } else {
-                    logger.warn(`LOGS Account excluido com successo ID: ${id}`);
+                    logger.warn(`[DELETE] Usuário ${usuarioExcluindo} role ${roleExcluindo} excluiu ID ${id} - IP: ${req.ip}`);
                     res.status(200).json({ message: `ID ${id} excluido.`, row: this.changes })
                 }
             })
