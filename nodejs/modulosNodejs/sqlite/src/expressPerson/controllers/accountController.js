@@ -100,11 +100,18 @@ class AccountController {
     clientesID(req, res) {
         const { id } = req.params
 
-        this.db.get("SELECT * FROM account WHERE id = ?", [id], (err, user) => {
+        const usuario = req.user?.username || 'desconhecido'
+        const roles = req.user?.role || 'role-desconhecido'
+
+        this.db.get("SELECT nome, sobrenome, pais, role  FROM account WHERE id = ?", [id], (err, user) => {
             if (err) {
                 return res.status(401).json({ message: 'Erro ao contar dados:', erro: err.message });
             }
+            if (!user) {
+                return res.status(404).json({ message: `Nenhum registro encontrado com ID ${id}` });
+            }
 
+            logger.info(`[GET] usuario ${usuario} - ${roles} acaba de fazer uma busca pelo ${id} clientesID`)
             res.status(200).json({ message: 'Busca de registro', data: user });
         }); 
     }
