@@ -1,27 +1,35 @@
 require("dotenv-safe").config();
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt")
+const { z } = require('zod')
 const logger = require("../logger/logger")
 
+const registroSchema = z.object({
+    nome: z.string().min(3, 'Nome deve ter pelo menos 3 caracteres'),
+    sobrenome: z.string().min(3, 'Sobrenome deve ter pelo menos 3 caracteres'),
+    senha: z.string().min(6, 'A senha deve ter pelo menos 6 caracteres'),
+    pais: z.string().min(3, 'Pais deve ter pelo menos 3 caracteres')
+});
 class AccountController {
     constructor(db) {
         this.db = db
     }
 
     async registro(req, res) {
-        const { nome, sobrenome, senha, pais } = req.body
+        try {
+            const { nome, sobrenome, senha, pais } = registroSchema.parse(req.body)
         
         const role = 'user'
 
-        if (!nome || !senha) {
-            return res.status(401).json({ message: 'Erro com senha ou nome de usuario'})
-        }
-        if (!sobrenome || !pais) {
-            return res.status(401).json({ message: 'Erro com sobrenome ou pais'})
-        }
-        if (senha.length < 6) {
-            return res.status(400).json({ message: 'A senha deve ter pelo menos 6 caracteres.' });
-        }
+        // if (!nome || !senha) {
+        //     return res.status(401).json({ message: 'Erro com senha ou nome de usuario'})
+        // }
+        // if (!sobrenome || !pais) {
+        //     return res.status(401).json({ message: 'Erro com sobrenome ou pais'})
+        // }
+        // if (senha.length < 6) {
+        //     return res.status(400).json({ message: 'A senha deve ter pelo menos 6 caracteres.' });
+        // }
 
         const senhaHash = await bcrypt.hash(senha, 10)
       
@@ -37,6 +45,18 @@ class AccountController {
 
             stmt.finalize();
         });   
+        } catch (error) {
+            if (error instanceof z.ZodError) {
+            // Se o erro for de validação, retorna o erro com as mensagens do Zod
+            return res.status(400).json({
+                message: 'Erro de validação',
+                errors: error.errors,
+            });
+        }
+
+        // Para outros erros, retorna um erro genérico
+        return res.status(500).json({ message: 'Erro interno do servidor' })
+        }
     }
 
     login(req, res) {
