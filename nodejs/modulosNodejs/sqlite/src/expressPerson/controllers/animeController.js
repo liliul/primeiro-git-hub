@@ -1,3 +1,5 @@
+const logger = require("../logger/logger");
+
 class AnimeController {
     constructor(db) {
         this.db = db
@@ -5,12 +7,17 @@ class AnimeController {
     create(req, res) {
         const {nome_anime, pais_origem} = req.body 
         
+        const adminCreate = req.user?.username || 'Desconhecido'
+        const roles = req.user?.role || 'Desconhecido'
+
         this.db.serialize(() => {
             const stmt = this.db.prepare("INSERT INTO anime (nome_anime, pais_origem) VALUES (?, ?)");
             stmt.run(nome_anime, pais_origem, function(err) {
                 if (err) {
+                    logger.error(`[POST] erro ao criar anime ${adminCreate}-${roles}.`)
                     res.status(401).json({ message: 'Erro ao inserir dados:', erro: err.message});
-                } else {
+                } else {   
+                    logger.warn(`[POST] ${adminCreate}-${roles} criou novo anime`)
                     res.status(200).json({message: `Usuário inserido com sucesso! ID: ${this.lastID}`});
                 }
             });
@@ -58,12 +65,18 @@ class AnimeController {
 
     delete(req, res) {
         const { id } = req.params
+
+        const adminDelete = req.user?.username || 'Desconhecido'
+        const roles = req.user?.role || 'Role-Desconhecido'
+
         this.db.serialize(() => {
             const stmt = this.db.prepare('DELETE FROM anime WHERE id = ?')
             stmt.run(id, (err) => {
                 if (err) {
-                    res.status(401).json({ message: 'Erro ao deleta person', erro: err.message })
+                    logger.error(`[DELETE] ${adminDelete}-${roles} excluir o anime com ID: ${id} err: ${err.message}`)
+                    res.status(401).json({ message: 'Erro ao deleta anime', erro: err.message })
                 } else {
+                    logger.warn(`[DELETE] ${adminDelete}-${roles} excluir o anime com ID: ${id}`)
                     res.status(200).json({ message: `ID ${id} excluido.`, row: this.changes })
                 }
             })

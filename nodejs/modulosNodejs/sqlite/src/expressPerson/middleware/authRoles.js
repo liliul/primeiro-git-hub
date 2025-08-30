@@ -2,11 +2,15 @@ const logger = require("../logger/logger");
 
 function authorizeRoles(...rolesPermitidos) {
   return (req, res, next) => {
+    const userRole = req.user?.role;
+
     if (!rolesPermitidos.includes(req.user.role)) {
-      logger.error(`LOGS erro no role ${rolesPermitidos}`)
+      logger.error(`Acesso negado. Role do usuário: '${userRole}', Roles permitidos: [${rolesPermitidos.join(', ')}]`);
       return res.status(403).json({ message: 'Acesso negado.' });
     }
-    logger.warn(`LOGS role permitida: ${rolesPermitidos}`)
+
+    logger.info(`Acesso autorizado. Role do usuário: '${userRole}'`)
+    
     next();
   };
 }
