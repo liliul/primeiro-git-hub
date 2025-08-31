@@ -10,6 +10,12 @@ const registroSchema = z.object({
     senha: z.string().min(6, 'A senha deve ter pelo menos 6 caracteres'),
     pais: z.string().min(3, 'Pais deve ter pelo menos 3 caracteres')
 });
+
+const loginSchema = z.object({
+    nome: z.string().min(3, 'Nome deve ter pelo menos 3 caracteres'),
+    senha: z.string().min(3, 'Senha com no minimo 5 caracteres')
+})
+
 class AccountController {
     constructor(db) {
         this.db = db
@@ -19,7 +25,7 @@ class AccountController {
         try {
             const { nome, sobrenome, senha, pais } = registroSchema.parse(req.body)
         
-        const role = 'user'
+            const role = 'user'
 
         // if (!nome || !senha) {
         //     return res.status(401).json({ message: 'Erro com senha ou nome de usuario'})
@@ -50,7 +56,7 @@ class AccountController {
             // Se o erro for de validação, retorna o erro com as mensagens do Zod
             return res.status(400).json({
                 message: 'Erro de validação',
-                errors: error.errors,
+                errors: error.issues,
             });
         }
 
@@ -60,40 +66,50 @@ class AccountController {
     }
 
     login(req, res) {
-        const { nome, senha } = req.body
+       try {
+            const { nome, senha } = loginSchema.parse(req.body)
 
-        if (!nome || !senha) {
-            return res.status(400).json({ message: 'Erro usuário e senha obrigatórios' });
-        }
-        this.db.get('SELECT * FROM account WHERE nome = ? ', [nome], (err, user) => {
-            if (err) {
-            console.error(err);
-            return res.status(500).json({ message: 'Erro interno do servidor' });
-            }
-
-            if (!user) {
-            return res.status(401).json({ message: 'Usuário não encontrado' });
-            }
-
-            bcrypt.compare(senha, user.senha, (err, results) => {
+            // if (!nome || !senha) {
+            //     return res.status(400).json({ message: 'Erro usuário e senha obrigatórios' });
+            // }
+            this.db.get('SELECT * FROM account WHERE nome = ? ', [nome], (err, user) => {
                 if (err) {
-                    return res.status(500).json({ message: 'Erro ao comparar senha'})
-                }
-                if (!results) {
-                    logger.error(`LOGS erro ao comparar senha: ${senha}`)
-                    return res.status(401).json({ message: 'Erro na senha'})
+                console.error(err);
+                return res.status(500).json({ message: 'Erro interno do servidor' });
                 }
 
-                
-                const payload = { userId: user.id, username: user.nome, role: user.role };
-                const token = jwt.sign(payload, process.env.JWT_SECRET, {
-                    expiresIn: parseInt(process.env.JWT_EXPIRES)
-                });
+                if (!user) {
+                return res.status(401).json({ message: 'Usuário não encontrado' });
+                }
 
-                logger.info(`LOGS login success! ${user.nome}`)
-                res.json({ token })
+                bcrypt.compare(senha, user.senha, (err, results) => {
+                    if (err) {
+                        return res.status(500).json({ message: 'Erro ao comparar senha'})
+                    }
+                    if (!results) {
+                        logger.error(`LOGS erro ao comparar senha: ${senha}`)
+                        return res.status(401).json({ message: 'Erro na senha'})
+                    }
+
+                    
+                    const payload = { userId: user.id, username: user.nome, role: user.role };
+                    const token = jwt.sign(payload, process.env.JWT_SECRET, {
+                        expiresIn: parseInt(process.env.JWT_EXPIRES)
+                    });
+
+                    logger.info(`LOGS login success! ${user.nome}`)
+                    res.json({ token })
+                })
             })
-        })
+       } catch (error) {
+        if (error instanceof z.ZodError) {
+            logger.error(`[POST] Erro ao fazer login erro: ${JSON.stringify(error.issues), null, 2} zod`)
+            return res.status(400).json({
+                message: 'Erro na validação do login',
+                errors: error.issues,
+            });   
+        }
+       }
         
     }
 
