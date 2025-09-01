@@ -69,25 +69,24 @@ class AccountController {
        try {
             const { nome, senha } = loginSchema.parse(req.body)
 
-            // if (!nome || !senha) {
-            //     return res.status(400).json({ message: 'Erro usuário e senha obrigatórios' });
-            // }
             this.db.get('SELECT * FROM account WHERE nome = ? ', [nome], (err, user) => {
                 if (err) {
-                console.error(err);
-                return res.status(500).json({ message: 'Erro interno do servidor' });
+                    logger.error(`[${req.method}] login: erro 500 interno do servidor`)
+                    return res.status(500).json({ message: 'Erro interno do servidor' });
                 }
 
                 if (!user) {
-                return res.status(401).json({ message: 'Usuário não encontrado' });
+                    logger.error(`[${req.method}] login: erro 401 usuario ${nome} não foi encontrado`)
+                    return res.status(401).json({ message: 'Usuário não encontrado login' });
                 }
 
                 bcrypt.compare(senha, user.senha, (err, results) => {
                     if (err) {
+                        logger.error(`[${req.method}] login: erro 500 ao comparar senha`)
                         return res.status(500).json({ message: 'Erro ao comparar senha'})
                     }
                     if (!results) {
-                        logger.error(`LOGS erro ao comparar senha: ${senha}`)
+                        logger.error(`[${req.method}] login: erro 401 ao comparar senha: ${senha}`)
                         return res.status(401).json({ message: 'Erro na senha'})
                     }
 
@@ -97,13 +96,14 @@ class AccountController {
                         expiresIn: parseInt(process.env.JWT_EXPIRES)
                     });
 
-                    logger.info(`LOGS login success! ${user.nome}`)
+                    logger.info(`[${req.method}] login sucesso! ${user.nome}`)
                     res.json({ token })
                 })
             })
+
        } catch (error) {
         if (error instanceof z.ZodError) {
-            logger.error(`[POST] Erro ao fazer login erro: ${JSON.stringify(error.issues), null, 2} zod`)
+            logger.error(`[${req.method}] Erro ao fazer login erro: ${JSON.stringify(error.issues), null, 2} zod`)
             return res.status(400).json({
                 message: 'Erro na validação do login',
                 errors: error.issues,
