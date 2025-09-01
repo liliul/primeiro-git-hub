@@ -159,48 +159,51 @@ class AccountController {
 
         const usuario = req.user?.username || 'desconhecido'
         const roles = req.user?.role || 'role-desconhecido'
-        console.error(usuario, roles);
         
 
         if (!role) {
+            logger.error(`[${req.method}] role é obrigatoria`)
             return res.status(400).json({ message: 'Role é obrigatória' })
         }
 
         const rolesPermitidas = ['user', 'admin']
         if (!rolesPermitidas.includes(role)) {
+            logger.error(`[${req.method}] role invalida tipo: ${rolesPermitidas}`)
             return res.status(400).json({ message: 'Role inválida' })
         }
         if (req.user.role === 'master' && parseInt(req.user.id) === parseInt(id)) {
+            logger.warn(`[${req.method}] O administrador mestre não pode alterar o próprio papel.`)
             return res.status(403).json({ message: 'O administrador mestre não pode alterar o próprio papel.' });
         }
 
-        logger.info(`LOGS auterando roles ${role}`)
-
         this.db.get('SELECT role FROM account WHERE id = ?', [id], (err, user) => {
             if (err) {
-                logger.error(`[SELECT] erro ao buscar usuario: ${id}`)
+                logger.error(`[${req.method}] erro ao buscar usuario: ${id}`)
                 return res.status(500).json({ message: 'Erro ao buscar usuário', erro: err.message })
             }
 
             if (!user) {
+                logger.error(`[${req.method}] usuario ${usuario} nao encontrado`)
                 return res.status(404).json({ message: 'Usuário não encontrado' })
             }
 
             if (user.role === 'master') {
+                logger.warn(`[${req.method}] usuario ${usuario}-${id} tentou alterar o papel do master`)
                 return res.status(403).json({ message: 'Você não tem permissão para alterar o papel de um administrador mestre' })
             }
 
             this.db.run('UPDATE account SET role = ? WHERE id = ?', [role, id], function (err, user) {
                 if (err) {
+                    logger.error(`[${req.method}] usuario ${usuario}-${id} erro ao atualizar role`)
                     return res.status(500).json({ message: 'Erro ao atualizar role', erro: err })
                 }
 
                 if (this.changes === 0) {
+                    logger.warn(`[${req.method}] usuario ${usuario}-${id} não encontrado`)
                     return res.status(404).json({ message: 'Usuário não encontrado' })
                 }
                 
-                logger.warn(`[PUT] Usuário ${usuario} - ${roles} atualizou role do usuario  ID ${id} - IP: ${req.ip}`);
-
+                logger.info(`[${req.method}] Usuário ${usuario} - ${roles} atualizou role do usuario  ID ${id} - IP: ${req.ip}`)
                 return res.status(200).json({ message: `Role '${role}' atribuída ao usuário com ID ${id}` })
                 }
             )
@@ -219,7 +222,7 @@ class AccountController {
                     logger.error(`[DELETE][ERRO] Usuário ${usuarioExcluindo} role ${roleExcluindo} tentou excluir ID ${id} - IP: ${req.ip} - Erro: ${err.message}`)
                     return res.status(401).json({ message: 'Erro ao deleta registro', erro: err.message })
                 } else {
-                    logger.warn(`[DELETE] Usuário ${usuarioExcluindo} role ${roleExcluindo} excluiu ID ${id} - IP: ${req.ip}`);
+                    logger.info(`[DELETE] Usuário ${usuarioExcluindo} role ${roleExcluindo} excluiu ID ${id} - IP: ${req.ip}`);
                     res.status(200).json({ message: `ID ${id} excluido.`, row: this.changes })
                 }
             })
