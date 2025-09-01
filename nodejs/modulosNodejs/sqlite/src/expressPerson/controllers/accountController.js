@@ -27,41 +27,42 @@ class AccountController {
         
             const role = 'user'
 
-        // if (!nome || !senha) {
-        //     return res.status(401).json({ message: 'Erro com senha ou nome de usuario'})
-        // }
-        // if (!sobrenome || !pais) {
-        //     return res.status(401).json({ message: 'Erro com sobrenome ou pais'})
-        // }
-        // if (senha.length < 6) {
-        //     return res.status(400).json({ message: 'A senha deve ter pelo menos 6 caracteres.' });
-        // }
+            // if (!nome || !senha) {
+            //     return res.status(401).json({ message: 'Erro com senha ou nome de usuario'})
+            // }
+            // if (!sobrenome || !pais) {
+            //     return res.status(401).json({ message: 'Erro com sobrenome ou pais'})
+            // }
+            // if (senha.length < 6) {
+            //     return res.status(400).json({ message: 'A senha deve ter pelo menos 6 caracteres.' });
+            // }
 
-        const senhaHash = await bcrypt.hash(senha, 10)
-      
-        this.db.serialize(() => {
-            const stmt = this.db.prepare("INSERT INTO account (nome, sobrenome, senha, pais, role) VALUES (?, ?, ?, ?, ?)");
-            stmt.run(nome, sobrenome, senhaHash, pais, role, function(err) {
-                if (err) {
-                    res.status(401).json({ message: 'Erro ao inserir dados:', erro: err.message});
-                } else {
-                    res.status(200).json({message: `Usuário inserido com sucesso! ID: ${this.lastID}`});
-                }
-            });
+            const senhaHash = await bcrypt.hash(senha, 10)
+        
+            this.db.serialize(() => {
+                const stmt = this.db.prepare("INSERT INTO account (nome, sobrenome, senha, pais, role) VALUES (?, ?, ?, ?, ?)");
+                stmt.run(nome, sobrenome, senhaHash, pais, role, function(err) {
+                    if (err) {
+                        logger.error(`[${req.method}] registro: erro 401 ao inserir dados erro: ${err}`)
+                        res.status(401).json({ message: 'Erro ao inserir dados:', erro: err});
+                    } else {
+                        logger.info(`[${req.method}] registro: usuario ${nome} registrado com sucesso ID: ${this.lastID}`)
+                        res.status(200).json({message: `Usuário inserido com sucesso! ID: ${this.lastID}`});
+                    }
+                });
 
-            stmt.finalize();
-        });   
+                stmt.finalize();
+            });   
         } catch (error) {
             if (error instanceof z.ZodError) {
-            // Se o erro for de validação, retorna o erro com as mensagens do Zod
-            return res.status(400).json({
-                message: 'Erro de validação',
-                errors: error.issues,
-            });
-        }
-
-        // Para outros erros, retorna um erro genérico
-        return res.status(500).json({ message: 'Erro interno do servidor' })
+                logger.error(`[${req.method}] registro: erro 400 na validação, ${error.issues}`)
+                return res.status(400).json({
+                    message: 'Erro de validação',
+                    errors: error.issues,
+                });
+            }
+            logger.error(`[${req.method}] registro: erro 500 interno do servidor`)
+            return res.status(500).json({ message: 'Erro interno do servidor' })
         }
     }
 
