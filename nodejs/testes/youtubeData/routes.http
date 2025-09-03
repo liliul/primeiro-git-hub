@@ -1,0 +1,12 @@
+@host = http://localhost:3001
+
+GET http://localhost:3001/health 
+
+POST http://localhost:3001/account
+Content-Type: application/json
+
+{
+    "name": "Bulma",
+    "email": "bulma@email.com",
+    "password": "vegeta10"
+}
