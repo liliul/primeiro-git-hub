@@ -1,16 +1,16 @@
-import YoutubeAltaRepository from "../repository/youtubeAltaRepository.js"
+import YoutubeAltaService from "../services/youtubeAltaService.js"
 
 class YoutubeAlta {
     constructor(db) {
         this.db = db
         
-        this.youtubeAltaRepository = new YoutubeAltaRepository(this.db)
+        this.youtubeAltaService = new YoutubeAltaService(this.db)
     }
 
     async infoDoYoutubeEmAlta(req, res) {
         try {
             const { id: regionCode } = req.params
-            const data = await this.youtubeAltaRepository.connectYoutubeAlta(regionCode)
+            const data = await this.youtubeAltaService.buscarYoutubeEmAlta(regionCode)
             
             res.status(200).json({ message: `[${req.method}] url-${req.url} retornando os videos em alta youtube`, count: data.length})
 
@@ -19,6 +19,23 @@ class YoutubeAlta {
                 message: 'Erro ao buscar vídeos em alta do YouTube',
                 error: error.response?.data || error.message 
             })   
+        }
+    }
+
+    async buscarDadosDoYoutubeAlta(req, res) {
+        try {
+            const data = await this.youtubeAltaService.selectDadosYoutubeAlta()
+
+            res.status(200).json({
+                message: 'Vídeos em alta salvos no banco de dados',
+                count: data.rows.length,
+                data: data.rows
+            })
+        } catch (error) {
+            res.status(500).json({
+                message: 'Erro ao buscar vídeos no banco de dados',
+                error: error.message
+            })
         }
     }
 } 

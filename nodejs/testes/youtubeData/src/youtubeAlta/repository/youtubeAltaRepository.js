@@ -6,8 +6,8 @@ class YoutubeAltaRepository {
         this.getTrendingVideos = new GetTrendingVideos()
     }
 
-    async connectYoutubeAlta(regionCode) {
-            const videos = await this.getTrendingVideos.getTrendingVideos(regionCode)
+    async connectYoutubeAlta(videos, regionCode) {
+            // const videos = await this.getTrendingVideos.getTrendingVideos(regionCode)
 
             const queryText = `
                 INSERT INTO youtube_videos
@@ -49,7 +49,32 @@ class YoutubeAltaRepository {
                     return this.db.query(queryText, values);
             }))
 
-            return videos
+            // return videos
+    }
+
+    async queryBuscaDadosYoutubeAlta() {
+        const result = await this.db.query(`
+            SELECT 
+                id,
+                video_id,
+                title,
+                description,
+                channel,
+                published_at,
+                thumbnails,
+                tags,
+                statistics,
+                video_url,
+                etag,
+                channel_id,
+                region_code,
+                criado_em
+            FROM youtube_videos
+            ORDER BY criado_em DESC
+            LIMIT 50
+        `);
+
+        return result
     }
 }
 

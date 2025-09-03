@@ -1,0 +1,25 @@
+import GetTrendingVideos from "../utils/getTrendingVideos.js"
+import YoutubeAltaRepository from "../repository/youtubeAltaRepository.js"
+
+class YoutubeAltaService {
+    constructor(db) {
+        this.db = db 
+
+        this.getTrendingVideos = new GetTrendingVideos()
+        this.youtubeAltaRepository = new YoutubeAltaRepository(this.db)
+    }
+
+    async buscarYoutubeEmAlta(regionCode) {
+        const videos = await this.getTrendingVideos.getTrendingVideos(regionCode)
+
+        await this.youtubeAltaRepository.connectYoutubeAlta(videos, regionCode)
+
+        return videos
+    }
+
+    async selectDadosYoutubeAlta() {
+        return this.youtubeAltaRepository.queryBuscaDadosYoutubeAlta()
+    }
+}
+
+export default YoutubeAltaService
