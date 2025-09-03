@@ -6,7 +6,7 @@ class YoutubeAltaRepository {
         this.getTrendingVideos = new GetTrendingVideos()
     }
 
-    async connectYoutubeAlta(videos, regionCode) {
+    async salvarVideos(videos, regionCode) {
             // const videos = await this.getTrendingVideos.getTrendingVideos(regionCode)
 
             const queryText = `

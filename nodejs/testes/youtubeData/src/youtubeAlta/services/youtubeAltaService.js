@@ -12,12 +12,12 @@ class YoutubeAltaService {
     async buscarYoutubeEmAlta(regionCode) {
         const videos = await this.getTrendingVideos.getTrendingVideos(regionCode)
 
-        await this.youtubeAltaRepository.connectYoutubeAlta(videos, regionCode)
+        await this.youtubeAltaRepository.salvarVideos(videos, regionCode)
 
         return videos
     }
 
-    async selectDadosYoutubeAlta() {
+    async buscarVideosSalvos() {
         return this.youtubeAltaRepository.queryBuscaDadosYoutubeAlta()
     }
 }

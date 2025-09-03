@@ -24,7 +24,7 @@ class YoutubeAlta {
 
     async buscarDadosDoYoutubeAlta(req, res) {
         try {
-            const data = await this.youtubeAltaService.selectDadosYoutubeAlta()
+            const data = await this.youtubeAltaService.buscarVideosSalvos()
 
             res.status(200).json({
                 message: 'Vídeos em alta salvos no banco de dados',
