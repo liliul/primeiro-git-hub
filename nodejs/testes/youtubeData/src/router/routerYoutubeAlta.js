@@ -2,8 +2,8 @@ import express from 'express'
 import db from '../db/conection_db.js'
 
 
-import YoutubeAlta from '../controllers/youtubeAltaController.js'
-import GetTrendingVideos from '../utils/getTrendingVideos.js'
+import YoutubeAlta from '../youtubeAlta/controllers/youtubeAltaController.js'
+import GetTrendingVideos from '../youtubeAlta/utils/getTrendingVideos.js'
 
 const routerYoutubeAlta = express.Router()
 
