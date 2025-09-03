@@ -12,24 +12,6 @@ routerYoutubeAlta.get('/ytvideo/:id', async (req, res) => {
     try {
         const videos = await getTrendingVideos(regionCode)
    
-        await db.query(`
-          CREATE TABLE IF NOT EXISTS youtube_videos (
-            id SERIAL PRIMARY KEY,
-            video_id VARCHAR(30) UNIQUE NOT NULL,
-            title TEXT NOT NULL,
-            description TEXT,
-            channel VARCHAR(100),
-            published_at TIMESTAMP,
-            thumbnails JSONB,
-            tags TEXT[],
-            statistics JSONB,
-            video_url TEXT,
-            etag TEXT,
-            channel_id VARCHAR(50),
-            region_code VARCHAR(5),
-            criado_em TIMESTAMP DEFAULT NOW()
-          );
-        `);
         const queryText = `
           INSERT INTO youtube_videos
             (video_id, title, description, channel, published_at, thumbnails, tags, statistics, video_url, etag, channel_id, region_code)
@@ -51,7 +33,7 @@ routerYoutubeAlta.get('/ytvideo/:id', async (req, res) => {
           RETURNING *;
         `;
                   
-        for (const item of videos) {
+        await Promise.all(videos.map(item => {
               const values = [
                 item.id,
                 item.snippet.title,
@@ -67,18 +49,16 @@ routerYoutubeAlta.get('/ytvideo/:id', async (req, res) => {
                 regionCode
               ];
 
-              await db.query(queryText, values);
-        }
+              return db.query(queryText, values);
+        }))
         
         res.status(200).json({ message: 'retornando 10 videos em alta youtube', count: videos.length})
 
       } catch (error) {
-        if (error) {
-          res.status(500).json({ 
-            message: 'Erro ao buscar vídeos em alta do YouTube',
-            error: error.response?.data || error.message 
-          })
-        }
+        res.status(500).json({ 
+          message: 'Erro ao buscar vídeos em alta do YouTube',
+          error: error.response?.data || error.message 
+        })
     }
 })
 
