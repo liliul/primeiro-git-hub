@@ -3,6 +3,8 @@ import routerHealth from './router/health.js';
 import routerAccount from './router/routerAccount.js';
 import routerYoutubeAlta from './router/routerYoutubeAlta.js';
 
+import './node_cron/index.js'
+
 const app = express()
 app.use(express.json());
 
