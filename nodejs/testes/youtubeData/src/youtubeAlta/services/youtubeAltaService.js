@@ -9,8 +9,8 @@ class YoutubeAltaService {
         this.youtubeAltaRepository = new YoutubeAltaRepository(this.db)
     }
 
-    async buscarYoutubeEmAlta(regionCode) {
-        const videos = await this.getTrendingVideos.getTrendingVideos(regionCode)
+    async buscarYoutubeEmAlta(regionCode, maxResults) {
+        const videos = await this.getTrendingVideos.getTrendingVideos(regionCode, maxResults)
 
         await this.youtubeAltaRepository.salvarVideos(videos, regionCode)
 

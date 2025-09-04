@@ -10,7 +10,9 @@ class YoutubeAlta {
     async infoDoYoutubeEmAlta(req, res) {
         try {
             const { id: regionCode } = req.params
-            const data = await this.youtubeAltaService.buscarYoutubeEmAlta(regionCode)
+            const { maxResults } = req.query
+
+            const data = await this.youtubeAltaService.buscarYoutubeEmAlta(regionCode, maxResults)
             
             res.status(200).json({ message: `[${req.method}] url-${req.url} retornando os videos em alta youtube`, count: data.length})
 

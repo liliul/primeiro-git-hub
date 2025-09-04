@@ -30,3 +30,10 @@ docker exec -it meu_postgres psql -U root -d youtubedata
 \q
 
 ```
+
+rotas
+
+```bash
+
+localhost:3001/youtube/v1/ytvideo/JP?maxResults=2
+```
