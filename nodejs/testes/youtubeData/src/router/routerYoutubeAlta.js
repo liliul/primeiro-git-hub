@@ -56,4 +56,17 @@ routerYoutubeAlta.get('/ytalta/:id', async (req, res) => {
     }
 })
 
+routerYoutubeAlta.get('/yaltavideos/:UF', async (req, res) => {
+  try {
+    const { UF } = req.params
+
+    const videos = await db.query(`SELECT * FROM youtube_videos WHERE region_code = $1`, [UF])
+    // console.log(videos)
+    res.status(200).json({ message: 'retornando yaltavideos', length: videos.rows.length, data: videos.rows })
+    
+  } catch (error) {
+    res.status(401).json({ message: 'Erro ao pegar videos pelo id=JP', erro: error})
+  }
+})
+
 export default routerYoutubeAlta
