@@ -4,8 +4,9 @@ import YoutubeSearchController from '../youtubeSearch/controller/youtubeSearchCo
 const routerYoutubeSearch = express.Router()
 const searchController = new YoutubeSearchController()
 
-routerYoutubeSearch.get('/ytsearch', async (req, res) => {
-    const search = await searchController.searchVideos("abertura de dragon ball z", 3, "viewCount")
+routerYoutubeSearch.post('/ytsearch', async (req, res) => {
+    const { query } = req.body
+    const search = await searchController.searchVideos(query, 3)
     console.log(search);
     
     res.status(200).json({ message: 'ok', data: search})
