@@ -3,6 +3,28 @@ import db from '../db/indexDB.js'
 
 const routeCarts = express.Router()
 
+/**
+ * @swagger
+ * /cart:
+ *   post:
+ *     summary: Adicionar produto ao carrinho
+ *     description: Adiciona um produto ao carrinho do usuário
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               productId:
+ *                 type: string
+ *               quantity:
+ *                 type: integer
+ *     responses:
+ *       200:
+ *         description: Produto adicionado
+ */
+
 routeCarts.post('/create-carts-users/:id', async (req, res) => {
     const { id } = req.params
     const { productId, quantity } = req.body;
