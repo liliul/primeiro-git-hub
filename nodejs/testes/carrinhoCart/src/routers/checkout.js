@@ -47,6 +47,14 @@ routerCheckout.post("/checkout/:idUsers", async (req, res) => {
     console.error(err);
     res.status(500).json({ error: "Erro no checkout" });
   }
-});
+})
+
+routerCheckout.get('/checkout/', async (req, res) => {
+  const listCheckout = await db.query(`
+    select * from orders;    
+  `)
+
+  res.status(200).json({ message: 'listando checkout', data: listCheckout.rows})
+})
 
 export default routerCheckout
