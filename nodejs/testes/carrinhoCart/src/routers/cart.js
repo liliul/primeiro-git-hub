@@ -3,7 +3,7 @@ import db from '../db/indexDB.js'
 
 const routeCarts = express.Router()
 
-routeCarts.post('/create-carts/:id', async (req, res) => {
+routeCarts.post('/create-carts-users/:id', async (req, res) => {
     const { id } = req.params
     const { productId, quantity } = req.body;
     
@@ -14,7 +14,7 @@ routeCarts.post('/create-carts/:id', async (req, res) => {
         INSERT INTO carts (user_id) 
         VALUES ($1) returning *;
         `, [id])
-    
+
     }
 
     const cartsId = carts.rows[0].id
