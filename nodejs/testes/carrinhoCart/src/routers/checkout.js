@@ -40,26 +40,30 @@ routerCheckout.post("/checkout/:idUsers", async (req, res) => {
 
     for (const item of cart.rows) {
       await db.query(
+        "UPDATE products SET stock = stock - $1 WHERE id = $2",
+        [item.quantity, item.id]
+      );
+
+      await db.query(
         `INSERT INTO order_items (order_id, product_id, quantity, price)
         VALUES ($1, $2, $3, $4)`,
         [order.rows[0].id, item.id, item.quantity, item.price]
       )
-
-      await db.query("DELETE FROM cart_items WHERE cart_id = $1", [
-        cart.rows[0].cart_id,
-      ]);
-
-      // simula pagamento
-      const paymentSuccess = true
-
-      if (paymentSuccess) {
-        await db.query(
-          "UPDATE orders SET status = $1 WHERE id = $2",
-          ["paid", order.rows[0].id]
-        );
-      }
     }
-    
+
+    await db.query("DELETE FROM cart_items WHERE cart_id = $1", [
+      cart.rows[0].cart_id,
+    ]);
+
+    // simula pagamento
+    const paymentSuccess = true
+
+    if (paymentSuccess) {
+      await db.query(
+        "UPDATE orders SET status = $1 WHERE id = $2",
+        ["paid", order.rows[0].id]
+      );
+    }
 
     res.json({ message: "Pedido criado com sucesso", order: order.rows[0] });
   } catch (err) {
