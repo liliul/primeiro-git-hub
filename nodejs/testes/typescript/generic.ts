@@ -14,11 +14,11 @@ console.log(terceira);
 console.log(quarta);
 console.log(quinta);
 
-function identity<T extends { length: number }>(value: T): T {
-    console.log(value.length);  // Pode acessar .length porque T tem a restrição
-    return value;
-}
+// function identity<T extends { length: number }>(value: T): T {
+//     console.log(value.length);  // Pode acessar .length porque T tem a restrição
+//     return value;
+// }
 
-identity([1, 2, 3]); // Válido
-identity("Hello");   // Válido
+// identity([1, 2, 3]); // Válido
+// identity("Hello");   // Válido
 // identity(123);       // Erro, número não tem .length
