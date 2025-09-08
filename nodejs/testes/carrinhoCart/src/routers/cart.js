@@ -40,13 +40,28 @@ routeCarts.post('/create-carts-users/:id', async (req, res) => {
     }
 
     const cartsId = carts.rows[0].id
-
+    
     const product = await db.query("SELECT stock FROM products WHERE id = $1", [productId]);
+    // console.log(product.rows[0].stock);
     if (product.rows.length === 0) {
       return res.status(404).json({ error: "Produto não encontrado" });
     }
-    if (product.rows[0].stock <= quantity || quantity < 0) {
+    if (product.rows[0].stock < quantity || quantity <= 0) {
       return res.status(400).json({ error: "Estoque insuficiente" });
+    }
+    
+    const cartItem = await db.query(
+        "SELECT quantity FROM cart_items WHERE cart_id = $1 AND product_id = $2",
+        [cartsId, productId]
+    );
+    const currentQuantity = cartItem.rows.length > 0 ? cartItem.rows[0].quantity : 0;
+
+    const newTotal = currentQuantity + quantity;
+
+    if (newTotal > product.rows[0].stock) {
+        return res.status(400).json({
+        error: `Estoque insuficiente. Já tem ${currentQuantity} no carrinho, estoque disponível: ${product.rows[0].stock}`
+        });
     }
 
     const item = await db.query(
