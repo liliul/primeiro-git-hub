@@ -45,7 +45,7 @@ routeCarts.post('/create-carts-users/:id', async (req, res) => {
     if (product.rows.length === 0) {
       return res.status(404).json({ error: "Produto não encontrado" });
     }
-    if (product.rows[0].stock < quantity) {
+    if (product.rows[0].stock <= quantity || quantity < 0) {
       return res.status(400).json({ error: "Estoque insuficiente" });
     }
 
