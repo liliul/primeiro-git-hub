@@ -31,16 +31,25 @@ routerCheckout.post("/checkout/:idUsers", async (req, res) => {
     );
 
     
+    // for (const item of cart.rows) {
+    //   await db.query(
+    //     "UPDATE products SET stock = stock - $1 WHERE id = $2",
+    //     [item.quantity, item.id]
+    //   );
+    // }
+
     for (const item of cart.rows) {
       await db.query(
-        "UPDATE products SET stock = stock - $1 WHERE id = $2",
-        [item.quantity, item.id]
-      );
-    }
+        `INSERT INTO order_items (order_id, product_id, quantity, price)
+        VALUES ($1, $2, $3, $4)`,
+        [order.rows[0].id, item.id, item.quantity, item.price]
+      )
 
-    await db.query("DELETE FROM cart_items WHERE cart_id = $1", [
+      await db.query("DELETE FROM cart_items WHERE cart_id = $1", [
       cart.rows[0].cart_id,
     ]);
+    }
+    
 
     res.json({ message: "Pedido criado com sucesso", order: order.rows[0] });
   } catch (err) {
@@ -49,12 +58,49 @@ routerCheckout.post("/checkout/:idUsers", async (req, res) => {
   }
 })
 
-routerCheckout.get('/checkout/', async (req, res) => {
+routerCheckout.get('/checkout/orders/', async (req, res) => {
   const listCheckout = await db.query(`
     select * from orders;    
   `)
 
   res.status(200).json({ message: 'listando checkout', data: listCheckout.rows})
 })
+
+routerCheckout.get('/checkout/:userId', async (req, res) => {
+  try {
+    const { userId } = req.params;
+
+    const orders = await db.query(`
+      SELECT o.id as order_id, o.total, o.status, o.created_at,
+             oi.product_id, p.name, oi.quantity, oi.price
+      FROM orders o
+      JOIN order_items oi ON oi.order_id = o.id
+      JOIN products p ON oi.product_id = p.id
+      WHERE o.user_id = $1
+      ORDER BY o.created_at DESC
+    `, [userId]);
+
+    res.json({ message: 'Histórico de pedidos', data: orders.rows });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Erro ao listar pedidos" });
+  }
+});
+
+routerCheckout.put('/checkout/:orderId/status', async (req, res) => {
+  const { orderId } = req.params;
+  const { status } = req.body;
+
+  const validStatus = ["pending", "paid", "shipped", "completed", "canceled"];
+  if (!validStatus.includes(status)) {
+    return res.status(400).json({ error: "Status inválido" });
+  }
+
+  await db.query("UPDATE orders SET status = $1 WHERE id = $2", [status, orderId]);
+
+  res.json({ message: "Status atualizado" });
+});
+
+
 
 export default routerCheckout
