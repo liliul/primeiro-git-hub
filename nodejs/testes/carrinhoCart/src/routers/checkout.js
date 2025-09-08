@@ -46,8 +46,18 @@ routerCheckout.post("/checkout/:idUsers", async (req, res) => {
       )
 
       await db.query("DELETE FROM cart_items WHERE cart_id = $1", [
-      cart.rows[0].cart_id,
-    ]);
+        cart.rows[0].cart_id,
+      ]);
+
+      // simula pagamento
+      const paymentSuccess = true
+
+      if (paymentSuccess) {
+        await db.query(
+          "UPDATE orders SET status = $1 WHERE id = $2",
+          ["paid", order.rows[0].id]
+        );
+      }
     }
     
 
