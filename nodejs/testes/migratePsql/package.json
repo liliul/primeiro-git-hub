@@ -1,0 +1,14 @@
+{
+  "name": "migratepsql",
+  "version": "1.0.0",
+  "description": "1. Criar tabela para controlar migrations    Antes de rodar qualquer migration, precisamos de uma tabela que registre quais já foram aplicadas:",
+  "main": "db.js",
+  "scripts": {
+   
+    "migrate": "node migrate.js",
+    "start": "node server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
