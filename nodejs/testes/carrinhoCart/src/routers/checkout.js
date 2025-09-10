@@ -1,10 +1,14 @@
 import express from 'express'
 import db from '../db/indexDB.js'
+import AuthorizationJwt from '../middleware/auth.js'
 
 const routerCheckout = express.Router()
 
-routerCheckout.post("/checkout/:idUsers", async (req, res) => {
-  const id  = req.params.idUsers
+routerCheckout.post("/checkout/", AuthorizationJwt, async (req, res) => {
+  // const id  = req.params.idUsers
+  // recupera o id do token
+  const id = req.user.id
+   console.log(req.user);
     
   try {
     const cart = await db.query(
