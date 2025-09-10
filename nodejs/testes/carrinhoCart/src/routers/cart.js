@@ -1,5 +1,6 @@
 import express from 'express'
 import db from '../db/indexDB.js'
+import AuthorizationJwt from '../middleware/auth.js'
 
 const routeCarts = express.Router()
 
@@ -25,7 +26,7 @@ const routeCarts = express.Router()
  *         description: Produto adicionado
  */
 
-routeCarts.post('/create-carts-users/:id', async (req, res) => {
+routeCarts.post('/create-carts-users/:id', AuthorizationJwt, async (req, res) => {
     const { id } = req.params
     const { productId, quantity } = req.body;
     
