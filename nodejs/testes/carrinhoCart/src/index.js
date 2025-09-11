@@ -4,6 +4,8 @@ import routerProducts from './routers/products.js'
 import routeCarts from './routers/cart.js'
 import routerCartItems from './routers/cartItems.js'
 import routerCheckout from './routers/checkout.js'
+import dotenv from "dotenv";
+dotenv.config();
 
 import { swaggerUi, swaggerSpec } from "../swagger.js"
 

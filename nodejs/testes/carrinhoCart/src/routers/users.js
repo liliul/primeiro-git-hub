@@ -2,8 +2,6 @@ import express from 'express'
 import db from '../db/indexDB.js'
 import jwt from 'jsonwebtoken'
 import bcrypt from 'bcrypt'
-import dotenv from "dotenv";
-dotenv.config();
 
 const routerUsers = express.Router()
 
