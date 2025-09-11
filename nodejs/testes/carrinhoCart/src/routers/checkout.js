@@ -76,7 +76,7 @@ routerCheckout.post("/checkout/", AuthorizationJwt, async (req, res) => {
   }
 })
 
-routerCheckout.get('/checkout/orders/', async (req, res) => {
+routerCheckout.get('/checkout/orders/', AuthorizationJwt, async (req, res) => {
   const listCheckout = await db.query(`
     select * from orders;    
   `)
@@ -84,9 +84,9 @@ routerCheckout.get('/checkout/orders/', async (req, res) => {
   res.status(200).json({ message: 'listando checkout', data: listCheckout.rows})
 })
 
-routerCheckout.get('/checkout/:userId', async (req, res) => {
+routerCheckout.get('/checkout/', AuthorizationJwt, async (req, res) => {
   try {
-    const { userId } = req.params;
+    const userId = req.user.id;
 
     const orders = await db.query(`
       SELECT o.id as order_id, o.total, o.status, o.created_at,
@@ -105,8 +105,8 @@ routerCheckout.get('/checkout/:userId', async (req, res) => {
   }
 });
 
-routerCheckout.put('/checkout/:orderId/status', async (req, res) => {
-  const { orderId } = req.params;
+routerCheckout.put('/checkout/:orderId/status', AuthorizationJwt, async (req, res) => {
+  const { orderId } = req.user.id;
   const { status } = req.body;
 
   const validStatus = ["pending", "paid", "shipped", "completed", "canceled"];
