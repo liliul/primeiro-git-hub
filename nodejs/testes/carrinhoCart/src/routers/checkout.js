@@ -106,7 +106,8 @@ routerCheckout.get('/checkout/', AuthorizationJwt, async (req, res) => {
 });
 
 routerCheckout.put('/checkout/:orderId/status', AuthorizationJwt, async (req, res) => {
-  const { orderId } = req.user.id;
+  const { orderId } = req.params;
+  const userId = req.user.id; 
   const { status } = req.body;
 
   const validStatus = ["pending", "paid", "shipped", "completed", "canceled"];
@@ -114,7 +115,11 @@ routerCheckout.put('/checkout/:orderId/status', AuthorizationJwt, async (req, re
     return res.status(400).json({ error: "Status inválido" });
   }
 
-  await db.query("UPDATE orders SET status = $1 WHERE id = $2", [status, orderId]);
+  const dbUser = await db.query("UPDATE orders SET status = $1 WHERE id = $2 AND user_id = $3 RETURNING *", [status, orderId, userId]);
+
+  if (dbUser.rows.length === 0) {
+    return res.status(404).json({ error: "Pedido não encontrado ou não pertence ao usuário" });
+  }
 
   res.json({ message: "Status atualizado" });
 });
