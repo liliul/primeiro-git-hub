@@ -77,7 +77,7 @@ routeCarts.post('/create-carts-users/:id', AuthorizationJwt, async (req, res) =>
     res.status(200).json({ message: 'Create carts ok', data: item.rows })    
 })
 
-routeCarts.get('/list-carts', async (req, res) => {
+routeCarts.get('/list-carts', AuthorizationJwt, async (req, res) => {
     const listCarts = await db.query(`
         select * from carts;
     `)
@@ -85,7 +85,7 @@ routeCarts.get('/list-carts', async (req, res) => {
     res.status(200).json({ message: 'ok', data: listCarts.rows })
 })
 
-routeCarts.delete('/delete-carts/:id', async (req, res) => {
+routeCarts.delete('/delete-carts/:id', AuthorizationJwt, async (req, res) => {
     const { id } = req.params
 
     const deleteProducts = await db.query(`
@@ -100,7 +100,7 @@ routeCarts.delete('/delete-carts/:id', async (req, res) => {
 
 })
 
-routeCarts.put('/update-products/:id', async (req, res) => {
+routeCarts.put('/update-products/:id', AuthorizationJwt, async (req, res) => {
     const { id } = req.params
     const { name, price, stock } = req.body 
 
