@@ -100,23 +100,4 @@ routeCarts.delete('/delete-carts/:id', AuthorizationJwt, async (req, res) => {
 
 })
 
-routeCarts.put('/update-products/:id', AuthorizationJwt, async (req, res) => {
-    const { id } = req.params
-    const { name, price, stock } = req.body 
-
-    const updateProducts = await db.query(`
-        update products set 
-            name = $1, price = $2, stock = $3 
-            where id = $4
-    `, [name, price, stock, id])
-
-    if (!updateProducts) {
-        return res.status(400).json({ message: 'erro no update' })
-    }
-
-    res.status(200).json({ message: 'Atualizado com sucesso ok'})
-
-})
-
-
 export default routeCarts
