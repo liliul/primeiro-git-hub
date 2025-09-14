@@ -1,6 +1,7 @@
 import express from 'express'
 import db from '../db/indexDB.js'
 import { z } from "zod"
+import AuthorizationJwt from '../middleware/auth.js'
 
 const routerProducts = express.Router()
 
@@ -16,7 +17,7 @@ const productSchema = z.object({
     z.number().int().nonnegative("Stock deve ser >= 0")
   )
 })
-routerProducts.post('/create-products', async (req, res) => {
+routerProducts.post('/create-products', AuthorizationJwt,  async (req, res) => {
     const validation = productSchema.safeParse(req.body)
 
     if (!validation.success) {
@@ -58,7 +59,7 @@ routerProducts.post('/create-products', async (req, res) => {
     
 })
 
-routerProducts.get('/list-products', async (req, res) => {
+routerProducts.get('/list-products', AuthorizationJwt, async (req, res) => {
     const listUsers = await db.query(`
         select * from products;
     `)
@@ -66,7 +67,7 @@ routerProducts.get('/list-products', async (req, res) => {
     res.status(200).json({ message: 'ok', data: listUsers.rows })
 })
 
-routerProducts.delete('/delete-products/:id', async (req, res) => {
+routerProducts.delete('/delete-products/:id', AuthorizationJwt, async (req, res) => {
     const { id } = req.params
 
     const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
@@ -89,7 +90,7 @@ routerProducts.delete('/delete-products/:id', async (req, res) => {
 
 })
 
-routerProducts.put('/update-products/:id', async (req, res) => {
+routerProducts.put('/update-products/:id', AuthorizationJwt, async (req, res) => {
     const { id } = req.params
     const { name, price, stock } = req.body 
 
