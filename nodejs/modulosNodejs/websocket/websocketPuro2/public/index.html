@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <body>
+    <h2>Chat Socket.IO (teste básico)</h2>
+    <div id="chat"></div>
+    <input id="msg" placeholder="Digite..." />
+    <button onclick="enviar()">Enviar</button>
+
+    <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+    <script>
+      // Conecta ao servidor
+      const socket = io("http://localhost:3000");
+
+      socket.on("connect", () => {
+        console.log("✅ Conectado ao servidor:", socket.id);
+      });
+
+      // Recebe mensagens do servidor
+      socket.on("chatMessage", (msg) => {
+        console.log("📥 Mensagem recebida:", msg);
+        const div = document.createElement("div");
+        div.innerText = msg;
+        document.getElementById("chat").appendChild(div);
+      });
+
+      // Envia mensagem para o servidor
+      function enviar() {
+        const input = document.getElementById("msg");
+        socket.emit("chatMessage", input.value);
+        input.value = "";
+      }
+    </script>
+  </body>
+</html>
