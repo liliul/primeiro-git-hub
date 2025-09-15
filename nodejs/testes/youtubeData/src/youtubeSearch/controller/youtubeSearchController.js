@@ -1,4 +1,3 @@
-
 import YoutubeSearchVideoUtils from '../utils/searchVideos.js';
 
 class YoutubeSearchController {
