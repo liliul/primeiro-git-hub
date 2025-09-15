@@ -48,8 +48,6 @@ routerUsers.post('/login', async (req, res) => {
 })
 
 routerUsers.get('/list-users', AuthorizationJwt, authRoles.isAdmin, async (req, res) => {
-    console.log(req.user.role);
-    
     const listUsers = await db.query(`
         select * from users;
     `)
@@ -70,6 +68,25 @@ routerUsers.delete('/delete-users/:id', AuthorizationJwt, authRoles.isSuperAdmin
 
     res.status(200).json({ message: 'ok', data: deleteUsers})
 
+})
+
+routerUsers.put('/update-users/:id', AuthorizationJwt, authRoles.isAuthenticated, async (req, res) => {
+    const { id } = req.params
+    const { name, password } = req.body
+
+    const passwordHash = await bcrypt.hash(password, 10)
+
+    const userUpdate = await db.query(`UPDATE users SET name = $1, password = $2 WHERE id = $3 RETURNING *`,
+        [name, passwordHash, id]
+    )
+
+    if (userUpdate.rowCount === 0) {
+        return res.status(404).json({ message: 'Usuário não encontrado.' });
+    }
+    res.status(200).json({ 
+        message: 'Usuário atualizado com sucesso.',
+        user: userUpdate.rows[0]
+    })
 })
 
 export default routerUsers
