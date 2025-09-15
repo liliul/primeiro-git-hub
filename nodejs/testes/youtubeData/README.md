@@ -35,5 +35,9 @@ rotas
 
 ```bash
 
+# videos pelo pais maximo de video do youtube
 localhost:3001/youtube/v1/ytvideo/JP?maxResults=2
+
+# busca por pais
+localhost:3001/youtube/v1/yaltavideos/JP
 ```
