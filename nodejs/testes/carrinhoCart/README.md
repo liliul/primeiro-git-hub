@@ -23,3 +23,38 @@ docker exec -it meu_postgres psql -U root -d <nomeDobanco>
 \q
 
 ```
+
+rotas
+
+```bash
+
+# users
+localhost:3001/v1/create-users
+
+{
+	"name": "nome sobrenome",
+	"email": "@email.com",
+	"password": "123"
+}
+
+# products
+localhost:3001/v2/create-products
+
+{
+	"name": "Notebook Acer 15",
+	"price": 2200,
+	"stock": 10
+}
+
+bearer token
+
+# carts
+localhost:3001/v3/create-carts-users/3a4734f7-65a1-4ee1-8dda-9f37604fb0e4
+
+{
+	"productId": "3c7fc1f0-fcc5-41ad-82c7-4683f9501b14",
+	"quantity": 1
+}
+
+bearer token
+```
