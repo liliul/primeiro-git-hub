@@ -1,8 +1,11 @@
 import { productSchema } from "./productsDto.js"
+import ProductsService from "./productsService.js"
 
 class ProductsController {
     constructor(db) {
-        this.db = db 
+        this.db = db
+        
+        this.productsService = new ProductsService(this.db)
     }
 
     async createProducts(req, res) {
@@ -17,12 +20,9 @@ class ProductsController {
         const { name, price, stock } = validation.data
 
         try {
-            const users = await this.db.query(`
-                INSERT INTO products (name, price, stock) 
-                VALUES ($1, $2, $3);
-                `, [name, price, stock])
+            await this.productsService.createProductsService(name, price, stock)
 
-            res.status(200).json({ message: 'ok', data: users.rowCount})
+            res.status(200).json({ message: 'ok create products' })
         } catch (error) {
             res.status(500).json({ 
                 message: "Erro na criação de produto", 
@@ -43,12 +43,10 @@ class ProductsController {
             })
         }
         
-        const deleteProducts = await this.db.query(`
-            delete from products where id = $1;
-        `, [id])
-
-        if (!deleteProducts) {
-            return res.status(400).json({ message: 'erro no delete' })
+        const deleteProducts = await this.productsService.deleteProductsService(id)
+        
+        if (deleteProducts.rowCount === 0) {
+            return res.status(400).json({ message: 'erro no delete produto nao encontrado' })
         }
 
         res.status(200).json({ message: 'Deletado com sucesso ok'})
@@ -78,11 +76,7 @@ class ProductsController {
         }
 
         try {
-            const updateProducts = await this.db.query(`
-            update products set 
-                name = $1, price = $2, stock = $3 
-                where id = $4
-            `, [name, price, stock, id])
+            const updateProducts = await this.productsService.updateProductsService(name, price, stock, id)
 
             if (updateProducts.rowCount === 0) {
                 return res.status(400).json({ message: 'produto não encontrado' })
@@ -95,9 +89,7 @@ class ProductsController {
     }
 
     async listProducts(req, res) {
-        const listUsers = await this.db.query(`
-            select * from products;
-        `)
+        const listUsers = await this.productsService.listProductsService()
 
         res.status(200).json({ message: 'ok', data: listUsers.rows })
     }
