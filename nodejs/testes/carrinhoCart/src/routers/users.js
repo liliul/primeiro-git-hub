@@ -2,7 +2,7 @@ import express from 'express'
 import db from '../db/indexDB.js'
 import { authRoles } from '../middleware/roles.js'
 import AuthorizationJwt from '../middleware/auth.js'
-import UsersController from '../users/usersController.js'
+import UsersController from '../mvc/users/usersController.js'
 
 const routerUsers = express.Router()
 
