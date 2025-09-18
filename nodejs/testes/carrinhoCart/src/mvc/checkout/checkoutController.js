@@ -50,6 +50,27 @@ class CheckoutController {
         }
     }
 
+    async updateCheckoutOrderIdStatus(req, res) {
+        const userId = req.user.id 
+        const { orderId } = req.params
+        const { status } = req.body
+
+        const validStatus = ["pending", "paid", "shipped", "completed", "canceled"]
+        if (!validStatus.includes(status)) {
+            return res.status(400).json({ error: "Status inválido" })
+        }
+
+        const orders = await this.db.query("UPDATE orders SET status = $1 WHERE id = $2 AND user_id = $3 RETURNING *",
+            [status, orderId, userId]
+        )
+
+        if (orders.rows.length === 0) {
+            return res.status(404).json({ error: "Pedido não encontrado ou não pertence ao usuário" })
+        }
+
+        res.json({ message: "Status atualizado" })
+    }
+
 }
 
 export default CheckoutController
