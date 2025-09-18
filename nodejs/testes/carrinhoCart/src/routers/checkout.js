@@ -1,80 +1,16 @@
 import express from 'express'
 import db from '../db/indexDB.js'
 import AuthorizationJwt from '../middleware/auth.js'
+import CheckoutController from '../mvc/checkout/checkoutController.js'
 
 const routerCheckout = express.Router()
 
-routerCheckout.post("/checkout/", AuthorizationJwt, async (req, res) => {
-  // const id  = req.params.idUsers
-  // recupera o id do token
-  const id = req.user.id
-   console.log(req.user);
-    
-  try {
-    const cart = await db.query(
-      `SELECT p.id, p.price, ci.quantity, c.id as cart_id
-       FROM cart_items ci
-       JOIN carts c ON ci.cart_id = c.id
-       JOIN products p ON ci.product_id = p.id
-       WHERE c.user_id = $1`,
-      [id]
-    );
+const checkout = new CheckoutController(db)
 
-    if (cart.rows.length === 0) {
-      return res.status(400).json({ error: "Carrinho vazio" });
-    }
-
-    const total = cart.rows.reduce(
-      (sum, item) => sum + item.price * item.quantity,
-      0
-    );
-
-    const order = await db.query(
-      "INSERT INTO orders (user_id, total) VALUES ($1, $2) RETURNING *",
-      [id, total]
-    );
-
-    
-    // for (const item of cart.rows) {
-    //   await db.query(
-    //     "UPDATE products SET stock = stock - $1 WHERE id = $2",
-    //     [item.quantity, item.id]
-    //   );
-    // }
-
-    for (const item of cart.rows) {
-      await db.query(
-        "UPDATE products SET stock = stock - $1 WHERE id = $2",
-        [item.quantity, item.id]
-      );
-
-      await db.query(
-        `INSERT INTO order_items (order_id, product_id, quantity, price)
-        VALUES ($1, $2, $3, $4)`,
-        [order.rows[0].id, item.id, item.quantity, item.price]
-      )
-    }
-
-    await db.query("DELETE FROM cart_items WHERE cart_id = $1", [
-      cart.rows[0].cart_id,
-    ]);
-
-    // simula pagamento
-    const paymentSuccess = true
-
-    if (paymentSuccess) {
-      await db.query(
-        "UPDATE orders SET status = $1 WHERE id = $2",
-        ["paid", order.rows[0].id]
-      );
-    }
-
-    res.json({ message: "Pedido criado com sucesso", order: order.rows[0] });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Erro no checkout" });
-  }
-})
+routerCheckout.post("/checkout/", 
+  AuthorizationJwt,
+  checkout.checkoutController.bind(checkout)
+)
 
 routerCheckout.get('/checkout/orders/', AuthorizationJwt, async (req, res) => {
   const listCheckout = await db.query(`
