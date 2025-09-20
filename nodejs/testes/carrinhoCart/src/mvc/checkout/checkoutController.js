@@ -23,7 +23,12 @@ class CheckoutController {
 
     async searchCheckoutOrders(req, res) {
         const selectOrders = await this.db.query(`
-            select * from orders;`
+            select
+            (select u.name from users as u where u.id = o.user_id) as user_name,
+            (select u.email from users as u where u.id = o.user_id) as user_email, 
+            id, user_id, total, status, created_at
+            from orders as o
+            `
         )
 
         res.status(200).json({ message: 'Listando Orders', data: selectOrders.rows})
