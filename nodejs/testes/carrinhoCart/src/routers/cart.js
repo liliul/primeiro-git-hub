@@ -77,10 +77,23 @@ routeCarts.post('/create-carts-users/:id', AuthorizationJwt, async (req, res) =>
     res.status(200).json({ message: 'Create carts ok', data: item.rows })    
 })
 
-routeCarts.get('/list-carts', AuthorizationJwt, async (req, res) => {
+routeCarts.get('/list-carts/:id', AuthorizationJwt, async (req, res) => {
+    const { id } = req.params
+
     const listCarts = await db.query(`
-        select * from carts;
-    `)
+        select c.id as cartid, u.id as userid, u.name,u.email, c.created_at as creatCart from users u
+        join carts c on u.id = c.user_id
+        where u.id = $1`,
+        [id]
+    )
+
+    res.status(200).json({ message: 'ok', data: listCarts.rows })
+})
+
+routeCarts.get('/list-carts/', AuthorizationJwt, async (req, res) => {
+    const listCarts = await db.query(`
+        select * from carts`
+    )
 
     res.status(200).json({ message: 'ok', data: listCarts.rows })
 })
