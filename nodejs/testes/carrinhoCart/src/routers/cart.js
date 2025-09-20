@@ -1,6 +1,7 @@
 import express from 'express'
 import db from '../db/indexDB.js'
 import AuthorizationJwt from '../middleware/auth.js'
+import { authRoles } from '../middleware/roles.js'
 
 const routeCarts = express.Router()
 
@@ -90,7 +91,7 @@ routeCarts.get('/list-carts/:id', AuthorizationJwt, async (req, res) => {
     res.status(200).json({ message: 'ok', data: listCarts.rows })
 })
 
-routeCarts.get('/list-carts/', AuthorizationJwt, async (req, res) => {
+routeCarts.get('/list-carts/', AuthorizationJwt, authRoles.isAdmin, async (req, res) => {
     const listCarts = await db.query(`
         select * from carts`
     )
@@ -98,7 +99,7 @@ routeCarts.get('/list-carts/', AuthorizationJwt, async (req, res) => {
     res.status(200).json({ message: 'ok', data: listCarts.rows })
 })
 
-routeCarts.delete('/delete-carts/:id', AuthorizationJwt, async (req, res) => {
+routeCarts.delete('/delete-carts/:id', AuthorizationJwt, authRoles.isAuthenticated, async (req, res) => {
     const { id } = req.params
 
     const deleteProducts = await db.query(`

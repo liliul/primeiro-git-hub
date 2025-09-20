@@ -28,7 +28,7 @@ routerProducts.put('/update-products/:id',
 
 routerProducts.get('/list-products', 
     AuthorizationJwt,
-    authRoles.isAdmin,
+    authRoles.isAuthenticated,
     productsController.listProducts.bind(productsController)
  )
 
