@@ -34,11 +34,13 @@ class CheckoutController {
             const userId = req.user.id;
 
             const orders = await this.db.query(`
-            SELECT o.id as order_id, o.total, o.status, o.created_at,
-                    oi.product_id, p.name, oi.quantity, oi.price
+           SELECT o.id as order_id, o.total, o.status, o.created_at,
+                    oi.product_id, p.name as nameProduct, oi.quantity, oi.price,
+                    u.name as nameUser, u.email as emailUser
             FROM orders o
             JOIN order_items oi ON oi.order_id = o.id
             JOIN products p ON oi.product_id = p.id
+			join users u on u.id = o.user_id 
             WHERE o.user_id = $1
             ORDER BY o.created_at DESC
             `, [userId]);
