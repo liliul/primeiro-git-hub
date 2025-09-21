@@ -57,4 +57,9 @@ localhost:3001/v3/create-carts-users/3a4734f7-65a1-4ee1-8dda-9f37604fb0e4
 }
 
 bearer token
+
+# rota de paginação com cursor bidirecional
+localhost:3001/v1/checkout/orders/pages?cursor_created_at=2025-09-08T15:19:43.113Z&cursor_id=5d00de0a-cf32-49f1-8086-b58d0f6fdcd5&limit=5&direction=next
+
+bearer token
 ```
