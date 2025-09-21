@@ -20,6 +20,12 @@ routerCheckout.get('/checkout/orders/',
   checkout.searchCheckoutOrders.bind(checkout)
 )
 
+routerCheckout.get('/checkout/orders/pages', 
+  AuthorizationJwt,
+  authRoles.isAdmin,
+  checkout.searchCheckoutOrdersCursorPages.bind(checkout)
+)
+
 routerCheckout.get('/checkout-id', 
   AuthorizationJwt,
   authRoles.isAuthenticated,
