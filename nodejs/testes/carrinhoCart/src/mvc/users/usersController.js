@@ -1,5 +1,6 @@
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
+import { register } from './userDto.js'
 
 class UsersController {
     constructor(db) {
@@ -7,19 +8,23 @@ class UsersController {
     }
 
     async createUsers(req, res) {
-        const { name, email, password } = req.body
+        const { name, email, password } = register.parse(req.body)
         const role = 'user'
-
-        const passwordHash = await bcrypt.hash(password, 10)
         
-        const users = await this.db.query(`INSERT INTO users (name, email, password, role) VALUES ($1, $2, $3, $4);`,
-            [name, email, passwordHash, role]
-        )
+        try {
+            const passwordHash = await bcrypt.hash(password, 10)
+            
+            const users = await this.db.query(`INSERT INTO users (name, email, password, role) VALUES ($1, $2, $3, $4);`,
+                [name, email, passwordHash, role]
+            )
 
-        res.status(200).json({ message: 'ok', data: users.result})
+            res.status(200).json({ message: 'ok', data: users.result})
+        } catch (error) {
+            res.status(400).json( { message: 'Erro na criação do usuario', erro: error })
+        }
     }
 
-
+    
 
     async loginUsers(req, res) {
         const { email, password} = req.body 

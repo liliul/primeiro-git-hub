@@ -7,11 +7,11 @@ import routerCheckout from './routers/checkout.js'
 import routerSuperAdmin from './routers/superAdmin.js'
 import dotenv from "dotenv";
 dotenv.config();
-
+import cors from 'cors'
 import { swaggerUi, swaggerSpec } from "../swagger.js"
 
 const app = express()
-
+app.use(cors())
 app.use(express.json())
 app.use('/v1/', routerSuperAdmin)
 app.use('/v1/', routerUsers)
