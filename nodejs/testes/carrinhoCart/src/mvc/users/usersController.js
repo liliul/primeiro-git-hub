@@ -1,6 +1,6 @@
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
-import { register } from './userDto.js'
+import { registerShema } from './userDto.js'
 
 class UsersController {
     constructor(db) {
@@ -8,7 +8,8 @@ class UsersController {
     }
 
     async createUsers(req, res) {
-        const { name, email, password } = register.parse(req.body)
+        const { name, email, password } = registerShema.parse(req.body)
+        
         const role = 'user'
         
         try {
@@ -20,6 +21,14 @@ class UsersController {
 
             res.status(200).json({ message: 'ok', data: users.result})
         } catch (error) {
+            if (error instanceof ZodError) {
+         
+            const validationErrors = error.issues.map(issue => ({
+                path: issue.path.join('.'),
+                message: issue.message,
+            }));
+            return res.status(400).json({ message: 'Erro de validação', errors: validationErrors });
+        }
             res.status(400).json( { message: 'Erro na criação do usuario', erro: error })
         }
     }

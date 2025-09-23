@@ -13,6 +13,8 @@ import { swaggerUi, swaggerSpec } from "../swagger.js"
 const app = express()
 app.use(cors())
 app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
+
 app.use('/v1/', routerSuperAdmin)
 app.use('/v1/', routerUsers)
 app.use('/v2/', routerProducts)
