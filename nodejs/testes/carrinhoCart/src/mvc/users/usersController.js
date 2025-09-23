@@ -1,6 +1,7 @@
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
-import { registerShema } from './userDto.js'
+import { registerShema, loginShema } from './userDto.js'
+import { ZodError } from 'zod'
 
 class UsersController {
     constructor(db) {
@@ -8,11 +9,10 @@ class UsersController {
     }
 
     async createUsers(req, res) {
-        const { name, email, password } = registerShema.parse(req.body)
-        
-        const role = 'user'
-        
         try {
+            const { name, email, password } = registerShema.parse(req.body)
+            const role = 'user'
+
             const passwordHash = await bcrypt.hash(password, 10)
             
             const users = await this.db.query(`INSERT INTO users (name, email, password, role) VALUES ($1, $2, $3, $4);`,
@@ -22,49 +22,61 @@ class UsersController {
             res.status(200).json({ message: 'ok', data: users.result})
         } catch (error) {
             if (error instanceof ZodError) {
-         
-            const validationErrors = error.issues.map(issue => ({
-                path: issue.path.join('.'),
-                message: issue.message,
-            }));
-            return res.status(400).json({ message: 'Erro de validação', errors: validationErrors });
-        }
-            res.status(400).json( { message: 'Erro na criação do usuario', erro: error })
+                const validationErrors = error.issues.map(issue => ({
+                    path: issue.path.join('.'),
+                    message: issue.message,
+                }));
+                return res.status(400).json({ message: 'Erro de validação', errors: validationErrors })
+            }
+
+            return res.status(400).json( { message: 'Erro na criação do usuario', erro: error })
         }
     }
 
     
 
-    async loginUsers(req, res) {
-        const { email, password} = req.body 
+    async loginUsers(req, res) {     
+        try {
+            const { email, password} = loginShema.parse(req.body) 
 
-        const userDb = await this.db.query(`
-            select id, name, email, password, role from users where email = $1 limit 1`, 
-            [email]
-        )
-        
-        if (userDb.rows.length === 0) {
-            return res.status(401).json({ error: "Usuário não encontrado" });
-        }
-        
-        const user = userDb.rows[0];
-        
-        const passwordCompare = await bcrypt.compare(password, user.password)
-        if (!passwordCompare) {
-            return res.status(401).json({ error: "Senha incorreta" })
-        }
+            const userDb = await this.db.query(`
+                select id, name, email, password, role from users where email = $1 limit 1`, 
+                [email]
+            )
+            
+            if (userDb.rows.length === 0) {
+                return res.status(401).json({ error: "Usuário não encontrado" })
+            }
+            
+            const user = userDb.rows[0];
+            
+            const passwordCompare = await bcrypt.compare(password, user.password)
+            if (!passwordCompare) {
+                return res.status(401).json({ error: "Senha incorreta" })
+            }
 
-        const payload = { 
-            id: user.id,
-            name: user.name, 
-            email: user.email, 
-            role: user.role
-        };
-        const token = jwt.sign(payload, process.env.JWT_SECRET, {
-            expiresIn: parseInt(process.env.JWT_EXPIRES)
-        })
-        
-        res.status(200).json({ message: token })
+            const payload = { 
+                id: user.id,
+                name: user.name, 
+                email: user.email, 
+                role: user.role
+            };
+            const token = jwt.sign(payload, process.env.JWT_SECRET, {
+                expiresIn: parseInt(process.env.JWT_EXPIRES)
+            })
+            
+            res.status(200).json({ message: token })
+        } catch (error) {
+            if (error instanceof ZodError) {   
+                const validationErrors = error.issues.map(issue => ({
+                    path: issue.path.join('.'),
+                    message: issue.message,
+                }));
+                return res.status(400).json({ message: 'Erro de validação', errors: validationErrors })
+            }
+
+            return res.status(400).json( { message: 'Erro na criação do usuario', erro: error })
+        }
     }
 
 

@@ -7,3 +7,8 @@ export const registerShema = z.object({
     email: z.string().email({ message: 'Email invalido' }),
     password: z.string().min(8, { message: 'A senha deve ter pelo menos 8 caracteres' })
 })
+
+export const loginShema = z.object({
+    email: z.string().email({ error: 'Email invalido'}),
+    password: z.string().min(8, { error: 'A senha deve conter pelo menos 8 caracteres' })
+})
