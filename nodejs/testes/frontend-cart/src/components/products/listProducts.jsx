@@ -3,6 +3,7 @@ import { useAuth } from "../../context/auth/useAuth"
 import { useState } from "react"
 import { UpdateProducts } from "./updateProducts"
 import { ButtoDeleteProduct, ButtoEditProduct } from "./utils"
+import { deleteProduct } from "./deleteProducts"
 
 export function ProductsList() {
     const [dados, setDados] = useState([])
@@ -28,27 +29,15 @@ export function ProductsList() {
         getProducts(user.token)
     },[user.token])
     
-    async function deleteProduct(id) {
+    async function handleDeleteProducts(id) {
         try {
-            const options = {
-                method: 'DELETE',
-                headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${user.token}`,
-                },
-            }
-            const req = await fetch(`http://localhost:3001/v2/delete-products/${id}`, options)
-
-            if (req.ok) {
-                setDados((prev) => prev.filter((item) => item.id !== id))
-            } else {
-                const errorRes = await req.json()
-                console.error('Erro ao deletar', errorRes)
-            }
+            await deleteProduct(id, user.token)
+            setDados((prev) => prev.filter((item) => item.id !== id))
         } catch (error) {
-            console.error('Erro ao deletar produto', error)
+            console.error(error.message);
         }
     }
+    
     return (
         <>
             <h1>Products</h1>
@@ -57,7 +46,7 @@ export function ProductsList() {
                 <div className="p-2 w-[800px] grid grid-cols-2 gap-3 place-items-center mx-auto bg-white rounded-lg shadow-lg overflow-hidden m-4">
                     {dados.map((items) => (
                         <div className="w-full h-full rounded-[10px] p-6 border-2 border-black relative" key={items.id}>
-                            <ButtoDeleteProduct btndelete={() => deleteProduct(items.id)} />
+                            <ButtoDeleteProduct btndelete={() => handleDeleteProducts(items.id)} />
                             <ButtoEditProduct edit={() => setSelected(items)} />
                             
                             <div className="mb-2">
