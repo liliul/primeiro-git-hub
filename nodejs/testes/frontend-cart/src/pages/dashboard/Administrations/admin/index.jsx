@@ -17,6 +17,15 @@ export function AdminDashboard() {
                             </li>
                         </ul>
                     </div>
+
+                    <div className="mt-5">
+                        <h2>Users</h2>
+                        <ul className="mt-2">
+                            <li>
+                                <Link to="list-users">Listar Usuarios</Link>
+                            </li>
+                        </ul>
+                    </div>
                 </nav>
 
                 <div className="w-full">

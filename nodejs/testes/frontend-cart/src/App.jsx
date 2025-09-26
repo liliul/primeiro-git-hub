@@ -11,6 +11,7 @@ import Layout from './layout'
 import { AdminDashboard } from './pages/dashboard/Administrations/admin'
 import { CreateProducts } from './components/products/createProducts'
 import { ProductsList } from './components/products/listProducts'
+import { ListUsers } from './components/users/list-users'
 
 function App() {
   return (
@@ -39,6 +40,8 @@ function App() {
             }>
               <Route path="create" element={<CreateProducts />} />
               <Route path="list" element={<ProductsList />} />
+
+              <Route path="list-users" element={<ListUsers />} />
             </Route> 
           </Route>
         </Routes>
