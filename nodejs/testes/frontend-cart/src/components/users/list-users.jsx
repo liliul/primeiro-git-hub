@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react"
 import { useAuth } from "../../context/auth/useAuth"
-import { ButtoDeleteUsers } from "./utils"
+import { ButtoDeleteUsers, ButtoEditUsers } from "./utils"
 import { DeleteUsers } from "./delete-users"
+import { UpdateUsers } from "./update-users"
 
 export function ListUsers() {
     const [dados, setDados] = useState([])
+    const [selected, setSelected] = useState(null)
     const { user } = useAuth()
 
     async function getUsers(token) {
@@ -46,6 +48,7 @@ export function ListUsers() {
                         <li key={i.id} className="mb-3 border-b border-black">
                             <div className="text-gray-600 relative">
                                 <ButtoDeleteUsers btndelete={() => handleDelete(i.id)} />
+                                <ButtoEditUsers edit={() => setSelected(i)} />
                                 <h1>{ i.name }</h1>
                                 <b>{ i.email }</b>
                                 <br/>
@@ -55,6 +58,33 @@ export function ListUsers() {
                     ))}
                 </ul>
             </div>
+
+            {selected && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+                    <div className="bg-white rounded-lg shadow-lg p-6 relative">
+                        <button
+                            onClick={() => setSelected(null)}
+                            className="absolute top-2 right-2 text-gray-600 hover:text-black"
+                        >
+                            ✕
+                        </button>
+
+                        <UpdateUsers 
+                            id={selected.id}
+                            name={selected.name}
+                            password={selected}
+                            onUpdated={
+                                (updated) => {
+                                    setDados((prev) =>
+                                        prev.map((p) => (p.id === updated.id ? updated : p))
+                                    )
+                                    setSelected(null)
+                                }
+                            }
+                        />  
+                    </div>
+                </div>
+            )}
         </>
     )
 } 
