@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react"
 import { useAuth } from "../../context/auth/useAuth"
+import { ButtoDeleteUsers } from "./utils"
+import { DeleteUsers } from "./delete-users"
 
 export function ListUsers() {
     const [dados, setDados] = useState([])
@@ -26,12 +28,33 @@ export function ListUsers() {
         getUsers(user.token)
     },[user.token])
 
+    async function handleDelete(id) {
+        try {
+            await DeleteUsers(id, user.token)
+            setDados((prev) => prev.filter((i) => i.id !== id))
+        } catch (error) {
+            console.error(error.message)
+        }
+    } 
+
     return (
         <>
             <h1>Listando usuarios</h1>
-            {dados.map((i) => (
-                <li key={i.id}>{ i.name }</li>
-            ))}
+            <div className="p-5 w-[800px] mx-auto bg-white rounded-lg shadow-lg overflow-hidden m-4">
+                <ul>
+                    {dados.map((i) => (
+                        <li key={i.id} className="mb-3 border-b border-black">
+                            <div className="text-gray-600 relative">
+                                <ButtoDeleteUsers btndelete={() => handleDelete(i.id)} />
+                                <h1>{ i.name }</h1>
+                                <b>{ i.email }</b>
+                                <br/>
+                                <small>{ i.role }</small>
+                            </div>
+                        </li>
+                    ))}
+                </ul>
+            </div>
         </>
     )
 } 
