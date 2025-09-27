@@ -72,7 +72,6 @@ export function ListUsers() {
                         <UpdateUsers 
                             id={selected.id}
                             name={selected.name}
-                            password={selected}
                             onUpdated={
                                 (updated) => {
                                     setDados((prev) =>

@@ -9,7 +9,7 @@ const updateUserShema = z.object({
     password: z.string().min(8, 'No minimo 8 caracteries')
 }) 
 
-export function UpdateUsers({ id, name, password, onUpdated }) {
+export function UpdateUsers({ id, name, onUpdated }) {
     const [isShowPassword, setIsShowPassword] = useState(false)
     const { user } = useAuth()
 
@@ -18,7 +18,6 @@ export function UpdateUsers({ id, name, password, onUpdated }) {
         defaultValues: {
             id,
             name,
-            password
         }
     })
 
@@ -83,6 +82,7 @@ export function UpdateUsers({ id, name, password, onUpdated }) {
                             id={`password-${id}`} 
                             type={isShowPassword ? 'text' : 'password'}
                             name="password"
+                            placeholder='novo senha'
                             {...register("password")}
                         />
                         <ButtonShowPassword />
