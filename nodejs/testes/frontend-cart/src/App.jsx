@@ -12,6 +12,8 @@ import { AdminDashboard } from './pages/dashboard/Administrations/admin'
 import { CreateProducts } from './components/products/createProducts'
 import { ProductsList } from './components/products/listProducts'
 import { ListUsers } from './components/users/list-users'
+import { DashboardSuperAdmin } from './pages/dashboard/Administrations/superAdmin'
+import { AddRoles } from './components/superAdmin/add-roles'
 
 function App() {
   return (
@@ -30,7 +32,7 @@ function App() {
               </AuthRolesRoute>
             } />
 
-            <Route path='/dashboard/' element={
+            <Route path='/dashboard/admin' element={
               <AuthRolesRoute roles={['admin', 'super-admin']}>
                 {/* <TestandoDashboard /> */}
                 <AdminDashboard />
@@ -43,6 +45,14 @@ function App() {
 
               <Route path="list-users" element={<ListUsers />} />
             </Route> 
+
+            <Route path='/dashboard/super-admin' element={
+              <AuthRolesRoute roles={['super-admin']}>
+                   <DashboardSuperAdmin /> 
+              </AuthRolesRoute>
+            }>
+              <Route path='add-roles' element={<AddRoles />} />
+            </Route>
           </Route>
         </Routes>
       </AuthProvider>
