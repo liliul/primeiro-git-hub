@@ -1,7 +1,8 @@
+import { Link } from "react-router-dom"
 import { useAuth } from "../../context/auth/useAuth"
 
 export function Header() {
-    const { user } = useAuth()
+    const { user, logout } = useAuth()
 
     return (
         <>
@@ -15,8 +16,22 @@ export function Header() {
                 </div>
 
                 <div className="flex flex-col">
-                    <h1 className="text-[12px] text-gray-500">{ user?.name ?? "Visitante" }</h1>
-                    <small className="text-gray-800">{ user?.email ?? "Sem email" }</small>
+                    { user ? (
+                        <div>
+                            <h1 className="text-[12px] text-gray-500">{ user?.name ?? "Visitante" }</h1>
+                            <small className="text-gray-800">{ user?.email ?? "Sem email" }</small>
+                            <span 
+                                className="ml-2 text-black"
+                                onClick={() => logout()}
+                            >
+                                Sair
+                            </span>
+                        </div>
+                    ) : (
+                        <button className="text-black">
+                            <Link to="/login">Login</Link>
+                        </button>
+                    )}
                 </div>
             </header>
         </>

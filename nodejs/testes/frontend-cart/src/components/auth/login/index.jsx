@@ -31,8 +31,10 @@ function Login() {
 
             const res = await req.json()
 
-            localStorage.setItem('token', res.message)
-            console.log(res.message)
+            localStorage.setItem('token', res.token)
+            
+            console.log(res)
+
         } catch (error) {
             console.error(error)
         } 

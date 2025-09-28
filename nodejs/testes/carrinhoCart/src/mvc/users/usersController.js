@@ -61,11 +61,11 @@ class UsersController {
                 email: user.email, 
                 role: user.role
             };
-            const token = jwt.sign(payload, process.env.JWT_SECRET, {
+            const jwtToken = jwt.sign(payload, process.env.JWT_SECRET, {
                 expiresIn: parseInt(process.env.JWT_EXPIRES)
             })
             
-            res.status(200).json({ message: token })
+            res.status(200).json({ token: jwtToken, users: payload })
         } catch (error) {
             if (error instanceof ZodError) {   
                 const validationErrors = error.issues.map(issue => ({
