@@ -4,6 +4,7 @@ import { useState } from "react"
 import { UpdateProducts } from "./updateProducts"
 import { ButtoDeleteProduct, ButtoEditProduct } from "./utils"
 import { deleteProduct } from "./deleteProducts"
+import { ButtonAddCart } from "../cart/buttonAddCart"
 
 export function ProductsList() {
     const [dados, setDados] = useState([])
@@ -64,9 +65,12 @@ export function ProductsList() {
                             </p>
                         )}
 
-                            <button className="w-full bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-300">
+                            {/* <button className="w-full bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-300">
                                 Adicionar ao Carrinho
-                            </button>
+                            </button> */}
+                            <ButtonAddCart
+                                idProducts={items.id}
+                            />
                         </div>
                     ))}
                 </div>
