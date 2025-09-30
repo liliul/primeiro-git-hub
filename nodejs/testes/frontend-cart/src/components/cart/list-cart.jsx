@@ -61,15 +61,41 @@ export function ListCart() {
     if (user?.token) {
       onSubmitGetCart()
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user?.token])
 
+  async function deleteCart(idDelete) {
+        try {
+          const options = {
+            method: 'DELETE',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${user.token}`
+            }
+          }
+
+          const req = await fetch(`http://localhost:3001/v3/delete-cart-items/${idDelete}`, options)
+          if (req.ok) {
+            await req.json()
+            setDados(prev => prev.filter(item => item.item_id !== idDelete))
+          }
+        } catch (error) {
+          console.error(error)
+        }
+  }
   return (
     <section className="w-[450px] p-3 absolute top-9 bg-[#191919] z-50">
       <h1>Carrinho</h1>
       <div>
         <ul>
           {dados.map((item) => (
-            <li key={item.item_id} className="mb-4">
+            <li key={item.item_id} className="mb-4 relative">
+              <button
+                className="bg-red-600 text-white p-1 absolute top-1 right-1"
+                onClick={() => {deleteCart(item.item_id)}} 
+              >
+                x
+              </button>
               <div>
                 <h2>{item.name}</h2>
                 <small>R$ {item.price}</small>
