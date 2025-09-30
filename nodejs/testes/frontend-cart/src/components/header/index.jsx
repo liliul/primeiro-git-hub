@@ -1,9 +1,18 @@
 import { Link } from "react-router-dom"
 import { useAuth } from "../../context/auth/useAuth"
+import { ListCart } from "../cart/list-cart"
+import { useState } from "react"
 
 export function Header() {
     const { user, logout } = useAuth()
+    const [selected, setSelected] = useState(false)
 
+    function handleCartOpen() {
+        setSelected(true)
+    }
+    function handleCartClose() {
+        setSelected(false)
+    }
     return (
         <>
             <header className="h-8 w-full bg-white flex items-center justify-between pl-5 pr-5">
@@ -11,8 +20,25 @@ export function Header() {
                     <div className="h-[23px] w-[23px] bg-gray-500 rounded-[6px]"></div>
                 </div>
 
-                <div>
-                    <h1 className="text-[15px] text-gray-500">Carrinho de Compra</h1>
+                <div className="relative">
+                    {selected ? (
+                      <div>
+                        <button
+                            onClick={() => {handleCartClose()}}
+                            className="text-[15px] text-white bg-red-600 rounded-md p-1"
+                        >
+                            Fechar Carrinho
+                        </button>
+                        <ListCart />
+                      </div>
+                    ) : (
+                        <button
+                            onClick={() => {handleCartOpen()}}
+                            className="text-[15px] text-white bg-blue-500 rounded-md p-1"
+                        >
+                            Carrinho de Compra
+                        </button>
+                    )}
                 </div>
 
                 <div className="flex flex-col">
