@@ -47,8 +47,12 @@ export function ProductsList() {
                 <div className="p-2 w-[800px] grid grid-cols-2 gap-3 place-items-center mx-auto bg-white rounded-lg shadow-lg overflow-hidden m-4">
                     {dados.map((items) => (
                         <div className="w-full h-full rounded-[10px] p-6 border-2 border-black relative" key={items.id}>
-                            <ButtoDeleteProduct btndelete={() => handleDeleteProducts(items.id)} />
-                            <ButtoEditProduct edit={() => setSelected(items)} />
+                            {((user?.role === 'admin') || (user?.role === 'super-admin')) && (
+                                <>
+                                    <ButtoDeleteProduct btndelete={() => handleDeleteProducts(items.id)} />
+                                    <ButtoEditProduct edit={() => setSelected(items)} />
+                                </>
+                            )}
                             
                             <div className="mb-2">
                                 <h3 className="text-xl font-semibold text-gray-900">{items.name}</h3>
