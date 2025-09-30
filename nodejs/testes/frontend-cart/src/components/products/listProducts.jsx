@@ -68,9 +68,19 @@ export function ProductsList() {
                             {/* <button className="w-full bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-300">
                                 Adicionar ao Carrinho
                             </button> */}
-                            <ButtonAddCart
+                            {items.stock <= 0 ? (
+                                <ButtonAddCart
                                 idProducts={items.id}
+                                btnDisabled={true}
+                                btnStyle="text-white p-2 bg-gray-500 rounded-md"
                             />
+                            ): (
+                                <ButtonAddCart
+                                idProducts={items.id}
+                                btnDisabled={false}
+                                btnStyle="text-white p-2 bg-blue-600 rounded-md"
+                            />
+                            )}
                         </div>
                     ))}
                 </div>

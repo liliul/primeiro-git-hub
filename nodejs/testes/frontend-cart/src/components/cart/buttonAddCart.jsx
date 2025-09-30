@@ -1,6 +1,6 @@
 import { useAuth } from "../../context/auth/useAuth"
 
-export function ButtonAddCart({ idProducts }) {
+export function ButtonAddCart({ idProducts, btnDisabled, btnStyle }) {
     const { user } = useAuth()
     
     async function onSubmitCart(productId) {
@@ -34,8 +34,9 @@ export function ButtonAddCart({ idProducts }) {
     return (
         <>
             <button 
-                className="text-white p-2 bg-blue-600 rounded-md"
+                className={btnStyle}
                 onClick={() => {onSubmitCart(idProducts)}}
+                disabled={btnDisabled}
             >
                 Add cart
             </button>
