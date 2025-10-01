@@ -2,6 +2,7 @@ import { Link } from "react-router-dom"
 import { useAuth } from "../../context/auth/useAuth"
 import { ListCart } from "../cart/list-cart"
 import { useState } from "react"
+import { Tooltip } from "../utils/toolTips"
 
 export function Header() {
     const { user, logout } = useAuth()
@@ -17,7 +18,9 @@ export function Header() {
         <>
             <header className="h-8 w-full bg-white flex items-center justify-between pl-5 pr-5">
                 <div>
-                    <div className="h-[23px] w-[23px] bg-gray-500 rounded-[6px]"></div>
+                   <Tooltip text="Logo do Cart">
+                     <div className="h-[23px] w-[23px] bg-gray-500 rounded-[6px]"></div>
+                   </Tooltip>
                 </div>
 
                 <div className="relative">
