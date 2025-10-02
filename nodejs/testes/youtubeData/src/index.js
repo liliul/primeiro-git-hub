@@ -6,9 +6,6 @@ import routerYoutubeSearch from './router/routerYoutubeSearch.js';
 
 // import './node_cron/index.js'
 
-import dotenv from 'dotenv'
-dotenv.config()
-
 const app = express()
 app.use(express.json());
 
