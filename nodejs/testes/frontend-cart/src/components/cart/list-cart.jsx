@@ -1,6 +1,7 @@
 import { useForm } from "react-hook-form"
 import { useAuth } from "../../context/auth/useAuth"
 import { useEffect, useState } from "react"
+import { Checkout } from "../checkout/checkout"
 
 export function ListCart() {
   const [dados, setDados] = useState([])
@@ -119,6 +120,7 @@ export function ListCart() {
           ))}
         </ul>
       </div>
+      <Checkout />
     </section>
   )
 }
