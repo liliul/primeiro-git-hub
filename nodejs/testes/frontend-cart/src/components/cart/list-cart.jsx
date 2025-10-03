@@ -85,7 +85,7 @@ export function ListCart() {
         }
   }
   return (
-    <section className="w-[450px] p-3 absolute top-9 bg-[#191919] z-50">
+    <section className={`cart-menu w-[450px] p-3 absolute top-9 bg-[#191919] z-50`}>
       <h1>Carrinho</h1>
       <div>
         <ul>
