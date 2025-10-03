@@ -23,26 +23,28 @@ export function Header() {
                    </Tooltip>
                 </div>
 
-                <div className="relative">
-                    {selected ? (
-                      <div>
-                        <button
-                            onClick={() => {handleCartClose()}}
-                            className="text-[15px] text-white bg-red-600 rounded-md p-1"
-                        >
-                            Fechar Carrinho
-                        </button>
-                        <ListCart />
-                      </div>
-                    ) : (
-                        <button
-                            onClick={() => {handleCartOpen()}}
-                            className="text-[15px] text-white bg-blue-500 rounded-md p-1"
-                        >
-                            Carrinho de Compra
-                        </button>
-                    )}
-                </div>
+                { user && (
+                    <div className="relative">
+                        {selected ? (
+                        <div>
+                            <button
+                                onClick={() => {handleCartClose()}}
+                                className="text-[15px] text-white bg-red-600 rounded-md p-1"
+                            >
+                                Fechar Carrinho
+                            </button>
+                            <ListCart />
+                        </div>
+                        ) : (
+                            <button
+                                onClick={() => {handleCartOpen()}}
+                                className="text-[15px] text-white bg-blue-500 rounded-md p-1"
+                            >
+                                Carrinho de Compra
+                            </button>
+                        )}
+                    </div>
+                )}
 
                 <div className="flex flex-col">
                     { user ? (
