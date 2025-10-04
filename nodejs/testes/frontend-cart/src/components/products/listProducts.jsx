@@ -12,8 +12,7 @@ export function ProductsList() {
 
     const { user } = useAuth()
     
-    useEffect(() => {
-        async function getProducts(token) {
+    async function getProducts(token) {
             const opitons = {
             method: 'GET',
             headers: {
@@ -27,6 +26,7 @@ export function ProductsList() {
             setDados(res.data)
         }
 
+    useEffect(() => {
         getProducts(user.token)
     },[user.token])
     
@@ -111,6 +111,8 @@ export function ProductsList() {
                                 )
                                 setSelected(null)
                             }}
+
+                            checado={getProducts}
                         />
                     </div>
                 </div>

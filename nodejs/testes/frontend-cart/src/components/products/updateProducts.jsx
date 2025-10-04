@@ -16,7 +16,7 @@ const updateProductSchema = z.object({
   )
 })
 
-export function UpdateProducts({ id, name, price, stock, onUpdated }) {
+export function UpdateProducts({ id, name, price, stock, onUpdated, checado }) {
     const { user } = useAuth()
 
     const {register, handleSubmit, formState: {errors, isSubmitting}} = useForm({
@@ -44,6 +44,10 @@ export function UpdateProducts({ id, name, price, stock, onUpdated }) {
                 const res = await req.json()
 
                 if (onUpdated) onUpdated(res)
+                    
+                if (checado) {
+                    checado(user.token)
+                }
             }
         } catch (error) {
           console.error(error)
