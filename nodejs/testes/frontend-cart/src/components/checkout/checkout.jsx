@@ -2,7 +2,7 @@ import { useState, useEffect } from "react"
 import { useAuth } from "../../context/auth/useAuth"
 import { MessageCustom } from "../utils/mesageCustom"
 
-export function Checkout() {
+export function Checkout({checado}) {
     const { user } = useAuth() 
     const [messageCustom, setMessageCustom] = useState(null)
     const [dadosCartLength, setDadosCartLength] = useState([])
@@ -22,10 +22,14 @@ export function Checkout() {
                 const res = await req.json()
                 console.log(res)
                 setMessageCustom(res)
-                
-                 setTimeout(() => {
-                    setMessageCustom(null)
-                },1000)
+
+                await onSubmitGetCart()
+
+                setTimeout( () => {
+                    if (checado) {
+                        checado()
+                    }
+                },3000)   
             }
         } catch (error) {
             console.error(error)
@@ -57,6 +61,8 @@ export function Checkout() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [user.token])
     console.log(messageCustom?.order?.status);
+    console.log(dadosCartLength);
+    
     
     return (
         <>
@@ -74,14 +80,17 @@ export function Checkout() {
                         onClick={() => {CriarCheckout()}} 
                     >checkout</button>
                     
-                    {messageCustom && (
-                        <MessageCustom
-                        msg={messageCustom.message}
-                        status={messageCustom.order?.status}
-                        total={messageCustom.order?.total}
-                        />
-                    )}
+                  
                 </>
+            )}
+
+            {messageCustom && (
+                <MessageCustom
+                msg={messageCustom.message}
+                status={messageCustom.order?.status}
+                total={messageCustom.order?.total}
+                setMessageCustom={setMessageCustom}
+                />
             )}
         </>
     )

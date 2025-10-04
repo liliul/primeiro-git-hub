@@ -1,4 +1,16 @@
-export function MessageCustom({msg, status, total}) {
+import { useEffect } from "react"
+
+export function MessageCustom({msg, status, total, setMessageCustom}) {
+     useEffect(() => {
+    if (msg) {
+      const timer = setTimeout(() => {
+        setMessageCustom(null);
+      }, 3000);
+
+      return () => clearTimeout(timer)
+    }
+  }, [msg, setMessageCustom])
+
     if (!msg) return 
     return (
         <>

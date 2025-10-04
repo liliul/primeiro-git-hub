@@ -87,7 +87,9 @@ export function ListCart() {
   return (
     <section className={`cart-menu w-[450px] p-3 absolute top-9 bg-[#191919] z-50`}>
       <h1>Carrinho</h1>
-      <div>
+      {dados.length === 0 ? 'sem cart' : (
+        <>
+        <div>
         <ul>
           {dados.map((item) => (
             <li key={item.item_id} className="mb-4 relative">
@@ -120,7 +122,11 @@ export function ListCart() {
           ))}
         </ul>
       </div>
-      <Checkout />
+      <Checkout 
+        checado={onSubmitGetCart}
+      />
+        </>
+      )}
     </section>
   )
 }
