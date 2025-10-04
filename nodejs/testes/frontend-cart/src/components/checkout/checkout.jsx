@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react"
 import { useAuth } from "../../context/auth/useAuth"
+import { MessageCustom } from "../utils/mesageCustom"
 
 export function Checkout() {
     const { user } = useAuth() 
-    // const [disableButtonCheckout, setDisableButtonCheckout] = useState(true)
+    const [messageCustom, setMessageCustom] = useState(null)
     const [dadosCartLength, setDadosCartLength] = useState([])
 
     async function CriarCheckout() {
@@ -20,6 +21,11 @@ export function Checkout() {
             if (req.ok) {
                 const res = await req.json()
                 console.log(res)
+                setMessageCustom(res)
+                
+                 setTimeout(() => {
+                    setMessageCustom(null)
+                },1000)
             }
         } catch (error) {
             console.error(error)
@@ -48,22 +54,34 @@ export function Checkout() {
     }
     useEffect(() => {
         onSubmitGetCart()
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [user.token])
-    console.log(dadosCartLength.length);
+    console.log(messageCustom?.order?.status);
     
     return (
         <>
             {dadosCartLength.length === 0 ? (
-               <button
+                <button
                     disabled
                     className="bg-blue-100 text-black p-2"
                     onClick={() => {CriarCheckout()}} 
                 >checkout</button>
+                
             ): (
-                <button
-                    className="bg-blue-400 text-white p-2"
-                    onClick={() => {CriarCheckout()}} 
-                >checkout</button>
+                <>
+                    <button
+                        className="bg-blue-400 text-white p-2"
+                        onClick={() => {CriarCheckout()}} 
+                    >checkout</button>
+                    
+                    {messageCustom && (
+                        <MessageCustom
+                        msg={messageCustom.message}
+                        status={messageCustom.order?.status}
+                        total={messageCustom.order?.total}
+                        />
+                    )}
+                </>
             )}
         </>
     )
