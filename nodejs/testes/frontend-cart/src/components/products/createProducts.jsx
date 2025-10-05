@@ -2,6 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import z from "zod"
 import { useAuth } from "../../context/auth/useAuth"
+import { useState } from "react"
 
 const productSchema = z.object({
   name: z.string()
@@ -18,12 +19,15 @@ const productSchema = z.object({
 
 export function CreateProducts() {
     const { user } = useAuth()
+    const [erro, setErro] = useState(null)
 
-    const {register, handleSubmit, formState: {errors, isSubmitting}} = useForm({
+    const {register, handleSubmit, reset, formState: {errors, isSubmitting}} = useForm({
         resolver: zodResolver(productSchema)
     })
     
     async function onSubmitCreateProduct(data) {
+        setErro(null) 
+        
         try {
             const options = {
                 method: 'POST',
@@ -34,8 +38,16 @@ export function CreateProducts() {
                 body: JSON.stringify(data)
             }
             
-            await fetch('http://localhost:3001/v2/create-products', options)
+            const req = await fetch('http://localhost:3001/v2/create-products', options)
+            
+            if (!req.ok) {
+                const res = await req.json()
+                console.log(res)
+                setErro(res)
+            }
 
+            reset()
+            
         } catch (error) {
           console.error(error)
         }
@@ -44,7 +56,13 @@ export function CreateProducts() {
     return (
         <>
             <h1>Criar produto</h1>
-            <div className="p-2 w-[800px] grid grid-cols-2 gap-3 place-items-center mx-auto bg-white rounded-lg shadow-lg overflow-hidden m-4">
+            <div className="p-2 w-[800px] grid grid-cols-1 gap-3 place-items-center mx-auto bg-white rounded-lg shadow-lg overflow-hidden m-4">
+                {erro && (
+                    <div className="p-2 rounded-md shadow-md shadow-[#191919] text-red-600">
+                        <b>{erro.message}</b>
+                        <p>{erro.error}</p>
+                    </div>
+                )}
                 <form onSubmit={handleSubmit(onSubmitCreateProduct)} className="text-black">
                     <div>
                         <label htmlFor="name">Nome do produto:</label>
