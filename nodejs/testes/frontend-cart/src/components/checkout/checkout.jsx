@@ -1,12 +1,13 @@
 import { useState, useEffect } from "react"
 import { useAuth } from "../../context/auth/useAuth"
 import { MessageCustom } from "../utils/mesageCustom"
+import { useProducts } from "../../context/cart/productsListContent"
 
 export function Checkout({checado}) {
     const { user } = useAuth() 
     const [messageCustom, setMessageCustom] = useState(null)
     const [dadosCartLength, setDadosCartLength] = useState([])
-
+    const {refreshProducts} = useProducts()
     async function CriarCheckout() {
         try {
             const options = {
@@ -29,7 +30,9 @@ export function Checkout({checado}) {
                     if (checado) {
                         checado()
                     }
-                },3000)   
+                    
+                    refreshProducts(user.token)  
+                },3000) 
             }
         } catch (error) {
             console.error(error)

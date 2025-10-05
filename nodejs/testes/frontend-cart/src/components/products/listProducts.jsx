@@ -5,39 +5,44 @@ import { UpdateProducts } from "./updateProducts"
 import { ButtoDeleteProduct, ButtoEditProduct } from "./utils"
 import { deleteProduct } from "./deleteProducts"
 import { ButtonAddCart } from "../cart/buttonAddCart"
+import { useProducts } from "../../context/cart/productsListContent"
 
 export function ProductsList() {
-    const [dados, setDados] = useState([])
+    // const [dados, setDados] = useState([])
     const [selected, setSelected] = useState(null)
+    const { products,refreshProducts} = useProducts()
 
     const { user } = useAuth()
-    
-    async function getProducts(token) {
-            const opitons = {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}` 
-            },
-            }
-            const req = await fetch('http://localhost:3001/v2/list-products', opitons)
-            const res = await req.json()
+    // async function getProducts(token) {
+    //         const opitons = {
+    //         method: 'GET',
+    //         headers: {
+    //             'Content-Type': 'application/json',
+    //             'Authorization': `Bearer ${token}` 
+    //         },
+    //         }
+    //         const req = await fetch('http://localhost:3001/v2/list-products', opitons)
+    //         const res = await req.json()
 
-            setDados(res.data)
-        }
+    //         setDados(res.data)
+    //     }
 
     useEffect(() => {
-        getProducts(user.token)
+        // getProducts(user.token)
+        refreshProducts(user.token)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     },[user.token])
     
     async function handleDeleteProducts(id) {
         try {
             await deleteProduct(id, user.token)
-            setDados((prev) => prev.filter((item) => item.id !== id))
+            // setDados((prev) => prev.filter((item) => item.id !== id))
+            await refreshProducts(user.token)
         } catch (error) {
             console.error(error.message);
         }
     }
+    console.log(products);
     
     return (
         <>
@@ -45,7 +50,7 @@ export function ProductsList() {
 
             <div >       
                 <div className="p-2 w-[800px] grid grid-cols-2 gap-3 place-items-center mx-auto bg-white rounded-lg shadow-lg overflow-hidden m-4">
-                    {dados.map((items) => (
+                    {products.map((items) => (
                         <div className="w-full h-full rounded-[10px] p-6 border-2 border-black relative" key={items.id}>
                             {((user?.role === 'admin') || (user?.role === 'super-admin')) && (
                                 <>
@@ -105,14 +110,15 @@ export function ProductsList() {
                             name={selected.name}
                             price={selected.price}
                             stock={selected.stock}
-                            onUpdated={(updated) => {
-                                setDados((prev) =>
-                                prev.map((p) => (p.id === updated.id ? updated : p))
-                                )
+                            onUpdated={() => { //updated
+                                // setDados((prev) =>
+                                // prev.map((p) => (p.id === updated.id ? updated : p))
+                                // )
+                                refreshProducts(user.token)
                                 setSelected(null)
                             }}
 
-                            checado={getProducts}
+                            checado={refreshProducts}
                         />
                     </div>
                 </div>
