@@ -20,6 +20,7 @@ const productSchema = z.object({
 export function CreateProducts() {
     const { user } = useAuth()
     const [erro, setErro] = useState(null)
+    const [sucesso, setSucesso] = useState(null)
 
     const {register, handleSubmit, reset, formState: {errors, isSubmitting}} = useForm({
         resolver: zodResolver(productSchema)
@@ -27,7 +28,8 @@ export function CreateProducts() {
     
     async function onSubmitCreateProduct(data) {
         setErro(null) 
-        
+        setSucesso(null)
+
         try {
             const options = {
                 method: 'POST',
@@ -39,17 +41,20 @@ export function CreateProducts() {
             }
             
             const req = await fetch('http://localhost:3001/v2/create-products', options)
+            const res = await req.json()
             
             if (!req.ok) {
-                const res = await req.json()
                 console.log(res)
                 setErro(res)
+                return
             }
 
             reset()
+            setSucesso(res)
             
         } catch (error) {
           console.error(error)
+          setErro(error)
         }
     }
 
@@ -61,6 +66,11 @@ export function CreateProducts() {
                     <div className="p-2 rounded-md shadow-md shadow-[#191919] text-red-600">
                         <b>{erro.message}</b>
                         <p>{erro.error}</p>
+                    </div>
+                )}
+                {sucesso && (
+                    <div className="p-2 rounded-md shadow-md shadow-[#191919] text-green-600">
+                        <b>{sucesso.message}</b>
                     </div>
                 )}
                 <form onSubmit={handleSubmit(onSubmitCreateProduct)} className="text-black">
