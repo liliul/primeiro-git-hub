@@ -17,6 +17,15 @@ export function AdminDashboard() {
                             </li>
                         </ul>
                     </div>
+                    
+                    <div className="mt-5">
+                        <h2>Orders</h2>
+                        <ul className="mt-2">
+                            <li>
+                                <Link to="orders-pagina">Historico de compras</Link>
+                            </li>
+                        </ul>
+                    </div>
 
                     <div className="mt-5">
                         <h2>Users</h2>

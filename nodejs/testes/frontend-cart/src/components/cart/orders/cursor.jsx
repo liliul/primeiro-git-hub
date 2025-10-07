@@ -1,0 +1,106 @@
+import { useState, useEffect } from "react";
+import { useAuth } from "../../../context/auth/useAuth";
+
+export function OrdersPaginando() {
+  const [orders, setOrders] = useState([]);
+  const [nextCursor, setNextCursor] = useState(null);
+  const [prevCursor, setPrevCursor] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const {user} = useAuth()
+
+  async function fetchOrders(cursor = null, direction = "next") {
+    setLoading(true);
+
+    try {
+      let url = "http://localhost:3001/v1/checkout/orders/pages";
+
+      if (cursor) {
+        url += `?cursor_created_at=${cursor.cursor_created_at}&cursor_id=${cursor.cursor_id}&limit=5&direction=${direction}`;
+      }
+
+      const options = {
+        method: 'GET',
+        headers: {
+            'Content-type': 'application/json',
+            'Authorization': `Bearer ${user.token}`
+        }
+      }
+
+      const req = await fetch(url, options);
+      const res = await req.json();
+      console.log(res)
+      
+      if (!req.ok) throw new Error(res.message || "Erro ao buscar pedidos");
+
+    //   setOrders(res.data);
+     setOrders((prev) =>
+        direction === "next" ? [...prev, ...res.data] : [...res.data, ...prev]
+      );
+      setNextCursor(res.nextCursor);
+      setPrevCursor(res.prevCursor);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    fetchOrders();
+  }, []);
+
+ useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && nextCursor && !loading) {
+          fetchOrders(nextCursor, "next");
+        }
+      },
+      { threshold: 1.0 }
+    );
+
+    const sentinel = document.querySelector("#scroll-sentinel");
+    if (sentinel) observer.observe(sentinel);
+
+    return () => observer.disconnect();
+  }, [nextCursor?.cursor_id, nextCursor?.cursor_created_at, fetchOrders, loading]);
+
+  return (
+    <div className="p-4">
+      <h1 className="text-xl font-bold mb-4">Pedidos</h1>
+
+      {loading && <p>Carregando...</p>}
+
+      <ul className="space-y-2">
+        {orders.map((order) => (
+          <li key={order.id} className="border p-2 rounded">
+            <div><strong>Cliente:</strong> {order.user_name}</div>
+            <div><strong>Total:</strong> R$ {order.total}</div>
+            <div><strong>Status:</strong> {order.status}</div>
+            <div><strong>Data:</strong> {new Date(order.created_at).toLocaleString()}</div>
+          </li>
+        ))}
+      </ul>
+
+      <div className="flex justify-between mt-4">
+        <button
+          disabled={!prevCursor || loading}
+          onClick={() => fetchOrders(prevCursor, "prev")}
+          className="bg-gray-700 text-white py-1 px-3 rounded disabled:opacity-50"
+        >
+          ← Anterior
+        </button>
+
+        <button
+          disabled={!nextCursor || loading}
+          onClick={() => fetchOrders(nextCursor, "next")}
+          className="bg-blue-600 text-white py-1 px-3 rounded disabled:opacity-50"
+        >
+          Próximo →
+        </button>
+      </div>
+
+      <div id="scroll-sentinel" className="h-4"></div>
+    </div>
+  );
+}

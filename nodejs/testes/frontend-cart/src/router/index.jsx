@@ -13,6 +13,7 @@ import { ListUsers } from '../components/users/list-users'
 import { DashboardSuperAdmin } from '../pages/dashboard/Administrations/superAdmin'
 import { AddRoles } from '../components/superAdmin/add-roles'
 import { AppProviders } from '../context/providers'
+import { OrdersPaginando } from '../components/cart/orders/cursor'
 
 export function AppRoutes() {
     return (
@@ -42,6 +43,8 @@ export function AppRoutes() {
                 <Route path="list" element={<ProductsList />} />
 
                 <Route path="list-users" element={<ListUsers />} />
+
+                <Route path='orders-pagina' element={<OrdersPaginando />} />
               </Route> 
 
               <Route path='/dashboard/super-admin' element={
