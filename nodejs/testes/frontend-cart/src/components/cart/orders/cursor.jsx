@@ -33,9 +33,20 @@ export function OrdersPaginando() {
       if (!req.ok) throw new Error(res.message || "Erro ao buscar pedidos");
 
     //   setOrders(res.data);
-     setOrders((prev) =>
-        direction === "next" ? [...prev, ...res.data] : [...res.data, ...prev]
-      );
+    //  setOrders((prev) =>
+    //     direction === "next" ? [...prev, ...res.data] : [...res.data, ...prev]
+    //   );
+
+        setOrders((prev) => {
+        const newOrders = res.data.filter(
+            (item) => !prev.some((o) => o.id === item.id) 
+        );
+
+        return direction === "next"
+            ? [...prev, ...newOrders]
+            : [...newOrders, ...prev];
+        });
+        
       setNextCursor(res.nextCursor);
       setPrevCursor(res.prevCursor);
     } catch (error) {
@@ -67,7 +78,7 @@ export function OrdersPaginando() {
 
   return (
     <div className="p-4">
-      <h1 className="text-xl font-bold mb-4">Pedidos</h1>
+      <h1 className="text-xl font-bold mb-4">Historico de compras</h1>
 
       {loading && <p>Carregando...</p>}
 
