@@ -4,7 +4,6 @@ import { useAuth } from "../../../context/auth/useAuth";
 export function OrdersPaginando() {
   const [orders, setOrders] = useState([]);
   const [nextCursor, setNextCursor] = useState(null);
-  const [prevCursor, setPrevCursor] = useState(null);
   const [loading, setLoading] = useState(false);
   const {user} = useAuth()
 
@@ -61,15 +60,17 @@ export function OrdersPaginando() {
         });
             
         setNextCursor(res.nextCursor);
-        setPrevCursor(res.prevCursor);
+        
     } catch (error) {
       console.error(error);
     } finally {
       setLoading(false);
     }
   }
+  
   useEffect(() => {
     fetchOrders();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
  useEffect(() => {
@@ -86,6 +87,7 @@ export function OrdersPaginando() {
     if (sentinel) observer.observe(sentinel);
 
     return () => observer.disconnect();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [nextCursor?.cursor_id, nextCursor?.cursor_created_at, fetchOrders, loading]);
 
   return (
@@ -104,24 +106,6 @@ export function OrdersPaginando() {
           </li>
         ))}
       </ul>
-
-      <div className="flex justify-between mt-4">
-        <button
-          disabled={!prevCursor || loading}
-          onClick={() => fetchOrders(prevCursor, "prev")}
-          className="bg-gray-700 text-white py-1 px-3 rounded disabled:opacity-50"
-        >
-          ← Anterior
-        </button>
-
-        <button
-          disabled={!nextCursor || loading}
-          onClick={() => fetchOrders(nextCursor, "next")}
-          className="bg-blue-600 text-white py-1 px-3 rounded disabled:opacity-50"
-        >
-          Próximo →
-        </button>
-      </div>
 
       <div id="scroll-sentinel" className="h-4"></div>
     </div>
