@@ -12,30 +12,37 @@ export function OrdersPaginando() {
     setLoading(true);
 
     try {
-      let url = "http://localhost:3001/v1/checkout/orders/pages";
+        let url = "http://localhost:3001/v1/checkout/orders/pages";
 
-      if (cursor) {
-        url += `?cursor_created_at=${cursor.cursor_created_at}&cursor_id=${cursor.cursor_id}&limit=5&direction=${direction}`;
-      }
-
-      const options = {
-        method: 'GET',
-        headers: {
-            'Content-type': 'application/json',
-            'Authorization': `Bearer ${user.token}`
+        if (cursor) {
+            url += `?cursor_created_at=${cursor.cursor_created_at}&cursor_id=${cursor.cursor_id}&limit=5&direction=${direction}`;
         }
-      }
 
-      const req = await fetch(url, options);
-      const res = await req.json();
-      console.log(res)
-      
-      if (!req.ok) throw new Error(res.message || "Erro ao buscar pedidos");
+        const options = {
+            method: 'GET',
+            headers: {
+                'Content-type': 'application/json',
+                'Authorization': `Bearer ${user.token}`
+            }
+        }
 
-    //   setOrders(res.data);
-    //  setOrders((prev) =>
-    //     direction === "next" ? [...prev, ...res.data] : [...res.data, ...prev]
-    //   );
+        const req = await fetch(url, options);
+        
+        if (req.status === 401) {
+            localStorage.removeItem("token");
+            window.location.href = "/login";
+            return null;
+        }
+        
+        const res = await req.json();
+        console.log(res)
+        
+        if (!req.ok) throw new Error(res.message || "Erro ao buscar pedidos");
+
+        //   setOrders(res.data);
+        //  setOrders((prev) =>
+        //     direction === "next" ? [...prev, ...res.data] : [...res.data, ...prev]
+        //   );
 
         setOrders((prev) => {
         const newOrders = res.data.filter(
@@ -46,9 +53,9 @@ export function OrdersPaginando() {
             ? [...prev, ...newOrders]
             : [...newOrders, ...prev];
         });
-        
-      setNextCursor(res.nextCursor);
-      setPrevCursor(res.prevCursor);
+            
+        setNextCursor(res.nextCursor);
+        setPrevCursor(res.prevCursor);
     } catch (error) {
       console.error(error);
     } finally {
