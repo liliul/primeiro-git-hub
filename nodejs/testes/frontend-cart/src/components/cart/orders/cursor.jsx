@@ -12,12 +12,18 @@ export function OrdersPaginando() {
     setLoading(true);
 
     try {
-        let url = "http://localhost:3001/v1/checkout/orders/pages";
+        let baseUrl = "http://localhost:3001/v1/checkout/orders/pages";
+        const params = new URLSearchParams();
 
         if (cursor) {
-            url += `?cursor_created_at=${cursor.cursor_created_at}&cursor_id=${cursor.cursor_id}&limit=5&direction=${direction}`;
+          // url += `?cursor_created_at=${cursor.cursor_created_at}&cursor_id=${cursor.cursor_id}&limit=5&direction=${direction}`;
+          params.append('cursor_created_at', cursor.cursor_created_at);
+          params.append('cursor_id', cursor.cursor_id);
+          params.append('limit', 5);
+          params.append('direction', direction)
         }
-
+        const url = `${baseUrl}${params.toString() ? `?${params.toString()}` : ""}`;
+        
         const options = {
             method: 'GET',
             headers: {
@@ -62,7 +68,6 @@ export function OrdersPaginando() {
       setLoading(false);
     }
   }
-
   useEffect(() => {
     fetchOrders();
   }, []);
