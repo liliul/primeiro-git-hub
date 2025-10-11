@@ -1,95 +1,6 @@
-//  function handleLoginSubmit(event) {
-//     // event.preventDefault();
-
-//     const formData = formatLoginData();
-
-//     console.log('Dados prontos para envio:', formData);
-
-//     //Exemplo de como você chamaria a função de login (do código anterior)
-//     // if (formData) {
-//     //     handleLogin(formData.email, formData.password);
-//     // }
-// }
-
 import { utils } from './utils.js';
 
-function formatLoginData() {
-    const form = document.getElementById('login-form');
-    if (!form) return null;
-
-    const formData = new FormData(form);
-    
-    const data = {};
-    for (let [key, value] of formData.entries()) {
-        data[key] = value;
-    }
-
-    return formData;
-}
-
-document.getElementById('login-form').addEventListener('submit', (e) => {
-    e.preventDefault()
-    const formData = formatLoginData()
-
-    console.log(formData.get('email'), formData.get('password'));
-    
-    handleLogin(formData.get('email'), formData.get('password'))
-})
-
 const API_BASE_URL = 'http://localhost:8000/auth'; 
-
-async function handleRegister(name, email, password) {
-    try {
-        const response = await fetch(`${API_BASE_URL}/register`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ name, email, password }),
-        });
-
-        const data = await response.json();
-
-        if (response.ok) {
-            alert(data.message); 
-            return true;
-        } else {
-            alert(`Erro no Cadastro: ${data.message}`);
-            return false;
-        }
-    } catch (error) {
-        console.error('Erro de rede:', error);
-        alert('Falha ao conectar com o servidor.');
-        return false;
-    }
-}
-
-async function handleLogin(email, password) {
-    try {
-        const response = await fetch(`${API_BASE_URL}/login`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ email, password }),
-        });
-
-        const data = await response.json();
-
-        if (response.ok) {
-            utils.saveTokens(data.accessToken, data.refreshToken);
-            console.log('Login bem-sucedido. Tokens salvos.');
-            return data.id; 
-        } else {
-            alert(`Erro no Login: ${data.message}`);
-            return null;
-        }
-    } catch (error) {
-        console.error('Erro de rede:', error);
-        alert('Falha ao conectar com o servidor.');
-        return null;
-    }
-}
 
 async function handleLogout(userId) {
     try {
@@ -136,20 +47,20 @@ async function refreshAccessToken() {
 
         if (response.ok) {
             
-            saveTokens(data.accessToken, data.refreshToken);
+            utils.saveTokens(data.accessToken, data.refreshToken);
             console.log('Tokens renovados com sucesso!');
             return true;
         } else {
            
             console.error('Falha na renovação dos tokens:', data.message);
-            clearTokens(); 
+            utils.clearTokens(); 
             alert('Sua sessão expirou. Por favor, faça login novamente.');
             
             return false;
         }
     } catch (error) {
         console.error('Erro de rede ao renovar token:', error);
-        clearTokens();
+        utils.clearTokens();
         return false;
     }
 }
@@ -169,7 +80,7 @@ async function authenticatedFetch(endpoint, options = {}) {
         return fetch(url, { ...options, headers });
     }
 
-    let response = await makeRequest(currentAccessToken);
+    let response = await makeRequest(utils.currentAccessToken);
 
     if (response.status === 403) {
         console.warn('Access Token expirado. Tentando renovar...');
@@ -179,7 +90,7 @@ async function authenticatedFetch(endpoint, options = {}) {
         if (success) {
            
             console.log('Tentando requisição novamente com novo token...');
-            response = await makeRequest(currentAccessToken);
+            response = await makeRequest(utils.currentAccessToken);
         } else {
             
             return response;
