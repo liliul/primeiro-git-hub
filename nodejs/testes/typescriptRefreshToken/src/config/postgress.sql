@@ -1,9 +1,15 @@
+CREATE EXTENSION IF NOT EXISTS "pgcrypto";
 CREATE TABLE users (
-  id SERIAL PRIMARY KEY,
-  email VARCHAR(255) UNIQUE NOT NULL,
-  password VARCHAR(255) NOT NULL,
-  refresh_token TEXT
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(255) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    refresh_token TEXT
 );
 
 ALTER TABLE users
 ADD COLUMN name VARCHAR(100) NOT NULL;
+
+DELETE FROM users
+WHERE id = 1
+RETURNING *;

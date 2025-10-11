@@ -8,10 +8,11 @@ import {
 } from "../service/token.service";
 
 export async function register(req: Request, res: Response) {
-  const { email, password } = req.body;
+  const { name, email, password } = req.body;
 
   const hashed = await bcrypt.hash(password, 10);
-  await pool.query("INSERT INTO users (email, password) VALUES ($1, $2)", [
+  await pool.query("INSERT INTO users (name, email, password) VALUES ($1, $2, $3)", [
+    name,
     email,
     hashed,
   ]);
@@ -40,7 +41,7 @@ export async function login(req: Request, res: Response) {
     user.id,
   ]);
 
-  return res.json({ accessToken, refreshToken });
+  return res.json({ id: user.id, accessToken, refreshToken });
 }
 
 export async function refreshToken(req: Request, res: Response) {
