@@ -4,3 +4,6 @@ CREATE TABLE users (
   password VARCHAR(255) NOT NULL,
   refresh_token TEXT
 );
+
+ALTER TABLE users
+ADD COLUMN name VARCHAR(100) NOT NULL;

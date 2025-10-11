@@ -5,7 +5,7 @@ import {
   generateAccessToken,
   generateRefreshToken,
   verifyRefreshToken,
-} from "../service/token.service.js";
+} from "../service/token.service";
 
 export async function register(req: Request, res: Response) {
   const { email, password } = req.body;
