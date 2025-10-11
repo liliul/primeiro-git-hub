@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import bcrypt from "bcrypt";
-import { pool } from "../config/db.js";
+import { pool } from "../config/db";
 import {
   generateAccessToken,
   generateRefreshToken,
