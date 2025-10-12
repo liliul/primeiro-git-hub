@@ -1,41 +1,43 @@
 import { utils } from './utils.js';
 
 const API_BASE_URL = 'http://localhost:8000/auth'; 
-
-async function handleLogout(userId) {
-    try {
+const API_USER_URL = 'http://localhost:8000/user';
+// async function handleLogout(userId) {
+//     try {
         
-        await fetch(`${API_BASE_URL}/logout`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
+//         await fetch(`${API_BASE_URL}/logout`, {
+//             method: 'POST',
+//             headers: {
+//                 'Content-Type': 'application/json',
+//             },
             
-            body: JSON.stringify({ id: userId }), 
-        });
+//             body: JSON.stringify({ id: userId }), 
+//         });
         
-        clearTokens();
-        alert('Logout efetuado com sucesso!');
+//         clearTokens();
+//         alert('Logout efetuado com sucesso!');
        
-    } catch (error) {
-        console.error('Erro durante o logout:', error);
-        clearTokens(); 
-    }
-}
+//     } catch (error) {
+//         console.error('Erro durante o logout:', error);
+//         clearTokens(); 
+//     }
+// }
 
 /**
  * Tenta obter um novo Access Token usando o Refresh Token armazenado.
  * @returns {boolean} true se a renovação for bem-sucedida, false caso contrário.
  */
 async function refreshAccessToken() {
-    const refreshToken = getRefreshToken();
+    const refreshToken = utils.getRefreshToken();
+    console.log(refreshToken);
+    
     if (!refreshToken) {
         console.error('Refresh Token não encontrado. Usuário deve fazer login.');
         return false;
     }
 
     try {
-        const response = await fetch(`${API_BASE_URL}/refreshToken`, {
+        const response = await fetch(`${API_BASE_URL}/refresh`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -69,7 +71,24 @@ async function refreshAccessToken() {
  * Realiza uma requisição autenticada, tentando renovar o token em caso de falha 403/401.
  */
 async function authenticatedFetch(endpoint, options = {}) {
-    const url = `${API_BASE_URL}${endpoint}`;
+    const url = `${API_USER_URL}${endpoint}`;
+
+    if (!utils.currentAccessToken) {
+        // Se houver um Refresh Token, tente renovar
+        if (utils.getRefreshToken()) {
+             const success = await refreshAccessToken();
+             if (!success) {
+                 // Falha na renovação, limpa os tokens e redireciona (logout)
+                 utils.clearTokens(); 
+                 window.location.href = 'login.html'
+                 return { status: 401, json: async () => ({ message: 'Sessão expirada. Redirecionando...' }) };
+             }
+        } else {
+             // Não tem nenhum token, força o redirecionamento imediato
+             utils.clearTokens();
+             return { status: 401, json: async () => ({ message: 'Usuário não autenticado. Redirecionando...' }) };
+        }
+    }
 
     async function makeRequest(token) {
         const headers = {
@@ -81,7 +100,8 @@ async function authenticatedFetch(endpoint, options = {}) {
     }
 
     let response = await makeRequest(utils.currentAccessToken);
-
+    console.log(utils.currentAccessToken);
+    
     if (response.status === 403) {
         console.warn('Access Token expirado. Tentando renovar...');
  
@@ -100,17 +120,18 @@ async function authenticatedFetch(endpoint, options = {}) {
     return response;
 }
 
-async function getProtectedData() {
+export async function getProtectedData() {
     try {
      
-        const response = await authenticatedFetch('/protected-route', {
+        const response = await authenticatedFetch('/home', {
             method: 'GET'
         });
 
         if (response.ok) {
             const data = await response.json();
             console.log('Dados protegidos:', data);
-            return data;
+            window.location.href = 'home.html'
+            // return data;
         } 
         
         const errorData = await response.json();

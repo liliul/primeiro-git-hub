@@ -1,10 +1,12 @@
 export const TOKEN_STORAGE_KEY = 'refreshToken';
 export const ACCESS_TOKEN_KEY = 'accessToken'; 
 
-let currentAccessToken = null;
+// export let currentAccessToken = null;
+export let currentAccessToken = localStorage.getItem(ACCESS_TOKEN_KEY) || null;
 
 function saveTokens(accessToken, refreshToken) {
-    currentAccessToken = accessToken;
+    // currentAccessToken = accessToken;
+    localStorage.setItem(ACCESS_TOKEN_KEY, accessToken); 
     localStorage.setItem(TOKEN_STORAGE_KEY, refreshToken);
 }
 
@@ -20,5 +22,6 @@ function clearTokens() {
 export const utils = {
     saveTokens,
     getRefreshToken,
-    clearTokens
+    clearTokens,
+    currentAccessToken
 }
