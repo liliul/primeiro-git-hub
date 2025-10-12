@@ -2,26 +2,6 @@ import { utils } from './utils.js';
 
 const API_BASE_URL = 'http://localhost:8000/auth'; 
 const API_USER_URL = 'http://localhost:8000/user';
-// async function handleLogout(userId) {
-//     try {
-        
-//         await fetch(`${API_BASE_URL}/logout`, {
-//             method: 'POST',
-//             headers: {
-//                 'Content-Type': 'application/json',
-//             },
-            
-//             body: JSON.stringify({ id: userId }), 
-//         });
-        
-//         clearTokens();
-//         alert('Logout efetuado com sucesso!');
-       
-//     } catch (error) {
-//         console.error('Erro durante o logout:', error);
-//         clearTokens(); 
-//     }
-// }
 
 /**
  * Tenta obter um novo Access Token usando o Refresh Token armazenado.
@@ -100,7 +80,7 @@ async function authenticatedFetch(endpoint, options = {}) {
     }
 
     let response = await makeRequest(utils.currentAccessToken);
-    console.log(utils.currentAccessToken);
+    console.log(response);
     
     if (response.status === 403) {
         console.warn('Access Token expirado. Tentando renovar...');
@@ -130,8 +110,7 @@ export async function getProtectedData() {
         if (response.ok) {
             const data = await response.json();
             console.log('Dados protegidos:', data);
-            window.location.href = 'home.html'
-            // return data;
+            return data;
         } 
         
         const errorData = await response.json();

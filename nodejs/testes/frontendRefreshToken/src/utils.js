@@ -17,6 +17,7 @@ function getRefreshToken() {
 function clearTokens() {
     currentAccessToken = null;
     localStorage.removeItem(TOKEN_STORAGE_KEY);
+    localStorage.removeItem(ACCESS_TOKEN_KEY);
 }
 
 export const utils = {

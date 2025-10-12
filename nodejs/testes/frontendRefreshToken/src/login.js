@@ -1,5 +1,4 @@
 import { utils } from './utils.js';
-import { getProtectedData } from './index.js'
 
 const API_BASE_URL = 'http://localhost:8000/auth'; 
 
@@ -26,7 +25,7 @@ function formatLoginData() {
     return formData;
 }
 
-async function handleLogin(email, password) {
+export async function handleLogin(email, password) {
     try {
         const response = await fetch(`${API_BASE_URL}/login`, {
             method: 'POST',
@@ -41,8 +40,11 @@ async function handleLogin(email, password) {
         if (response.ok) {
             utils.saveTokens(data.accessToken, data.refreshToken);
             console.log('Login bem-sucedido. Tokens salvos.');
-            
-            getProtectedData()
+
+            setTimeout(() => {
+                window.location.href = '/home.html'
+            }, 1200)
+
             return data.id; 
         } else {
             alert(`Erro no Login: ${data.message}`);
