@@ -26,12 +26,11 @@ async function checkAuthenticationAndLoadData() {
             }
         } else {
             console.error("Falha na autenticação ou carregamento de dados.");
-            window.location.href = 'login.html' 
+            window.location.reload()
         }
         
     } catch (error) {
         console.error("Erro ao verificar autenticação:", error);
         utils.clearTokens(); 
-        window.location.href = 'login.html'
     }
 }
