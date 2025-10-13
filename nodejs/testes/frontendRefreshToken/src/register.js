@@ -30,6 +30,7 @@ async function handleRegister(name, email, password) {
 
         if (response.ok) {
             alert(data.message); 
+            window.location.href = 'login.html';
             return true;
         } else {
             alert(`Erro no Cadastro: ${data.message}`);

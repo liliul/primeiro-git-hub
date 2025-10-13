@@ -1,5 +1,6 @@
 import { utils } from "./utils.js";
 import { getProtectedData } from "./index.js";
+import { handleLogout } from "./logout.js";
 
 document.addEventListener('DOMContentLoaded', () => {
     checkAuthenticationAndLoadData();
@@ -23,7 +24,12 @@ async function checkAuthenticationAndLoadData() {
                 body.style.display = 'block';
                
                 console.log(`Olá, ${protectedData.userName}! Seu ID é ${protectedData.userId}.`);
+
+                document.getElementById('logout').addEventListener('click', async () => {
+                    await handleLogout(protectedData.userId)
+                })
             }
+
         } else {
             console.error("Falha na autenticação ou carregamento de dados.");
             window.location.reload()

@@ -1,5 +1,4 @@
-// import { getProtectedData } from "./index.js";
-// import { utils } from "./utils.js";
+import { utils } from "./utils.js";
 
 // document.getElementById('logout').addEventListener('click', async () => {
 //     // const data = await getProtectedData()
@@ -10,7 +9,7 @@
 
 const API_BASE_URL = 'http://localhost:8000/auth'; 
 
-async function handleLogout(userId) {
+export async function handleLogout(userId) {
     try {
         
         const req = await fetch(`${API_BASE_URL}/logout`, {
@@ -29,7 +28,9 @@ async function handleLogout(userId) {
 
         utils.clearTokens();
         alert('Logout efetuado com sucesso!');
-        window.location.href = '/login.html'
+        setTimeout(() => {
+            window.location.href = '/login.html'
+        }, 1200)
        
     } catch (error) {
         console.error('Erro durante o logout:', error);
