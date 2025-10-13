@@ -20,9 +20,14 @@ function clearTokens() {
     localStorage.removeItem(ACCESS_TOKEN_KEY);
 }
 
+function isLoggedIn() {
+    return localStorage.getItem(TOKEN_STORAGE_KEY) !== null;
+}
+
 export const utils = {
     saveTokens,
     getRefreshToken,
     clearTokens,
-    currentAccessToken
+    currentAccessToken,
+    isLoggedIn
 }
