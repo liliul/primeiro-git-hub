@@ -1,6 +1,6 @@
 import { utils } from "./utils.js";
 import { getProtectedData } from "./index.js";
-import { handleLogout } from "./logout.js";
+import { modalInfoUsuarioLogado } from "./infoUsuario.js";
 
 document.addEventListener('DOMContentLoaded', () => {
     checkAuthenticationAndLoadData();
@@ -25,9 +25,7 @@ async function checkAuthenticationAndLoadData() {
                
                 console.log(`Olá, ${protectedData.userName}! Seu ID é ${protectedData.userId}.`);
 
-                document.getElementById('logout').addEventListener('click', async () => {
-                    await handleLogout(protectedData.userId)
-                })
+                modalInfoUsuarioLogado(protectedData)              
             }
 
         } else {
