@@ -8,31 +8,7 @@
 </head>
 <body style="display: none;" id="home-body" class="bg-gray-100 font-sans">
 
-    <header class="bg-yellow-400 shadow-md">
-        <div class="container mx-auto px-4 py-2 flex items-center justify-between">
-            
-            <div class="text-2xl font-bold text-gray-800">
-                MERCADO <span class="text-blue-700">CLONE</span>
-            </div>
-
-            <div class="flex-grow max-w-xl mx-8">
-                <div class="relative">
-                    <input 
-                        type="text" 
-                        placeholder="Buscar produtos, marcas e muito mais..." 
-                        class="w-full py-2 px-4 rounded-lg text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    >
-                    <button class="absolute right-0 top-0 mt-2 mr-3 text-gray-500 hover:text-blue-600">
-                        🔍
-                    </button>
-                </div>
-            </div>
-
-            <nav id="menu-info-usuario" class="space-x-4 text-sm font-medium">
-                <a href="#" class="text-gray-800 hover:text-blue-700 transition duration-150">Compras</a>
-            </nav>
-        </div>
-    </header>
+    <div id="header-main"></div>
 
     <main class="container mx-auto px-4 mt-6">
 
@@ -95,6 +71,41 @@
         </div>
     </footer>
 
+    <script>
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadHtml('header-main', 'src/partials/header.html')
+        })
+        
+        /**
+         * Carrega o conteúdo de um arquivo HTML externo e o insere em um elemento.
+         * @param {string} targetId O ID do elemento onde o HTML será inserido (ex: 'header-placeholder').
+         * @param {string} filePath O caminho para o arquivo HTML (ex: 'partials/header.html').
+         */
+        async function loadHtml(targetId, filePath) {
+            const targetElement = document.getElementById(targetId);
+            
+            if (!targetElement) {
+                console.error(`Elemento com ID '${targetId}' não encontrado.`);
+                return;
+            }
+
+            try {
+                const response = await fetch(filePath);
+                
+                if (response.ok) {
+                    const htmlContent = await response.text();
+                    targetElement.innerHTML = htmlContent;
+                } else {
+                    console.error(`Falha ao carregar o arquivo: ${filePath}. Status: ${response.status}`);
+                }
+            } catch (error) {
+                console.error('Erro de rede ao carregar HTML:', error);
+            }
+        }
+
+        window.loadHtml = loadHtml;
+    </script>
     <script type="module" src="src/home.js"></script>
 </body>
 </html>
