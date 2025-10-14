@@ -18,11 +18,10 @@
 // console.log(res)
 
 
-function states<T extends string | number | string[]>() {
-	let respose: T 
+function states<T extends string | number | (string | number)[]>() { 
 
 	function get() {
-		return respose
+		return 
 	}
 
 	function set(value: T) {
@@ -36,6 +35,6 @@ const userState = states()
 userState.get()
 const res1 = userState.set('Som goku')
 const res2 = userState.set(500)
-const res3 = userState.set(['vegeta', 'sasuke'])
+const res3 = userState.set(['vegeta', 'sasuke', 22, 32,15])
 
 console.log(res1, res2, res3)

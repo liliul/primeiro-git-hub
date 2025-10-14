@@ -13,9 +13,8 @@
 // const res = userState.set('Som goku')
 // console.log(res)
 function states() {
-    var respose;
     function get() {
-        return respose;
+        return;
     }
     function set(value) {
         return value;
@@ -26,5 +25,5 @@ var userState = states();
 userState.get();
 var res1 = userState.set('Som goku');
 var res2 = userState.set(500);
-var res3 = userState.set(['vegeta', 'sasuke']);
+var res3 = userState.set(['vegeta', 'sasuke', 22, 32, 15]);
 console.log(res1, res2, res3);
