@@ -5,7 +5,7 @@ import { UsuarioRoles } from "../middleware/roles.middleware";
 
 const router = Router()
 
-router.get('/home', authenticateToken, UsuarioRoles(['user', 'admin']), async (req: Request, res: Response) => {
+router.get('/home', authenticateToken, UsuarioRoles('user', 'moderador', 'admin', 'superAdmin'), async (req: Request, res: Response) => {
     
     if (!req.user?.id) {
         console.log(req.user?.id);

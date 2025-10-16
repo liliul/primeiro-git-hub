@@ -9,12 +9,14 @@ import {
 
 export async function register(req: Request, res: Response) {
   const { name, email, password } = req.body;
+  const roles = 'user'
 
   const hashed = await bcrypt.hash(password, 10);
-  await pool.query("INSERT INTO users (name, email, password) VALUES ($1, $2, $3)", [
+  await pool.query("INSERT INTO users (name, email, password, roles) VALUES ($1, $2, $3, $4)", [
     name,
     email,
     hashed,
+    roles,
   ]);
 
   return res.status(201).json({ message: "Usuário criado com sucesso!" });
@@ -23,7 +25,7 @@ export async function register(req: Request, res: Response) {
 export async function login(req: Request, res: Response) {
   const { email, password } = req.body;
 
-  const result = await pool.query("SELECT * FROM users WHERE email = $1", [
+  const result = await pool.query("SELECT email, password, roles, name, id FROM users WHERE email = $1", [
     email,
   ]);
 
@@ -33,7 +35,14 @@ export async function login(req: Request, res: Response) {
   const match = await bcrypt.compare(password, user.password);
   if (!match) return res.status(401).json({ message: "Senha incorreta" });
 
-  const accessToken = generateAccessToken({ id: user.id, email: user.email });
+  const payload = {
+    id: user?.id,
+    email: user?.email,
+    name: user?.name,
+    role: user?.roles
+  } 
+  
+  const accessToken = generateAccessToken(payload);
   const refreshToken = generateRefreshToken({ id: user.id });
 
   await pool.query("UPDATE users SET refresh_token = $1 WHERE id = $2", [
