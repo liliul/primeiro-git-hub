@@ -1,10 +1,11 @@
 import { Router, Request, Response } from "express";
 import { authenticateToken } from "../middleware/auth.middleware";
 import { pool } from "../config/db";
+import { UsuarioRoles } from "../middleware/roles.middleware";
 
 const router = Router()
 
-router.get('/home', authenticateToken, async (req: Request, res: Response) => {
+router.get('/home', authenticateToken, UsuarioRoles(['user', 'admin']), async (req: Request, res: Response) => {
     
     if (!req.user?.id) {
         console.log(req.user?.id);
