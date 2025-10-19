@@ -22,3 +22,10 @@ console.log(quinta);
 // identity([1, 2, 3]); // Válido
 // identity("Hello");   // Válido
 // identity(123);       // Erro, número não tem .length
+
+const record: Record<string, string> = {
+    name: 'naruto',
+    poder: 'razengan'
+} 
+
+console.log(record);
