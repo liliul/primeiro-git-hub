@@ -96,14 +96,14 @@ async function authenticatedFetch(endpoint, options = {}) {
             return response;
         }
     }
-
+    
     return response;
 }
 
 export async function getProtectedData() {
     try {
      
-        const response = await authenticatedFetch('/home', {
+        const response = await authenticatedFetch('/private', {
             method: 'GET'
         });
 
@@ -114,8 +114,8 @@ export async function getProtectedData() {
         } 
         
         const errorData = await response.json();
-        console.error('Falha ao obter dados protegidos:', errorData.message);
-        
+        console.error('Falha ao obter dados protegidos:', errorData.error);
+      
         return null;
 
     } catch (error) {

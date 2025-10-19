@@ -15,7 +15,7 @@ async function checkAuthenticationAndLoadData() {
         return;
     }
 
-    try {
+    try {   
         const protectedData = await getProtectedData();
 
         if (protectedData) {
@@ -30,7 +30,7 @@ async function checkAuthenticationAndLoadData() {
 
         } else {
             console.error("Falha na autenticação ou carregamento de dados.");
-            window.location.reload()
+            // window.location.reload()
         }
         
     } catch (error) {
