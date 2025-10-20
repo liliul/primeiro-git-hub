@@ -67,7 +67,15 @@ export async function refreshToken(req: Request, res: Response) {
     if (!user || user.refresh_token !== token)
       return res.status(403).json({ message: "Token inválido" });
 
-    const newAccess = generateAccessToken({ id: user.id, email: user.email });
+    
+    const payloadUser = {
+      id: user?.id,
+      email: user?.email,
+      name: user?.name,
+      role: user?.roles
+    } 
+
+    const newAccess = generateAccessToken(payloadUser);
     const newRefresh = generateRefreshToken({ id: user.id });
 
     await pool.query("UPDATE users SET refresh_token = $1 WHERE id = $2", [

@@ -19,7 +19,8 @@ router.get('/home', authenticateToken, UsuarioRoles('user', 'moderador', 'admin'
 
     const userId = req.user.id;
     const userEmail = req.user.email;
-    console.log('id home',userId);
+    const userrole = req.user?.role;
+    console.log('id home',userId, userrole);
     
     const result = await pool.query('SELECT name FROM users WHERE id = $1', [userId]);
     const userName = result.rows[0].name;
@@ -29,6 +30,7 @@ router.get('/home', authenticateToken, UsuarioRoles('user', 'moderador', 'admin'
         userName: userName,
         userEmail: userEmail,
         userId: userId,
+        roles: userrole,
         dataHora: new Date()
     });
 })
