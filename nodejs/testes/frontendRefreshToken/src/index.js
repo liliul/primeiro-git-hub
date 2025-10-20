@@ -9,7 +9,7 @@ const API_USER_URL = 'http://localhost:8000/user';
  */
 async function refreshAccessToken() {
     const refreshToken = utils.getRefreshToken();
-    console.log(refreshToken);
+    console.log('refresh:', refreshToken);
     
     if (!refreshToken) {
         console.error('Refresh Token não encontrado. Usuário deve fazer login.');
@@ -30,7 +30,7 @@ async function refreshAccessToken() {
         if (response.ok) {
             
             utils.saveTokens(data.accessToken, data.refreshToken);
-            console.log('Tokens renovados com sucesso!');
+            // console.log('Tokens renovados com sucesso!');
             return true;
         } else {
            
@@ -53,7 +53,7 @@ async function refreshAccessToken() {
 async function authenticatedFetch(endpoint, options = {}) {
     const url = `${API_USER_URL}${endpoint}`;
 
-    if (!utils.currentAccessToken) {
+    if (!utils.getCurrentAccessToken()) {
         // Se houver um Refresh Token, tente renovar
         if (utils.getRefreshToken()) {
              const success = await refreshAccessToken();
@@ -79,7 +79,7 @@ async function authenticatedFetch(endpoint, options = {}) {
         return fetch(url, { ...options, headers });
     }
 
-    let response = await makeRequest(utils.currentAccessToken);
+    let response = await makeRequest(utils.getCurrentAccessToken());
     console.log(response);
     
     if (response.status === 403) {
@@ -88,9 +88,23 @@ async function authenticatedFetch(endpoint, options = {}) {
         const success = await refreshAccessToken();
 
         if (success) {
-           
+            const accessTokenLocalStorage = utils.getCurrentAccessToken()
+            console.log(accessTokenLocalStorage);
+
             console.log('Tentando requisição novamente com novo token...');
-            response = await makeRequest(utils.currentAccessToken);
+            response = await makeRequest(accessTokenLocalStorage);
+            console.log('novo response: ', response);
+            
+            if (response.ok) {
+                setTimeout(() => {
+                    console.log('atualizar token reaload...');
+                    
+                    // window.location.reload()
+                }, 1000)
+            }else {
+                console.log('sem reload');
+                
+            }
         } else {
             
             return response;
@@ -102,8 +116,7 @@ async function authenticatedFetch(endpoint, options = {}) {
 
 export async function getProtectedData() {
     try {
-     
-        const response = await authenticatedFetch('/private', {
+        const response = await authenticatedFetch('/home', {
             method: 'GET'
         });
 

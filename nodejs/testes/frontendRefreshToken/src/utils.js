@@ -2,12 +2,16 @@ export const TOKEN_STORAGE_KEY = 'refreshToken';
 export const ACCESS_TOKEN_KEY = 'accessToken'; 
 
 // export let currentAccessToken = null;
-export let currentAccessToken = localStorage.getItem(ACCESS_TOKEN_KEY) || null;
+// export let currentAccessToken = localStorage.getItem(ACCESS_TOKEN_KEY) || null;
 
 function saveTokens(accessToken, refreshToken) {
-    currentAccessToken = null;
     localStorage.setItem(ACCESS_TOKEN_KEY, accessToken); 
     localStorage.setItem(TOKEN_STORAGE_KEY, refreshToken);
+    // currentAccessToken = accessToken;
+}
+
+function getCurrentAccessToken() {
+    return localStorage.getItem(ACCESS_TOKEN_KEY)
 }
 
 function getRefreshToken() {
@@ -81,11 +85,36 @@ function redirecionandoPagina(tempo, pagina) {
     }, tempo)
 }
 
+/**
+ * Verifica se o token JWT está prestes a expirar.
+ *
+ * Decodifica o payload Base64 do token JWT usando `atob()`
+ * e compara o tempo de expiração (`exp`) com o horário atual.
+ *
+ * @param {string} token - O token JWT a ser verificado.
+ * @returns {boolean} Retorna `true` se o token expira em menos de 1 minuto
+ *                    ou se o token for inválido; caso contrário, `false`.
+ * @throws {Error} Pode lançar erro caso o token não esteja no formato JWT válido.
+ */
+function tokenPrestesAexpirar(token) {
+    
+    try {
+        const [, payloadBase64] = token.split('.');
+        const payload = JSON.parse(atob(payloadBase64));
+        const exp = payload.exp * 1000; 
+        const now = Date.now();
+        return exp - now < 60_000; 
+    } catch {
+        return true;
+    }
+}
+
+
 export const utils = {
     saveTokens,
     getRefreshToken,
     clearTokens,
-    currentAccessToken,
     isLoggedIn,
-    redirecionandoPagina
+    redirecionandoPagina,
+    getCurrentAccessToken
 }
