@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minha Conta - Mercado Clone</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <style>
+        #user-body {
+            display: none;
+        }
+    </style>
+</head>
+<body id="user-body" class="bg-gray-100">
+    
+    <div id="header-main"></div>
+
+    <main id="page-content" class="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
+        
+        <h1 id="welcome-message" class="text-3xl font-bold text-gray-800 mb-6">
+            Olá, [Nome do Usuário]!
+        </h1>
+
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+
+            <nav class="bg-white p-4 rounded-lg shadow-md lg:col-span-1 h-fit">
+                <ul class="space-y-2">
+                    <li>
+                        <a href="#" class="block p-3 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600 transition">Meu Perfil</a>
+                    </li>
+                    <li>
+                        <a href="#" class="block p-3 text-gray-700 font-semibold rounded-md hover:bg-gray-50 transition">Minhas Compras</a>
+                    </li>
+                    <li>
+                        <a href="#" class="block p-3 text-gray-700 font-semibold rounded-md hover:bg-gray-50 transition">Endereços</a>
+                    </li>
+                    <li>
+                        <button id="logout-button-dashboard" class="w-full text-left p-3 text-red-600 font-semibold rounded-md hover:bg-red-50 transition">
+                            Sair
+                        </button>
+                    </li>
+                </ul>
+            </nav>
+
+            <section class="lg:col-span-3 bg-white p-6 rounded-lg shadow-md">
+                <h2 class="text-2xl font-semibold text-gray-800 mb-4 border-b pb-2">Detalhes Pessoais</h2>
+                
+                <div class="space-y-4">
+                    
+                    <div class="flex flex-col sm:flex-row sm:items-center">
+                        <label class="w-full sm:w-1/3 font-medium text-gray-600">Nome Completo:</label>
+                        <p id="user-full-name" class="w-full sm:w-2/3 text-gray-800">[Nome Completo Aqui]</p>
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row sm:items-center">
+                        <label class="w-full sm:w-1/3 font-medium text-gray-600">E-mail:</label>
+                        <p id="user-email" class="w-full sm:w-2/3 text-gray-800">[email@usuario.com]</p>
+                    </div>
+                    
+                    <div class="flex flex-col sm:flex-row sm:items-center text-sm text-gray-500">
+                        <label class="w-full sm:w-1/3 font-medium">ID de Usuário (Backend):</label>
+                        <p id="user-id" class="w-full sm:w-2/3">[ID]</p>
+                    </div>
+
+                    <button class="mt-4 px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 transition">
+                        Editar Perfil
+                    </button>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- <script src="../js/headerLoader.js"></script> 
+    <script src="../js/utils.js"></script> 
+    <script src="../js/auth-flow.js"></script> <script src="../js/user.js"></script> -->
+    
+    <script>
+         document.addEventListener('DOMContentLoaded', () => {
+            loadHtml('header-main', 'src/partials/header.html')
+        })
+        
+        /**
+         * Carrega o conteúdo de um arquivo HTML externo e o insere em um elemento.
+         * @param {string} targetId O ID do elemento onde o HTML será inserido (ex: 'header-placeholder').
+         * @param {string} filePath O caminho para o arquivo HTML (ex: 'partials/header.html').
+         */
+        async function loadHtml(targetId, filePath) {
+            const targetElement = document.getElementById(targetId);
+            
+            if (!targetElement) {
+                console.error(`Elemento com ID '${targetId}' não encontrado.`);
+                return;
+            }
+
+            try {
+                const response = await fetch(filePath);
+                
+                if (response.ok) {
+                    const htmlContent = await response.text();
+                    targetElement.innerHTML = htmlContent;
+                } else {
+                    console.error(`Falha ao carregar o arquivo: ${filePath}. Status: ${response.status}`);
+                }
+            } catch (error) {
+                console.error('Erro de rede ao carregar HTML:', error);
+            }
+        }
+
+        window.loadHtml = loadHtml;
+    </script>
+
+    <script type="module" src="./src/user.js"></script>
+</body>
+</html>

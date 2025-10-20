@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mercado Clone - Home</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        #private-body {
+            display: none;
+        }
+    </style>
+</head>
+<body id="private-body" class="bg-gray-100 font-sans">
+
+    <div id="header-main"></div>
+
+    <main class="container mx-auto px-4 mt-6">
+
+        <h1>Rota privada</h1>
+        
+    </main>
+
+    <footer class="bg-gray-200 mt-12 py-4">
+        <div class="container mx-auto px-4 text-center text-gray-600 text-sm">
+            <p>&copy; 2025 Mercado Clone. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <script>
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadHtml('header-main', 'src/partials/header.html')
+        })
+        
+        /**
+         * Carrega o conteúdo de um arquivo HTML externo e o insere em um elemento.
+         * @param {string} targetId O ID do elemento onde o HTML será inserido (ex: 'header-placeholder').
+         * @param {string} filePath O caminho para o arquivo HTML (ex: 'partials/header.html').
+         */
+        async function loadHtml(targetId, filePath) {
+            const targetElement = document.getElementById(targetId);
+            
+            if (!targetElement) {
+                console.error(`Elemento com ID '${targetId}' não encontrado.`);
+                return;
+            }
+
+            try {
+                const response = await fetch(filePath);
+                
+                if (response.ok) {
+                    const htmlContent = await response.text();
+                    targetElement.innerHTML = htmlContent;
+                } else {
+                    console.error(`Falha ao carregar o arquivo: ${filePath}. Status: ${response.status}`);
+                }
+            } catch (error) {
+                console.error('Erro de rede ao carregar HTML:', error);
+            }
+        }
+
+        window.loadHtml = loadHtml;
+    </script>
+    <script type="module" src="src/private.js"></script>
+</body>
+</html>
