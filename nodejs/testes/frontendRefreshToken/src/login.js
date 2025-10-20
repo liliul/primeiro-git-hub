@@ -41,9 +41,7 @@ export async function handleLogin(email, password) {
             utils.saveTokens(data.accessToken, data.refreshToken);
             console.log('Login bem-sucedido. Tokens salvos.');
 
-            setTimeout(() => {
-                window.location.href = '/home.html'
-            }, 1200)
+            utils.redirecionandoRolesAposLogin();
 
             return data.id; 
         } else {

@@ -109,6 +109,40 @@ function tokenPrestesAexpirar(token) {
     }
 }
 
+function redirecionandoRolesAposLogin() {
+    
+    try {
+        const token = localStorage.getItem(ACCESS_TOKEN_KEY
+        if (!token) return
+
+        const [, payloadBase64] = token.split('.');
+        const payload = JSON.parse(atob(payloadBase64));
+        console.log(payload);
+        
+        switch (payload.role) {
+            case 'user':
+                redirecionandoPagina(1200, 'user.html');
+                break;
+            case 'moderador':
+                redirecionandoPagina(1200, 'home.html')
+                break
+            case 'admin':
+                redirecionandoPagina(1200, 'home.html')
+                break
+            case 'superAdmin':
+                redirecionandoPagina(1200, 'home.html')                                                                                                                                                                     
+                break
+            default:
+                redirecionandoPagina(1200, '404.html')
+                break;
+        }
+
+    } catch (error) {
+        console.error(error);
+        
+    }
+
+}
 
 export const utils = {
     saveTokens,
@@ -116,5 +150,7 @@ export const utils = {
     clearTokens,
     isLoggedIn,
     redirecionandoPagina,
-    getCurrentAccessToken
+    getCurrentAccessToken,
+    MensagemCustomizada,
+    redirecionandoRolesAposLogin
 }
