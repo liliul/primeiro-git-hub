@@ -15,48 +15,63 @@ function getRefreshToken() {
 }
 
 function clearTokens() {
-    currentAccessToken = null;
     localStorage.removeItem(TOKEN_STORAGE_KEY);
     localStorage.removeItem(ACCESS_TOKEN_KEY);
+    // currentAccessToken = null;
 }
 
 function isLoggedIn() {
     // return localStorage.getItem(TOKEN_STORAGE_KEY) !== null;
-    const token = currentAccessToken;
-    console.log(token);
+    // const token = currentAccessToken;
+    // console.log(token);
     
-    if (!token) {
-        console.error('token null');
-        // window.location.href = 'login.html'
+    // if (!token) {
+    //     console.error('token null');
+    //     // window.location.href = 'login.html'
+    // }
+    function checarRefreshToken() {
+        const token = localStorage.getItem(TOKEN_STORAGE_KEY) !== null;
+        if (token) {
+            redirecionandoPagina(1200, 'home.html');
+        } else {
+            return
+        } 
+
     }
 
-    async function checkUrl() {
-        const options = {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            }
-        }
-        const req = await fetch('http://localhost:8000/user/private', options)
-        console.log(req);
-        if (!req.ok) {
+    async function checkUrl(functionRota) {
+        // const options = {
+        //     method: 'GET',
+        //     headers: {
+        //         'Content-Type': 'application/json',
+        //         'Authorization': `Bearer ${token}`
+        //     }
+        // }
+        // const req = await fetch('http://localhost:8000/user/private', options)
+        // console.log(req);
+        // if (!req.ok) {
+        //     const res = await req.json()
+        //     console.log(res);
+        //     // redirecionandoPagina(1000, 'login.html')
+        // }
+
+        // if (req.ok) {
+        //     // window.location.href = 'home.html'
+        //     // return
+
+        //     redirecionandoPagina(2000, 'home.html')
+        // }
+
+        const req = await functionRota()
+        if (req.ok) {
             const res = await req.json()
             console.log(res);
-            // redirecionandoPagina(1000, 'login.html')
+            
         }
-
-        if (req.ok) {
-            // window.location.href = 'home.html'
-            // return
-
-            redirecionandoPagina(2000, 'home.html')
-        }
-
 
     } 
 
-    checkUrl()
+    return { checkUrl, checarRefreshToken}
 
 }
 
