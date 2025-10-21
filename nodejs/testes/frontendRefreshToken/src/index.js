@@ -70,6 +70,16 @@ async function authenticatedFetch(endpoint, options = {}) {
         }
     }
 
+    if (utils.tokenPrestesAexpirar(utils.getCurrentAccessToken())) {
+        console.warn('Token prestes a expirar, renovando...');
+        const success = await refreshAccessToken();
+        if (!success) {
+            utils.clearTokens();
+            window.location.href = 'login.html';
+            return { status: 401, json: async () => ({ message: 'Sessão expirada.' }) };
+        }
+    }
+
     async function makeRequest(token) {
         const headers = {
             ...options.headers,
@@ -82,7 +92,7 @@ async function authenticatedFetch(endpoint, options = {}) {
     let response = await makeRequest(utils.getCurrentAccessToken());
     console.log(response);
     
-    if (response.status === 403) {
+    if (response.status === 403 || response.status === 401) {
         console.warn('Access Token expirado. Tentando renovar...');
  
         const success = await refreshAccessToken();
