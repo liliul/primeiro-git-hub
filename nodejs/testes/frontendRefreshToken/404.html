@@ -3,11 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Error 403</title>
+    <title>Ops Error</title>
 </head>
 <body>
-    <h1>Ops Sem acesso, Erro 403</h1>
+    <h1>Ops Sem acesso, Erro 404</h1>
 
-    <a href="index.html">votal para o inicio</a>
+    <button 
+        id="erro404"
+        style="padding: 15px;color: white;background-color: rgb(19, 173, 245);border: none;border-radius: 5px;"
+    >
+        votal para o dashboard
+    </button>
+
+    <script type="module">
+        import { utils } from './src/utils.js'
+        const idError404 = document.getElementById('erro404')
+    
+        idError404.addEventListener('click', () => {
+            idError404.setAttribute('disabled', true)
+            idError404.style.opacity = '.5'
+
+            utils.isLoggedIn().checarRefreshToken()
+        })
+    </script>
 </body>
 </html>

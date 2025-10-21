@@ -25,46 +25,46 @@ function clearTokens() {
 }
 
 function isLoggedIn() {
-    // return localStorage.getItem(TOKEN_STORAGE_KEY) !== null;
-    // const token = currentAccessToken;
-    // console.log(token);
-    
-    // if (!token) {
-    //     console.error('token null');
-    //     // window.location.href = 'login.html'
-    // }
+
     function checarRefreshToken() {
-        const token = localStorage.getItem(TOKEN_STORAGE_KEY) !== null;
-        if (token) {
-            redirecionandoPagina(1200, 'home.html');
-        } else {
-            return
-        } 
+        
+        try {
+            const token = localStorage.getItem(ACCESS_TOKEN_KEY);
+            if (!token) return false;
+  
+            const [, payloadBase64] = token.split('.');
+            const payload = JSON.parse(atob(payloadBase64));
+            if (!payload || !payload.role) return false;
+            console.log(payload);
+            
+            switch (payload.role) {
+                case 'user':
+                    redirecionandoPagina(1200, 'user.html');
+                    break;
+                case 'moderador':
+                    redirecionandoPagina(1200, 'home.html')
+                    break
+                case 'admin':
+                    redirecionandoPagina(1200, 'home.html')
+                    break
+                case 'superAdmin':
+                    redirecionandoPagina(1200, 'private.html')                                                                                                                                                                     
+                    break
+                default:
+                    redirecionandoPagina(1000, 'login.html')
+                    break;
+            }
+
+            return true;
+
+        } catch (error) {
+            console.error(error);
+            return false;
+        }
 
     }
 
     async function checkUrl(functionRota) {
-        // const options = {
-        //     method: 'GET',
-        //     headers: {
-        //         'Content-Type': 'application/json',
-        //         'Authorization': `Bearer ${token}`
-        //     }
-        // }
-        // const req = await fetch('http://localhost:8000/user/private', options)
-        // console.log(req);
-        // if (!req.ok) {
-        //     const res = await req.json()
-        //     console.log(res);
-        //     // redirecionandoPagina(1000, 'login.html')
-        // }
-
-        // if (req.ok) {
-        //     // window.location.href = 'home.html'
-        //     // return
-
-        //     redirecionandoPagina(2000, 'home.html')
-        // }
 
         const req = await functionRota()
         if (req.ok) {
