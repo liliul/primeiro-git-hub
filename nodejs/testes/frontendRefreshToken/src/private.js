@@ -1,5 +1,5 @@
 import { utils } from "./utils.js";
-import { rotaPrivada } from "./index.js";
+import { Rota } from "./auth.js";
 import { modalInfoUsuarioLogado } from "./infoUsuario.js";
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 async function checkAuthenticationAndLoadData() {
-    const body = document.getElementById('private-body');
+    const body = document.getElementById('isolate');
 
     if (!utils.getRefreshToken()) {
         utils.clearTokens(); 
@@ -16,7 +16,7 @@ async function checkAuthenticationAndLoadData() {
     }
 
     try {   
-        const protectedData = await rotaPrivada();
+        const protectedData = await Rota('GET', '/private');
 
         if (protectedData) {
            
