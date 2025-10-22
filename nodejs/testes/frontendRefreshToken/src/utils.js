@@ -79,7 +79,17 @@ function isLoggedIn() {
 
 }
 
-function redirecionandoPagina(tempo, pagina) {
+function redirecionandoPagina(tempo, pagina, msgError = null) {
+    if (typeof msgError === 'function') {
+        try {
+            () => {
+                msgError()
+            }
+        } catch (error) {
+            console.log(error);
+        }    
+    }
+    
     return setTimeout(() => {
         window.location.href = pagina
     }, tempo)
