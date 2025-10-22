@@ -109,10 +109,69 @@ function tokenPrestesAexpirar(token) {
     }
 }
 
+/**
+ * Mostra uma mensagem customizada na tela.
+ * @param {string} msg - Texto da mensagem.
+ * @param {boolean} [error=false] - True para estilizar como erro (vermelho).
+ * @param {number} [timeout=4000] - Tempo em ms para auto-fechar. 0 = não fecha automaticamente.
+ */
+function MensagemCustomizada(msg, error = false, timeout = 4000) {
+    if (!msg) return;
+
+    const existing = document.getElementById('id-msg-custom');
+    if (existing) existing.remove();
+
+    const container = document.createElement('div');
+    container.id = 'id-msg-custom';
+    container.setAttribute(
+        'class',
+        'p-4 rounded-lg absolute top-4 right-4 shadow-md bg-white/90 z-50 flex items-center gap-3'
+    );
+    container.style.pointerEvents = 'auto';
+
+    const text = document.createElement('span');
+    text.textContent = msg;
+    text.setAttribute('role', 'status');
+
+    const fechar = document.createElement('button');
+    fechar.type = 'button';
+    fechar.id = 'fechar-msg-custom';
+    fechar.setAttribute('aria-label', 'Fechar mensagem');
+    fechar.textContent = '×';
+    fechar.style.cursor = 'pointer';
+    fechar.style.fontWeight = '700';
+    fechar.style.fontSize = '1rem';
+    fechar.style.lineHeight = '1';
+    fechar.className = 'ml-2 px-2 py-1 rounded';
+
+    if (error) {
+        text.classList.add('text-red-600');
+        container.style.border = '1px solid rgba(239,68,68,0.2)';
+    } else {
+        text.classList.add('text-green-600');
+        container.style.border = '1px solid rgba(34,197,94,0.15)';
+    }
+
+    container.appendChild(text);
+    container.appendChild(fechar);
+
+    document.body.appendChild(container);
+
+    fechar.addEventListener('click', () => {
+        container.remove();
+    });
+
+    if (timeout && typeof timeout === 'number' && timeout > 0) {
+        setTimeout(() => {
+        container.remove();
+        }, timeout);
+    }
+}
+
 function redirecionandoRolesAposLogin() {
     
     try {
-        const token = localStorage.getItem(ACCESS_TOKEN_KEY
+        const token = localStorage.getItem(ACCESS_TOKEN_KEY);
         if (!token) return
 
         const [, payloadBase64] = token.split('.');
@@ -152,5 +211,6 @@ export const utils = {
     redirecionandoPagina,
     getCurrentAccessToken,
     MensagemCustomizada,
-    redirecionandoRolesAposLogin
+    redirecionandoRolesAposLogin,
+    tokenPrestesAexpirar
 }
