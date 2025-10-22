@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 async function checkAuthenticationAndLoadData() {
-    const body = document.getElementById('home-body');
+    const body = document.getElementById('isolate');
 
     if (!utils.getRefreshToken()) {
         utils.clearTokens(); 
@@ -30,7 +30,6 @@ async function checkAuthenticationAndLoadData() {
 
         } else {
             console.error("Falha na autenticação ou carregamento de dados.");
-            // window.location.reload()
         }
         
     } catch (error) {

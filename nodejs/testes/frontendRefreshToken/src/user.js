@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 async function checkAuthenticationAndLoadData() {
-    const body = document.getElementById('user-body');
+    const body = document.getElementById('isolate');
 
     if (!utils.getRefreshToken()) {
         utils.clearTokens(); 
@@ -25,7 +25,11 @@ async function checkAuthenticationAndLoadData() {
                
                 console.log(`Olá, ${protectedData.userName}! Seu ID é ${protectedData.userId}.`);
 
-                modalInfoUsuarioLogado(protectedData)              
+                modalInfoUsuarioLogado(protectedData)   
+                document.getElementById('welcome-message').textContent = `Ola, ${protectedData.userName}!`;
+                document.getElementById('user-full-name').textContent = protectedData.userName;
+                document.getElementById('user-email').textContent = protectedData.userEmail;
+                document.getElementById('user-id').textContent = protectedData.userId;
             }
 
         } else {
