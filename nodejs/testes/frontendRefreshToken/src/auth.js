@@ -150,10 +150,10 @@ async function authenticatedFetch(endpoint, options = {}) {
     return response;
 }
 
-export async function Rota(metedo, caminho) {
+export async function Rota(method, caminho) {
     try {
         const response = await authenticatedFetch(caminho, {
-            method: metedo
+            method: method
         });
 
         if (response.ok) {

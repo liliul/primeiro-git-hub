@@ -30,10 +30,10 @@ async function refreshAccessToken() {
         if (response.ok) {
             
             utils.saveTokens(data.accessToken, data.refreshToken);
-            // console.log('Tokens renovados com sucesso!');
+            console.log('Tokens renovados com sucesso!');
             return true;
         } else {
-           
+
             console.error('Falha na renovação dos tokens:', data.message);
             utils.clearTokens(); 
             alert('Sua sessão expirou. Por favor, faça login novamente.');
@@ -105,16 +105,31 @@ async function authenticatedFetch(endpoint, options = {}) {
             response = await makeRequest(accessTokenLocalStorage);
             console.log('novo response: ', response);
             
-            if (response.ok) {
-                setTimeout(() => {
-                    console.log('atualizar token reaload...');
-                    
-                    // window.location.reload()
-                }, 1000)
-            }else {
-                console.log('sem reload');
-                
+            switch (response.status) {
+                case 200:
+                    console.log('token atualizado como sucesso...');
+                    utils.MensagemCustomizada('token atualizado como sucesso...', false, 0)
+                    break
+                case 401:
+                    utils.MensagemCustomizada(response.statusText, true, 0)
+                    // utils.clearTokens()
+                    utils.redirecionandoPagina(1000, 'login.html')
+                    break;
+                case 403:
+                    utils.redirecionandoPagina(1000, '404.html')
+                    break
+                case 404:
+                    utils.redirecionandoPagina(1000, '404.html')
+                    break
+                case 500:
+                    utils.redirecionandoPagina(1000, '404.html')
+                    break
+                default:
+                    console.log('sem reload');
+                    utils.redirecionandoPagina(1000, '404.html')
+                break;
             }
+            
         } else {
             
             return response;
@@ -138,7 +153,30 @@ export async function getProtectedData() {
         
         const errorData = await response.json();
         console.error('Falha ao obter dados protegidos:', errorData.error);
-      
+        
+        return null;
+
+    } catch (error) {
+        console.error('Erro na requisição protegida:', error);
+        return null;
+    }
+}
+
+export async function rotaPrivada() {
+    try {
+        const response = await authenticatedFetch('/private', {
+            method: 'GET'
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            console.log('Dados protegidos:', data);
+            return data;
+        } 
+        
+        const errorData = await response.json();
+        console.error('Falha ao obter dados protegidos:', errorData.error);
+
         return null;
 
     } catch (error) {
