@@ -108,36 +108,36 @@ async function authenticatedFetch(endpoint, options = {}) {
                     utils.MensagemCustomizada('token atualizado como sucesso...', false, 0)
                     break
                 case 401:
-                    utils.clearTokens()
-                    utils.redirecionandoPagina(3000, 'login.html', 
+                    utils.redirecionandoPagina(3000, 'views/err/401.html', 
                         utils.MensagemCustomizada(`Erro ${response.statusText} ${response.status} usuario não estar autenticado.`, 
                             true, 2900
                         )
                     )
                     break;
                 case 403:
-                    utils.redirecionandoPagina(3000, '404.html', 
+                    utils.redirecionandoPagina(3000, 'views/err/403.html', 
                         utils.MensagemCustomizada(`Erro ${response.statusText} ${response.status} sem permissão para acessar essa pagina.`, 
                             true, 2900
                         )
                     )
                     break
                 case 404:
-                    utils.redirecionandoPagina(3000, '404.html', 
+                    utils.redirecionandoPagina(3000, 'views/err/404.html', 
                         utils.MensagemCustomizada(`Erro ${response.statusText} ${response.status} não encontrado.`, 
                             true, 2900
                         )
                     )
                     break
                 case 500:
-                    utils.redirecionandoPagina(3000, '404.html', 
+                    utils.redirecionandoPagina(3000, 'views/err/500.html', 
                         utils.MensagemCustomizada(`Erro ${response.statusText} ${response.status} Erro interno do servidor.`, 
                             true, 2900
                         )
                     )
                     break
                 default:
-                    utils.redirecionandoPagina(1000, '404.html')
+                    utils.clearTokens()
+                    utils.redirecionandoPagina(1000, 'login.html')
                 break;
             }
             

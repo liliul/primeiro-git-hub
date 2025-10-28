@@ -202,7 +202,7 @@ function redirecionandoRolesAposLogin() {
                 redirecionandoPagina(1200, 'home.html')                                                                                                                                                                     
                 break
             default:
-                redirecionandoPagina(1200, '404.html')
+                redirecionandoPagina(1200, 'login.html')
                 break;
         }
 
