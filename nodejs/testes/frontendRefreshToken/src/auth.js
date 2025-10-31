@@ -159,6 +159,7 @@ export async function Rota(method, caminho) {
         if (response.ok) {
             const data = await response.json();
             console.log('Dados protegidos:', data);
+            utils.MensagemCustomizada(data.message, false, 5000)
             return data;
         } 
         
