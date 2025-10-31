@@ -11,11 +11,8 @@ router.get('/home', authenticateToken, UsuarioRoles('user', 'moderador', 'admin'
     if (!req.user?.id) {
         console.log(req.user?.id);
         
-        return res.status(401).json({ message: "Usuário não autenticado após middleware." });
+        return res.status(401).json({ message: "Usuário sem autorização." });
     }
-    // if (!req.user?.email) {
-    //     return res.status(401).json({ message: "Usuário não autenticado após middleware." });
-    // }
 
     const userId = req.user.id;
     const userEmail = req.user.email;
