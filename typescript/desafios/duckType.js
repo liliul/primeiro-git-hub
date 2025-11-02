@@ -15,4 +15,6 @@ var nubanck = {
 var stripe = {
     processarPagamento: function () { console.log('processarPagamento via STRIPE'); }
 };
+processarPagamento(stripe);
 processarPagamento(pix);
+processarPagamento(nubanck);

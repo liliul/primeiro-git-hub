@@ -1,4 +1,8 @@
-function processarPagamento(tipo) {
+interface Processamento {
+	processarPagamento: () => void
+}
+
+function processarPagamento(tipo: Processamento) {
 	if (tipo.processarPagamento) {
 		tipo.processarPagamento()
 	}else {
@@ -18,4 +22,6 @@ const stripe = {
 	processarPagamento: () => {console.log('processarPagamento via STRIPE')}
 }
 
+processarPagamento(stripe)
 processarPagamento(pix)
+processarPagamento(nubanck)
