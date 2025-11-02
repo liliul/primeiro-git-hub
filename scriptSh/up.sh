@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# chmod +x up.sh
+
 # Exemplo: ./up.sh -r
 # $1 representa o primeiro parâmetro passado
 
@@ -41,6 +43,14 @@ echo "☁️ Copiado para Dropbox: $PASTA_DROPBOX/$ARQUIVO_ZIP"
 
 # Limpar .zip antigos (ex: com mais de 5 dias)
 # find "$PASTA_DROPBOX" -name "estudos-*.zip" -type f -mtime +5 -delete
-
+if [ "$1" == "-r" ]; then
+    echo "Removendo arquivo... $PASTA_DROPBOX"
+    find "$PASTA_DROPBOX" -type f -name "estudos-*.zip" -exec rm -v {} \;
+    echo "Arquivo removido!"
+else
+    echo "Uso: ./up.sh -r"
+    echo "Opções disponíveis:"
+    echo "  -r    remove o arquivo teste.txt"
+fi
 # crontab
 # MINUTO  HORA  DIA_DO_MÊS  MÊS  DIA_DA_SEMANA  COMANDO
