@@ -1,26 +1,11 @@
 #!/bin/bash
 
+# configs
 # chmod +x up.sh
+# crontab
+# MINUTO  HORA  DIA_DO_MÊS  MÊS  DIA_DA_SEMANA  COMANDO
 
-# Exemplo: ./up.sh -r
-# $1 representa o primeiro parâmetro passado
-
-# if [ "$1" == "-r" ]; then
-#     echo "Removendo arquivo..."
-#     rm -f portifoliozip.zip
-#     echo "Arquivo removido!"
-# else
-#     echo "Uso: ./up.sh -r"
-#     echo "Opções disponíveis:"
-#     echo "  -r    remove o arquivo teste.txt"
-# fi
-
-
-# Caminhos
-# PASTA_ORIGEM="$HOME/Documentos/obsidiancofre/estudos"
-# PASTA_DESTINO="$HOME/Documentos/obsidiancofre"
-# PASTA_DROPBOX="$HOME/Dropbox/test-gui-drop/obsidianCofre"
-
+# variaveis
 PASTA_ORIGEM="/home/liliu/Documentos/obsidiancofre/estudos"
 PASTA_DESTINO="/home/liliu/Documentos/obsidiancofre"
 PASTA_DROPBOX="/home/liliu/Dropbox/test-gui-drop/obsidianCofre"
@@ -47,10 +32,4 @@ if [ "$1" == "-r" ]; then
     echo "Removendo arquivo... $PASTA_DROPBOX"
     find "$PASTA_DROPBOX" -type f -name "estudos-*.zip" -exec rm -v {} \;
     echo "Arquivo removido!"
-else
-    echo "Uso: ./up.sh -r"
-    echo "Opções disponíveis:"
-    echo "  -r    remove o arquivo teste.txt"
 fi
-# crontab
-# MINUTO  HORA  DIA_DO_MÊS  MÊS  DIA_DA_SEMANA  COMANDO
