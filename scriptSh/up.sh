@@ -40,3 +40,11 @@ else
     echo "✅ Arquivo criado em: $PASTA_DESTINO/$ARQUIVO_ZIP"
     echo "☁️ Copiado para Dropbox: $PASTA_DROPBOX/$ARQUIVO_ZIP"
 fi
+
+if [ "$1" == "-h" ] || [ "$1" == "--help" ]; then
+    echo "Uso: up [opção]"
+    echo "   sem parâmetro  -> cria backups"
+    echo "   -r             -> remove backups antigos"
+    exit 0
+fi
+
