@@ -1,5 +1,5 @@
 import { utils } from "./utils.js";
-import { getProtectedData } from "./index.js";
+import { Rota } from "./auth.js";
 import { modalInfoUsuarioLogado } from "./infoUsuario.js";
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -16,7 +16,7 @@ async function checkAuthenticationAndLoadData() {
     }
 
     try {   
-        const protectedData = await getProtectedData();
+        const protectedData = await Rota('GET', '/home');
 
         if (protectedData) {
            

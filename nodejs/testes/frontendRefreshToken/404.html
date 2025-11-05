@@ -18,12 +18,13 @@
     <script type="module">
         import { utils } from './src/utils.js'
         const idError404 = document.getElementById('erro404')
-    
+        const utilsIsLoggedIn = utils.isLoggedIn()
+
         idError404.addEventListener('click', () => {
             idError404.setAttribute('disabled', true)
             idError404.style.opacity = '.5'
 
-            utils.isLoggedIn().checarRefreshToken()
+            utilsIsLoggedIn.checarRefreshToken()
         })
     </script>
 </body>
