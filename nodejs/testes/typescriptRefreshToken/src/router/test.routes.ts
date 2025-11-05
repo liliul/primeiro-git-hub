@@ -58,5 +58,28 @@ router.get('/private', authenticateToken, UsuarioRoles('admin', 'superAdmin'), a
     });
 })
 
+router.get('/me', authenticateToken, UsuarioRoles('user', 'moderador', 'admin', 'superAdmin'), async (req: Request, res: Response) => {
+
+   try {
+        const userName = req.user 
+        if (!userName) {
+            return res.status(404).json({ error: "req user" });
+        }
+        return res.json({ 
+            message: "Dados rota me",
+            userName: userName.name,
+            userEmail: userName.email,
+            userId: userName.id,
+            userRole: userName.role,
+            dataHora: new Date()
+        });
+        
+   } catch (error) {
+        console.error('me endpoint error');
+        return res.status(404).json({ error: "me endpoint" });
+   }
+})
+
+
 
 export default router
