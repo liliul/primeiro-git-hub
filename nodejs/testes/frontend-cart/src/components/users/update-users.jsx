@@ -12,6 +12,7 @@ const updateUserShema = z.object({
 export function UpdateUsers({ id, name, onUpdated }) {
     const [isShowPassword, setIsShowPassword] = useState(false)
     const { user } = useAuth()
+    const [error, setError] = useState(null)
 
     const {register, handleSubmit, formState: {errors, isSubmitting}} = useForm({
         resolver: zodResolver(updateUserShema),
@@ -33,6 +34,8 @@ export function UpdateUsers({ id, name, onUpdated }) {
             }
 
             const req = await fetch(`http://localhost:3001/v1/update-users/${id}`, options)
+            if (req.status === 403) setError(req.status)
+            
             if (req.ok) {
               const res = await req.json()
               console.log(res)
@@ -60,7 +63,12 @@ export function UpdateUsers({ id, name, onUpdated }) {
 
     return (
         <>
-            <h1>Atualizar produto</h1>
+            <div>
+                {error && (
+                    <h3 className='text-red-600'>Erro {error} sem autorização.</h3>
+                )}
+            </div>
+
             <div className="p-2 w-[800px] grid grid-cols-2 gap-3 place-items-center mx-auto bg-white rounded-lg shadow-lg overflow-hidden m-4">
                 <form onSubmit={handleSubmit(onSubmitUpdateUsers)} className="text-black">
                     <div>
