@@ -2,11 +2,13 @@ import { useForm } from "react-hook-form"
 import { useAuth } from "../../context/auth/useAuth"
 import { useEffect, useState } from "react"
 import { Checkout } from "../checkout/checkout"
+import { useProducts } from "../../context/cart/productsListContent"
 
 export function ListCart() {
   const [dados, setDados] = useState([])
   const { user } = useAuth()
   const { register, setValue, formState: { errors } } = useForm()
+  const { products } = useProducts()
 
   async function onSubmitGetCart() {
     try {
@@ -91,7 +93,16 @@ export function ListCart() {
           console.error(error)
         }
   }
-  console.log(dados);
+
+  function maxStockProduct(idProduct) {
+    const checkIdProductStock = products.find((item) => item.id === idProduct)
+    if (!checkIdProductStock) {
+      console.log("produto não encontrado")
+      return null
+    }
+
+    return checkIdProductStock.stock
+  }
   
   return (
     <section className={`cart-menu w-[450px] p-3 absolute top-9 bg-[#191919] z-50`}>
@@ -113,8 +124,11 @@ export function ListCart() {
                 <small>R$ {item.price}</small>
               </div>
 
-            <input 
+              <input 
                 type="number" 
+                min="1"
+                max={maxStockProduct(item.product_id)}
+                onKeyDown={(e) => e.preventDefault()}
                 id={`quantity-${item.item_id}`} 
                 {...register(`quantity-${item.item_id}`)} 
                 defaultValue={item.quantity}
