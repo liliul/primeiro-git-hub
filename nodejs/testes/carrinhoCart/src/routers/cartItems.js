@@ -17,7 +17,7 @@ routerCartItems.get('/list-cart-items/:id', async (req, res) => {
 
     try {
         const cart = await db.query(
-        `SELECT ci.id as item_id, p.name, p.price, ci.quantity,
+        `SELECT ci.id as item_id, p.id as product_id, p.name, p.price, ci.quantity,
                 (p.price * ci.quantity) as subtotal
         FROM cart_items ci
         JOIN carts c ON ci.cart_id = c.id
@@ -33,11 +33,28 @@ routerCartItems.get('/list-cart-items/:id', async (req, res) => {
     }
 })
 
-routerCartItems.put("/update-cart-items/:idItems", async (req, res) => {
-  const { idItems } = req.params;
-  const { quantity } = req.body;
+routerCartItems.put("/update-cart-items/:idItems/:idProduct", async (req, res) => {
 
   try {
+    const { idItems, idProduct } = req.params;
+    const { quantity } = req.body;
+    
+    const selectProductStock = await db.query(`
+      select stock from products where id = $1      
+    `, [idProduct])
+
+    if (selectProductStock.rowCount === 0) {
+      return res.status(404).json({ error: "Item não encontrado no stock" });
+    }
+
+    const quantidade = Number(quantity)
+    const stock = Number(selectProductStock.rows[0].stock)
+    
+    if (quantidade > stock) {
+      res.status(400).json({ error: "Tem mais quantidade de produto do que no stock" })
+      return
+    }
+   
     const result = await db.query(
       "UPDATE cart_items SET quantity = $1 WHERE id = $2 RETURNING *",
       [quantity, idItems]
@@ -47,7 +64,7 @@ routerCartItems.put("/update-cart-items/:idItems", async (req, res) => {
       return res.status(404).json({ error: "Item não encontrado" });
     }
 
-    res.json(result.rows[0]);
+    res.status(200).json({ message: result.rows[0] });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Erro ao atualizar item" });
