@@ -33,7 +33,7 @@ export function ListCart() {
     }
   }
 
-  async function updateQuantity(itemId, newQuantity) { 
+  async function updateQuantity(itemId, productId, newQuantity) { 
     try {
       const options = {
         method: 'PUT',
@@ -44,7 +44,14 @@ export function ListCart() {
         body: JSON.stringify({ itemId, quantity: newQuantity })
       }
 
-      const req = await fetch(`http://localhost:3001/v3/update-cart-items/${itemId}`, options)
+      const req = await fetch(`http://localhost:3001/v3/update-cart-items/${itemId}/${productId}`, options)
+      if (!req.ok) {
+        const res = await req.json()
+        console.log(res.error);
+        alert(`${res.error}`)
+        
+        return
+      }
       if (req.ok) {
         const res = await req.json()
         console.log("Atualizado:", res)
@@ -84,6 +91,8 @@ export function ListCart() {
           console.error(error)
         }
   }
+  console.log(dados);
+  
   return (
     <section className={`cart-menu w-[450px] p-3 absolute top-9 bg-[#191919] z-50`}>
       <h1>Carrinho</h1>
@@ -109,7 +118,7 @@ export function ListCart() {
                 id={`quantity-${item.item_id}`} 
                 {...register(`quantity-${item.item_id}`)} 
                 defaultValue={item.quantity}
-                onChange={(e) => updateQuantity(item.item_id, parseInt(e.target.value))}
+                onChange={(e) => updateQuantity(item.item_id, item.product_id, parseInt(e.target.value))}
                 className="border rounded px-2 py-1 w-20"
               />
               {errors[`quantity-${item.item_id}`] && (
