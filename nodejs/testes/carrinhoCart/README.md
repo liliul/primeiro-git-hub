@@ -28,6 +28,16 @@ docker exec -it meu_postgres psql -U root -d <nomeDobanco>
 
 ```
 
+configurar .env
+
+```bash
+# .env.example
+
+JWT_SECRET="chave secreta ex: com bcrypt"
+JWT_EXPIRES="tempo para expirar token"
+
+```
+
 rotas
 
 ```bash
