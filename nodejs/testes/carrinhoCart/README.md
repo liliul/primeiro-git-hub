@@ -12,6 +12,10 @@ docker run --name meu_postgres \
 
 docker exec -it meu_postgres psql -U root -d <nomeDobanco>
 
+# entra na db
+
+\c nomeDobanco
+
 # ver tabelas
 
 \dt
