@@ -7,24 +7,72 @@ const routeCarts = express.Router()
 
 /**
  * @swagger
- * /cart:
+ * /create-carts-users/{id}:
  *   post:
- *     summary: Adicionar produto ao carrinho
- *     description: Adiciona um produto ao carrinho do usuário
+ *     tags:
+ *       - Carts
+ *     summary: Cria ou atualiza o carrinho do usuário
+ *     description: >
+ *       Cria um carrinho para o usuário caso não exista e adiciona um produto ao carrinho.
+ *       Se o produto já existir no carrinho, a quantidade será somada.
+ *
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: ID do usuário (UUID)
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
  *             type: object
+ *             required:
+ *               - productId
+ *               - quantity
  *             properties:
  *               productId:
  *                 type: string
+ *                 format: uuid
+ *                 example: "7f26f090-e1fb-4a83-a228-a36a3b7d88f0"
  *               quantity:
  *                 type: integer
+ *                 minimum: 1
+ *                 example: 2
+ *
  *     responses:
  *       200:
- *         description: Produto adicionado
+ *         description: Produto adicionado ao carrinho
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Create carts ok"
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/CartItem'
+ *
+ *       400:
+ *         description: Erro de estoque ou validação
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorMessage'
+ *
+ *       404:
+ *         description: Produto não encontrado
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorMessage'
  */
 
 routeCarts.post('/create-carts-users/:id', AuthorizationJwt, async (req, res) => {
@@ -78,6 +126,45 @@ routeCarts.post('/create-carts-users/:id', AuthorizationJwt, async (req, res) =>
     res.status(200).json({ message: 'Create carts ok', data: item.rows })    
 })
 
+/**
+ * @swagger
+ * /list-carts/{id}:
+ *   get:
+ *     summary: Lista os carrinhos de um usuário
+ *     tags: [Carts]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID do usuário
+ *     responses:
+ *       200:
+ *         description: Lista de carrinhos do usuário
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: ok
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/CartList'
+ * 
+ *       401:
+ *         description: Não autorizado
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorMessage'
+ */
+
 routeCarts.get('/list-carts/:id', AuthorizationJwt, async (req, res) => {
     const { id } = req.params
 
@@ -91,6 +178,45 @@ routeCarts.get('/list-carts/:id', AuthorizationJwt, async (req, res) => {
     res.status(200).json({ message: 'ok', data: listCarts.rows })
 })
 
+/**
+ * @swagger
+ * /list-carts/:
+ *   get:
+ *     summary: Lista todos os carrinhos
+ *     tags: [Carts]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Lista de todos os carrinhos
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: ok
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/CartList'
+ *
+ *       401:
+ *         description: Token inválido ou ausente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorMessage'
+ *
+ *       403:
+ *         description: Acesso negado (não é admin)
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorMessage'
+ */
+
 routeCarts.get('/list-carts/', AuthorizationJwt, authRoles.isAdmin, async (req, res) => {
     const listCarts = await db.query(`
         select * from carts`
@@ -99,6 +225,58 @@ routeCarts.get('/list-carts/', AuthorizationJwt, authRoles.isAdmin, async (req, 
     res.status(200).json({ message: 'ok', data: listCarts.rows })
 })
 
+/**
+ * @swagger
+ * /delete-carts/{id}:
+ *   delete:
+ *     summary: Deleta um carrinho pelo ID
+ *     tags: [Carts]
+ *     security:
+ *       - bearerAuth: []
+ *
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *         description: ID do carrinho a ser deletado
+ *
+ *     responses:
+ *       200:
+ *         description: Carrinho deletado com sucesso
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Deletado com sucesso ok"
+ *
+ *       400:
+ *         description: Erro ao deletar carrinho
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorMessage'
+ *
+ *       401:
+ *         description: Token ausente ou inválido
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorMessage'
+ *
+ *       403:
+ *         description: Acesso negado (usuário não possui permissão)
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorMessage'
+ */
+
 routeCarts.delete('/delete-carts/:id', AuthorizationJwt, authRoles.isAuthenticated, async (req, res) => {
     const { id } = req.params
 
@@ -106,7 +284,7 @@ routeCarts.delete('/delete-carts/:id', AuthorizationJwt, authRoles.isAuthenticat
         delete from carts where id = $1;
     `, [id])
 
-    if (!deleteProducts) {
+    if (deleteProducts.rowCount === 0) {
         return res.status(400).json({ message: 'erro no delete' })
     }
 

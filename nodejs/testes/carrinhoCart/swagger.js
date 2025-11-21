@@ -9,13 +9,22 @@ const options = {
       version: "1.0.0",
       description: "API para gerenciar usuários, produtos, carrinho e pedidos",
     },
+    components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: "http",
+          scheme: "bearer",
+          bearerFormat: "JWT",
+        },
+      },
+    },
     servers: [
       {
-        url: "http://localhost:3000/api", // ajuste se precisar
+        url: "http://localhost:3001/docs",
       },
     ],
   },
-  apis: ["./src/routers/cart.js"], // arquivos onde você vai documentar as rotas
+  apis: ["./src/docs/swaggerSchemas.js","./src/routers/cart.js","./src/routers/users.js"],
 };
 
 const swaggerSpec = swaggerJSDoc(options);
