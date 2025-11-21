@@ -15,7 +15,7 @@ app.use(cors({
     credentials: true,
   }))
 
-app.use('/docs', swaggerUiMiddleware.serve, swaggerUiMiddleware.setup(swaggerSpec));
+app.use("/docs", swaggerUiMiddleware.serve, swaggerUiMiddleware.setup(swaggerSpec));
 
 app.use("/auth", authRoutes);
 app.use("/user/", userRoutes)
