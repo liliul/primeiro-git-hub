@@ -1,6 +1,7 @@
 import { z } from 'zod'
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { useNavigate } from 'react-router-dom'
 
 const registerSchema = z.object({
    name: z.string()
@@ -14,6 +15,7 @@ function Register() {
     const { register, handleSubmit, formState: { errors, isSubmitting  } } = useForm({
         resolver: zodResolver(registerSchema),
     })
+    const navigation = useNavigate()
 
     const onSubmit = async (data) => {
         console.log("Dados do formulário:", data);
@@ -35,6 +37,8 @@ function Register() {
             const res = await req.json()
 
             console.log(res)
+
+            navigation("/login")
         } catch (error) {
             console.error(error)
         } 
@@ -57,7 +61,7 @@ function Register() {
                     >Name:</label>
 
                     <input
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-150 ease-in-out" 
+                        className="w-full px-4 text-gray-800 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-150 ease-in-out" 
                         id="name" 
                         type="name" 
                         {...register("name")} 
@@ -73,7 +77,7 @@ function Register() {
                     >Email:</label>
 
                     <input
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-150 ease-in-out" 
+                        className="w-full px-4 text-gray-800 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-150 ease-in-out" 
                         id="email" 
                         type="email" 
                         {...register("email")} 
@@ -88,7 +92,7 @@ function Register() {
                         htmlFor="password"
                     >Senha:</label>
                     <input
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-150 ease-in-out" 
+                        className="w-full px-4 text-gray-800 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-150 ease-in-out" 
                         id="password" 
                         type="password" 
                         {...register("password")} 

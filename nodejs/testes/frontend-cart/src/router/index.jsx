@@ -22,7 +22,7 @@ export function AppRoutes() {
             <Routes>
             <Route path="/" element={<Layout />} >
               <Route index element={<ListandoProdutos />} />
-              <Route path='register' element={<Register />} />
+              <Route path='/register' element={<Register />} />
               <Route path='/login' element={<Login /> } /> 
               <Route path='/teste' element={<TestandoContext /> } />
 
