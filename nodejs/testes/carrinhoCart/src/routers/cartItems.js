@@ -13,24 +13,39 @@ routerCartItems.get('/list-cart-items', async (req, res) => {
 })
 
 routerCartItems.get('/list-cart-items/:id', async (req, res) => {
+  try {
     const { id } = req.params
 
-    try {
-        const cart = await db.query(
-        `SELECT ci.id as item_id, p.id as product_id, p.name, p.price, ci.quantity,
-                (p.price * ci.quantity) as subtotal
-        FROM cart_items ci
-        JOIN carts c ON ci.cart_id = c.id
-        JOIN products p ON ci.product_id = p.id
-        WHERE c.user_id = $1`,
-        [id]
-        );
-
-        res.json(cart.rows);
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ error: "Erro ao listar carrinho" });
+    if (!id) {
+      return res.status(400).json({
+        message: "ID ausente",
+        err: `id recebido: ${id}`
+      });
     }
+
+    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
+    if (!uuidRegex.test(id)) {
+      return res.status(400).json({
+        message: 'ID inválido para listar cart items',
+        err: `id que você enviou: ${id}`
+      })
+    }
+
+    const cart = await db.query(
+    `SELECT ci.id as item_id, p.id as product_id, p.name, p.price, ci.quantity,
+            (p.price * ci.quantity) as subtotal
+    FROM cart_items ci
+    JOIN carts c ON ci.cart_id = c.id
+    JOIN products p ON ci.product_id = p.id
+    WHERE c.user_id = $1`,
+    [id]
+    );
+
+    res.json(cart.rows);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Erro ao listar carrinho" });
+  }
 })
 
 routerCartItems.put("/update-cart-items/:idItems/:idProduct", async (req, res) => {
