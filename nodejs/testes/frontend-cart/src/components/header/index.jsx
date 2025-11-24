@@ -19,7 +19,9 @@ export function Header() {
             <header className="h-8 w-full bg-white flex items-center justify-between pl-5 pr-5">
                 <div>
                    <Tooltip text="Logo do Cart">
-                     <div className="h-[23px] w-[23px] bg-gray-500 rounded-[6px]"></div>
+                     <Link to="/">
+                        <div className="h-[23px] w-[23px] bg-gray-500 rounded-[6px]"></div>
+                     </Link>
                    </Tooltip>
                 </div>
 
@@ -59,9 +61,15 @@ export function Header() {
                             </span>
                         </div>
                     ) : (
-                        <button className="text-black">
-                            <Link to="/login">Login</Link>
-                        </button>
+                        <div className="flex items-center gap-3">
+                            <button className="text-black">
+                                <Link to="/register">Register</Link>
+                            </button>
+                            
+                            <button className="text-black">
+                                <Link to="/login">Login</Link>
+                            </button>
+                        </div>
                     )}
                 </div>
             </header>

@@ -14,14 +14,15 @@ import { DashboardSuperAdmin } from '../pages/dashboard/Administrations/superAdm
 import { AddRoles } from '../components/superAdmin/add-roles'
 import { AppProviders } from '../context/providers'
 import { OrdersPaginando } from '../components/cart/orders/cursor'
+import { ListandoProdutos } from '../pages/home/listandoProductsUsers'
 
 export function AppRoutes() {
     return (
         <AppProviders>
             <Routes>
             <Route path="/" element={<Layout />} >
-              <Route index element={<Register />} />
-
+              <Route index element={<ListandoProdutos />} />
+              <Route path='register' element={<Register />} />
               <Route path='/login' element={<Login /> } /> 
               <Route path='/teste' element={<TestandoContext /> } />
 
