@@ -1,6 +1,7 @@
 import { z } from 'zod'
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { useAuth } from '../../../context/auth/useAuth'
 
 const loginShema = z.object({
     email: z.string().email({ error: 'Email invalido'}),
@@ -11,6 +12,7 @@ function Login() {
     const { register, handleSubmit, formState: { errors, isSubmitting}} = useForm({
         resolver: zodResolver(loginShema),
     })
+    const { login } = useAuth()
 
     const onSubmit = async (data) => {
         console.log("Dados do formulário:", data);
@@ -31,7 +33,8 @@ function Login() {
 
             const res = await req.json()
 
-            localStorage.setItem('token', res.token)
+            // localStorage.setItem('token', res.token)
+            login(res.token)
             
             console.log(res)
 
