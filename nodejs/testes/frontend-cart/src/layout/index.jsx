@@ -5,7 +5,7 @@ export default function Layout() {
   return (
     <>
       <Header />
-      <main className="w-full h-[100vh] grid place-items-center">
+      <main>
         <Outlet /> 
       </main>
     </>

@@ -2,6 +2,7 @@ import { z } from 'zod'
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useAuth } from '../../../context/auth/useAuth'
+import { useNavigate } from 'react-router-dom'
 
 const loginShema = z.object({
     email: z.string().email({ error: 'Email invalido'}),
@@ -13,6 +14,7 @@ function Login() {
         resolver: zodResolver(loginShema),
     })
     const { login } = useAuth()
+    const navigation = useNavigate()
 
     const onSubmit = async (data) => {
         console.log("Dados do formulário:", data);
@@ -33,11 +35,10 @@ function Login() {
 
             const res = await req.json()
 
-            // localStorage.setItem('token', res.token)
             login(res.token)
             
             console.log(res)
-
+            navigation("/")
         } catch (error) {
             console.error(error)
         } 
@@ -45,55 +46,57 @@ function Login() {
 
     return (
         <>
-            <form 
-                className="bg-white p-8 rounded-xl shadow-2xl w-full max-w-md space-y-6"
-                onSubmit={handleSubmit(onSubmit)}>
-                <h2 className="text-3xl font-bold text-center text-gray-800">
-                    Login
-                </h2>
-                <div className="space-y-2">
-                    <label
-                        className="block text-sm font-medium text-gray-700" 
-                        htmlFor="email"
-                    >Email:</label>
-                    <input 
-                        className="w-full px-4 text-gray-800 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-150 ease-in-out" 
-                        type="email" 
-                        name='email' 
-                        id="email" 
-                        {...register("email")} 
-                    />
-                    {errors.email && <p className="text-sm text-red-600 mt-1">{errors.email.message}</p>}
-                </div>
-                <div>
-                    <label
-                        className="block text-sm font-medium text-gray-700" 
-                        htmlFor="password">Senha:</label>
-                    <input 
-                        className="w-full px-4 text-gray-800 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-150 ease-in-out" 
-                        type="password" 
-                        name="password" 
-                        id="password" 
-                        {...register("password")} 
-                    />
-                    {errors.password && <p className="text-sm text-red-600 mt-1">{errors.password.message}</p>}
-                </div>
+            <section className="w-full h-[100vh] grid place-items-center">
+                <form 
+                    className="bg-white p-8 rounded-xl shadow-2xl w-full max-w-md space-y-6"
+                    onSubmit={handleSubmit(onSubmit)}>
+                    <h2 className="text-3xl font-bold text-center text-gray-800">
+                        Login
+                    </h2>
+                    <div className="space-y-2">
+                        <label
+                            className="block text-sm font-medium text-gray-700" 
+                            htmlFor="email"
+                        >Email:</label>
+                        <input 
+                            className="w-full px-4 text-gray-800 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-150 ease-in-out" 
+                            type="email" 
+                            name='email' 
+                            id="email" 
+                            {...register("email")} 
+                        />
+                        {errors.email && <p className="text-sm text-red-600 mt-1">{errors.email.message}</p>}
+                    </div>
+                    <div>
+                        <label
+                            className="block text-sm font-medium text-gray-700" 
+                            htmlFor="password">Senha:</label>
+                        <input 
+                            className="w-full px-4 text-gray-800 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-150 ease-in-out" 
+                            type="password" 
+                            name="password" 
+                            id="password" 
+                            {...register("password")} 
+                        />
+                        {errors.password && <p className="text-sm text-red-600 mt-1">{errors.password.message}</p>}
+                    </div>
 
-                <div>
-                    <button
-                        className={`
-                            w-full py-2 px-4 rounded-lg font-semibold transition duration-150 ease-in-out
-                            ${isSubmitting 
-                                ? 'bg-indigo-400 cursor-not-allowed' 
-                                : 'bg-indigo-600 hover:bg-indigo-700 text-white shadow-lg'
-                            }
-                        `} 
-                        type='submit' 
-                        disabled={isSubmitting}>
-                        {isSubmitting ? 'Enviando...' : 'Entrar'}
-                    </button>
-                </div>
-            </form>
+                    <div>
+                        <button
+                            className={`
+                                w-full py-2 px-4 rounded-lg font-semibold transition duration-150 ease-in-out
+                                ${isSubmitting 
+                                    ? 'bg-indigo-400 cursor-not-allowed' 
+                                    : 'bg-indigo-600 hover:bg-indigo-700 text-white shadow-lg'
+                                }
+                            `} 
+                            type='submit' 
+                            disabled={isSubmitting}>
+                            {isSubmitting ? 'Enviando...' : 'Entrar'}
+                        </button>
+                    </div>
+                </form>
+            </section>
         </>
     )
 }
