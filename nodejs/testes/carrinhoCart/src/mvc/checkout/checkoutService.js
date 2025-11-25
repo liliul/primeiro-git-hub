@@ -22,6 +22,10 @@ class CheckoutService {
             throw new AppError("stock de produto vazios", 404)
         }
         
+        if (cart.rows[0].quantity < 1) {
+            throw new AppError("quantidade de items 0")
+        }
+        
         if (cart.rows[0].quantity > productStock.rows[0].stock) {
             throw new AppError(`Quantidade (${cart.rows[0].quantity}) maior que o estoque disponível (${productStock.rows[0].stock})`, 
                 400
