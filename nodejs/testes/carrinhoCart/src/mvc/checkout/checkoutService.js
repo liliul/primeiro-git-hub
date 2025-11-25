@@ -1,4 +1,5 @@
 import CheckoutRepository from "./checkoutRepository.js"
+import { AppError } from "../../error/AppError.js"
 
 class CheckoutService {
     constructor(db) {
@@ -10,9 +11,22 @@ class CheckoutService {
     async checkoutService(userId) {
         const cart = await this.checkoutRepository.checkoutCart(userId)
         
-         if (cart.rows.length === 0) {
-                throw new Error("Carrinho vazio")
-            }
+        if (cart.rows.length === 0) {
+            throw new AppError("Carrinho vazio", 400)
+        }
+
+        const idProduct = cart.rows[0].id 
+        const productStock = await this.checkoutRepository.productStock(idProduct)
+
+        if (productStock.rows.length === 0) {
+            throw new AppError("stock de produto vazios", 404)
+        }
+        
+        if (cart.rows[0].quantity > productStock.rows[0].stock) {
+            throw new AppError(`Quantidade (${cart.rows[0].quantity}) maior que o estoque disponível (${productStock.rows[0].stock})`, 
+                400
+            )
+        }
 
         const total = cart.rows.reduce((sum, item) => sum + item.price * item.quantity,0)
 

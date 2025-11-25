@@ -49,6 +49,12 @@ class CheckoutRepository {
             [paid, ordersId]
         )
     }
+
+    async productStock(idProduct) {
+        return await this.db.query(`SELECT stock FROM products WHERE id = $1;`,
+            [idProduct]
+        )
+    }    
 }
 
 export default CheckoutRepository

@@ -1,4 +1,5 @@
 import CheckoutService from "./checkoutService.js"
+import { AppError } from "../../error/AppError.js"
 
 class CheckoutController {
     constructor(db) {
@@ -16,7 +17,14 @@ class CheckoutController {
             res.json({ message: "Pedido criado com sucesso", order: order })
 
         } catch (err) {
-            console.error(err);
+            console.error(err)
+            
+            if (err instanceof AppError) {
+                return res.status(err.statusCode).json({
+                    error: err.message
+                });
+            }
+
             res.status(500).json({ error: "Erro no checkout" })
         }
     }
