@@ -19,11 +19,11 @@ module.exports = {
     skillsTech: [
 	'Javascript',
 	'html/css/sass',
-	'node',
-	'typescript',
-	'php',
-	'react',
-	'firebase',
+	'react/angular/next',
+	'node/typescript',
+	'express/nest',
+	'php/python/c/c++',
+	'firebase/postgres',
 	'git/github',
 	'docker/compose'
     ],
