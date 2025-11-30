@@ -54,7 +54,16 @@ class ProductsController {
 
     async updateProducts(req, res) {
         const { id } = req.params
-        const { name, price, stock } = req.body 
+        const validation = productSchema.safeParse(req.body)
+
+        if (!validation.success) {
+            return res.status(400).json({
+                message: "Erro de validação",
+                errors: validation.error.errors
+            })
+        }
+        
+        const { name, price, stock } = validation.data
 
         if (!name || typeof name !== "string" || name.length < 3) {
             return res.status(401).json({
