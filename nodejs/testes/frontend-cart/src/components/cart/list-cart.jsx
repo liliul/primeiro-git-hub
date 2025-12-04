@@ -51,7 +51,6 @@ export function ListCart() {
         const res = await req.json()
         console.log(res.error);
         alert(`${res.error}`)
-        
         return
       }
       if (req.ok) {
@@ -103,6 +102,30 @@ export function ListCart() {
 
     return checkIdProductStock.stock
   }
+  
+  // useEffect(() => {
+  //   dados.forEach(item => {
+  //     setValue(`quantity-${item.item_id}`, item.quantity)
+
+  //     const max = maxStockProduct(item.product_id)
+  //     console.log(max, item.quantity);
+      
+  //     if (item.quantity > max) {
+  //       alert(`O estoque do produto ${item.name} mudou. A quantidade foi ajustada para ${max}.`)
+  //       setDados(prev => prev.filter(p => p.item_id === item.product_id  ? { ...p, quantity: max } : p))
+  //     }
+  //   })
+  // }, [dados])
+
+  if (dados.length === 0) {
+    return (
+      <section className="cart-menu w-[450px] p-3 absolute top-9 bg-[#191919] z-50">
+        <h1>Carrinho</h1>
+        <p>Sem itens no carrinho</p>
+      </section>
+    );
+  }
+
   
   return (
     <section className={`cart-menu w-[450px] p-3 absolute top-9 bg-[#191919] z-50`}>
