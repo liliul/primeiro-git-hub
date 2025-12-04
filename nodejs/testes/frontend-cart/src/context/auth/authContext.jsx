@@ -20,18 +20,20 @@ export function AuthProvider({ children }) {
           role: decoded.role,
           token,
         });
-        setLoading(false);
       } catch (err) {
         console.error("Token inválido:", err);
         localStorage.removeItem("token");
       }
     }
+    
+    setLoading(false);
   }, []);
 
   const login = (token) => {
     localStorage.setItem("token", token);
     const decoded = jwtDecode(token);
     setUser({
+      id: decoded.id,
       name: decoded.name,
       email: decoded.email,
       role: decoded.role,
