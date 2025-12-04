@@ -6,7 +6,7 @@ import { useProducts } from "../../context/cart/productsListContent"
 
 export function ListCart() {
   const [dados, setDados] = useState([])
-  const { user } = useAuth()
+  const { user, loading } = useAuth()
   const { register, setValue, formState: { errors } } = useForm()
   const { products } = useProducts()
 
@@ -67,11 +67,18 @@ export function ListCart() {
   }
 
   useEffect(() => {
-    if (user?.token) {
-      onSubmitGetCart()
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user?.token])
+  if (user?.token && user.id) {
+    onSubmitGetCart();
+  }
+}, [user?.token, user?.id]);
+
+
+  // useEffect(() => {
+  //   if (user?.token) {
+  //     onSubmitGetCart()
+  //   }
+  // // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [user?.token])
 
   async function deleteCart(idDelete) {
         try {
@@ -117,13 +124,18 @@ export function ListCart() {
   //   })
   // }, [dados])
 
+
+  if (loading || !user?.token || !user?.id) {
+    return null
+  }
+  
   if (dados.length === 0) {
-    return (
-      <section className="cart-menu w-[450px] p-3 absolute top-9 bg-[#191919] z-50">
-        <h1>Carrinho</h1>
-        <p>Sem itens no carrinho</p>
-      </section>
-    );
+      return (
+        <section className="cart-menu w-[450px] p-3 absolute top-9 bg-[#191919] z-50">
+          <h1>Carrinho</h1>
+          <p>Sem itens no carrinho</p>
+        </section>
+      );
   }
 
   
