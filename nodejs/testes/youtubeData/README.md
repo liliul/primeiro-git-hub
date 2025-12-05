@@ -3,6 +3,9 @@
 ```bash
 
 YOUTUBE_API_KEY=
+GOOGLE_CLIENT_ID=
+GOOGLE_CLIENT_SECRET=
+JWT_SECRET=
 ```
 
 docker postgres
