@@ -79,7 +79,7 @@ routerGoogleAuth.get("/google/callback", async (req, res) => {
     });
 
 
-    return res.redirect("http://localhost:8081/auth-google-test.html");
+    return res.redirect("/v3/home");
 
   } catch (error) {
     console.log("GOOGLE ERROR:", error.response?.data);

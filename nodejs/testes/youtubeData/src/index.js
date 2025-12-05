@@ -5,20 +5,30 @@ import routerYoutubeAlta from './router/routerYoutubeAlta.js';
 import routerYoutubeSearch from './router/routerYoutubeSearch.js';
 import routerGoogleAuth from './router/googleAuth2.js';
 import cors from 'cors'
+import path from 'node:path';
+import cookieParser from 'cookie-parser';
+import routerLogger from './router/logger.js';
+
 // import './node_cron/index.js'
+
+const __dirname = path.resolve();
 
 const app = express()
 app.use(express.json());
 app.use(cors({
   origin: "http://localhost:8081",
   credentials: true,
-}));
+}))
+app.use(cookieParser());
+
+app.use(express.static(path.join(__dirname, "src/views")));
 
 app.use(routerHealth)
 app.use(routerAccount)
 app.use('/youtube/v1', routerYoutubeAlta)
 app.use('/youtube/v2', routerYoutubeSearch)
 app.use("/auth", routerGoogleAuth)
+app.use('/v3', routerLogger)
 
 app.listen(3001, () => {
   console.log('Servidor rodando em http://localhost:3001');
