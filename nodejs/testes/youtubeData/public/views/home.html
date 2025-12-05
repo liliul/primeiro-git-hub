@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home somente logado</title>
+</head>
+<body>
+    <h1>Home</h1>
+
+    <script type="module">
+
+        async function ytvideos() {
+            const req = await fetch('http://localhost:3001/youtube/v1/ytvideos')
+            const {data, message, count} = await req.json()
+
+            console.log(data)
+        }
+
+        ytvideos()
+    </script>
+</body>
+</html>

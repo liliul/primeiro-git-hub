@@ -21,7 +21,7 @@ app.use(cors({
 }))
 app.use(cookieParser());
 
-app.use(express.static(path.join(__dirname, "src/views")));
+app.use(express.static(path.join(__dirname, "/public")));
 
 app.use(routerHealth)
 app.use(routerAccount)
