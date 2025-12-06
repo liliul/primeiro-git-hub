@@ -9,4 +9,9 @@ routerLogger.get("/home", authRequirida, (req, res) => {
   res.sendFile(path.join(__dirname, "public/views/home.html"));
 });
 
+routerLogger.get("/logout", (req, res) => {
+  res.clearCookie("token");
+  res.redirect("/");
+});
+
 export default routerLogger;
