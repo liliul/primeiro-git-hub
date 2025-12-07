@@ -33,6 +33,15 @@
             text-decoration: none;
             outline: none;
         }
+
+        nav {
+            width: fit-content;
+            height: 100vh;
+            padding: 20px;
+        }
+        ul {
+            list-style: none;
+        }
     </style>
 </head>
 <body>
@@ -44,41 +53,15 @@
         </button>
     </div>
 
-    <div id="content"></div>
-
-    <script type="module">
-
-        async function ytvideos() {
-            const req = await fetch('http://localhost:3001/youtube/v1/ytvideos')
-            const {data, message, count} = await req.json()
-
-            return {data, message, count}
-        }
-
-        async function cardVideos() {
-           const v = await ytvideos()
-           console.log(v);
-           
-            const card = document.createElement('section')
-
-            card.innerHTML = v.data.map(i => {
-            // const div = document.createElement('div')
-                return `
-                    <div class="card">
-                        <img src="${i.thumbnails.default.url}" alt="${i.title}">
-                        <h3>${i.title}</h3>
-                        <p>${i.channel}</p>
-                        <a href="${i.video_url}" target="_blank">Assistir</a>
-                    </div>
-                `
-
-           }).join("")
-
-           document.getElementById('content').appendChild(card)
-            
-        }
-
-        cardVideos()
-    </script>
+    <section id="c-home">
+        <nav>
+            <h2>Menu</h2>
+            <ul>
+                <li>
+                    <a href="/views/listar-videos-alta.html">Listando videos youtube</a>
+                </li>
+            </ul>
+        </nav>
+    </section>
 </body>
 </html>
