@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buscar videos alta UF</title>
+    <style>
+        body {
+            background-color: #191919;
+            color: white;
+        }
+
+        .c-auth {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+
+            padding: 5px;
+            border-radius: 5px;
+            box-shadow: 2px 2px 5px azure;
+            background-color: #191919;
+            color: aliceblue;
+        }
+        button {
+            background-color: #191919;
+            color: aliceblue;
+            border: none;
+            padding: 5px;        
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+            outline: none;
+        }
+
+        .count {
+            color: blueviolet;
+        }
+        #content {
+            width: 1000px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .card {
+            box-shadow: 1px 1px 5px wheat;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 20px;
+        }
+        .voltar {
+            width: 25px;
+            height: 25px;
+            border-radius: 5px;
+            padding: 3px;
+            background-color: #999;
+
+            font-weight: bold;
+            margin-left: 40px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>Buscando videos no Youtube pelo UF.</h1>
+    <button class="voltar" onclick="window.history.back()"><</button>
+
+    <div class="c-auth">
+        <button>
+            <a href="/v3/logout">LOGUOT</a>
+        </button>
+    </div>
+
+    <div id="content">
+        <div>
+            <label for="uf">UF</label>
+            <input type="text" name="uf" id="uf">
+        </div>
+
+        <div id="videos"></div>
+    </div>
+
+    <script type="module">
+        const uf = document.getElementById('uf')
+        console.log(uf);
+
+        uf.addEventListener('keydown', async (e) => {
+            const u = e.target.value
+            console.log(u);
+            const f = await ytvideosUf(u.toUpperCase())
+            console.log(f);
+            const {message, data, length} = await f
+            cardVideos(message, data, length)
+        })
+        async function ytvideosUf(uf) {
+            
+            const req = await fetch(`http://localhost:3001/youtube/v1/yaltavideos/${uf}`)
+            const data = await req.json()
+
+            return data
+        }
+      
+        async function cardVideos(message, data, length) {
+            document.getElementById('videos').innerHTML = ''
+            
+            const h1 = document.createElement('h1')
+            h1.textContent = message
+            const span = document.createElement('span')
+            span.textContent = length
+            span.classList.add('count')
+
+            const card = document.createElement('section')
+
+            card.innerHTML = data.map(i => {
+                return `
+                    <div class="card">
+                        <img src="${i.thumbnails.default.url}" alt="${i.title}">
+                        <h3>${i.title}</h3>
+                        <p>${i.channel}</p>
+                        <a href="${i.video_url}" target="_blank">Assistir</a>
+                    </div>
+                `
+
+           }).join("")
+          
+
+           document.getElementById('videos').append(h1, span, card)
+            
+        }
+    </script>
+</body>
+</html>
