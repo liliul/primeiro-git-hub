@@ -14,7 +14,7 @@ class YoutubeAlta {
 
             const data = await this.youtubeAltaService.buscarYoutubeEmAlta(regionCode, maxResults)
             
-            res.status(200).json({ message: `[${req.method}] url-${req.url} retornando os videos em alta youtube`, count: data.length})
+            res.status(200).json({ message: `[${req.method}] url-${req.url} retornando os videos em alta youtube`, count: data.length, rows: data})
 
         } catch (error) {
             res.status(500).json({ 
