@@ -46,6 +46,7 @@ zipando_enviado_dropbox() {
 
 help() {
     echo "Uso: up [opção]"
+    echo "   -h ou --help      -> ajuda"
     echo "   sem parâmetro   -> cria backups"
     echo "   -b  ou --backup -> cria backups"
     echo "   -r              -> remove backups antigos"
