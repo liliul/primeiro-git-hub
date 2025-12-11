@@ -94,7 +94,7 @@
             <input type="text" name="uf" id="uf" placeholder="UF do pais">
             <br>
             <label for="num">Numero de quantos videos buscar e guarda no banco.</label>
-            <input type="number" name="num" value="0">
+            <input type="number" name="num" min="0" >
             <br>
             <button id="b-videos" type="submit">buscar videos no youtube.</button>
         </form>
@@ -113,11 +113,17 @@
             const formData = new FormData(e.target)
             console.log(formData.get('uf'), formData.get('num'))
             
+            const ufv = formData.get('uf')
+            const numv = formData.get('num')
+            
             try {
-                const { rows, count, message } = await salvandoVideos(formData.get('uf').toUpperCase(), formData.get('num'))
+                const { rows, count, message } = await salvandoVideos(ufv.trim().toUpperCase(), numv)
                 console.log(rows, count, message)
                 
                 cardVideos(message, count, rows)
+            } catch(e) {
+                console.error(e, {err: 'Erro no salvandoVideos.'})
+                document.getElementById('videos').textContent = e + ' input UF vazio ou errado'
             } finally {
                 setTimeout( async () => {
                     document.getElementById('b-videos').removeAttribute('disabled')
@@ -130,6 +136,11 @@
         async function salvandoVideos(uf, num) {
             const req = await fetch(`http://localhost:3001/youtube/v1/ytvideo/${uf}?maxResults=${num}`)
             const res = await req.json()
+
+            if (!req.ok) {
+                console.log({ err: 'Erro ao buscar videos no youtube para salvar.' })
+                return
+            }
 
             return res
         }
