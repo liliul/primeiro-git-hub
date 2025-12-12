@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pesquisando no Youtube</title>
+     <style>
+        body {
+            background-color: #191919;
+            color: white;
+        }
+
+        .c-auth {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+
+            padding: 5px;
+            border-radius: 5px;
+            box-shadow: 2px 2px 5px azure;
+            background-color: #191919;
+            color: aliceblue;
+        }
+        button {
+            background-color: #191919;
+            color: aliceblue;
+            border: none;
+            padding: 5px;        
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+            outline: none;
+        }
+
+        .count {
+            color: blueviolet;
+        }
+        #content {
+            width: 1000px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .card {
+            box-shadow: 1px 1px 5px wheat;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 20px;
+        }
+        .voltar {
+            width: 25px;
+            height: 25px;
+            border-radius: 5px;
+            padding: 3px;
+            background-color: #999;
+
+            font-weight: bold;
+            margin-left: 40px;
+            cursor: pointer;
+        }
+
+        .busca {
+            width: 100%;
+        }
+        .busca input {
+            width: 100%;
+            padding: 10px 5px;
+        }
+
+        .buscar-card {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+
+            box-shadow: 1px 1px 5px wheat;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 20px;
+        }
+        .buscar-card img {
+            width: 120px;
+            height: 90px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Pesquisando no Youtube</h1>
+
+    <button class="voltar" onclick="window.history.back()"><</button>
+
+    <div class="c-auth">
+        <button>
+            <a href="/v3/logout">LOGUOT</a>
+        </button>
+    </div>
+
+    <div id="content">
+        <div class="busca">
+            <form id="form-buscar">
+                <label for="buscar">Buscar</label>
+                <input type="text" name="buscar" id="buscar">
+            </form>
+        </div>
+
+        <div id="videos"></div>
+    </div>
+    
+    <script type="module">
+        
+        async function buscar() {
+            document.getElementById('videos').innerHTML = ''
+
+            const formBuscar = document.getElementById('form-buscar')
+            
+            formBuscar.addEventListener('submit', async (e) => {
+                e.preventDefault()
+                
+                const buscar = document.getElementById('buscar')
+                
+                console.log(buscar.value.trim());
+                const pesquisando = await pesquisandoNoYoutube(buscar.value.trim())
+
+                card(pesquisando)
+               
+            })
+
+        }
+        buscar()
+        async function pesquisandoNoYoutube(query) {
+            const url = 'http://localhost:3001/youtube/v2/ytsearch'
+            const options = {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({query})
+            }
+            const req = await fetch(url, options)
+            const res = await req.json()
+
+            console.log(res)
+
+            return res            
+        } 
+        
+        // pesquisandoNoYoutube('dragon ball z abertura')
+
+        function card(data) {
+            return data.data.map((i) => {
+                const section = document.createElement('section')
+                section.setAttribute('id', i.videoId)
+                section.setAttribute('class', 'buscar-card')
+
+                const title = document.createElement('h1')
+                title.textContent = i.title 
+
+                const thumbnails = document.createElement('img')
+                thumbnails.src = i.thumbnails.default.url 
+
+                const description = document.createElement('p')
+                description.textContent = i.description
+
+                const publishedAt = document.createElement('small')
+                publishedAt.textContent = i.publishedAt
+
+                const videoUrl = document.createElement('a')
+                videoUrl.href = i.videoUrl
+                videoUrl.textContent = 'Assistir'
+
+                section.append(title, thumbnails, description, publishedAt, videoUrl)
+
+                document.getElementById('videos').append(section)
+                
+            })
+        }
+    </script>
+</body>
+</html>
