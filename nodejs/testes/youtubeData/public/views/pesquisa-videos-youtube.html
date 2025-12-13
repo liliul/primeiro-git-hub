@@ -150,7 +150,10 @@
         // pesquisandoNoYoutube('dragon ball z abertura')
 
         function card(data) {
+            document.getElementById('videos').innerHTML = ''
+
             return data.data.map((i) => {
+
                 const section = document.createElement('section')
                 section.setAttribute('id', i.videoId)
                 section.setAttribute('class', 'buscar-card')
@@ -165,7 +168,8 @@
                 description.textContent = i.description
 
                 const publishedAt = document.createElement('small')
-                publishedAt.textContent = i.publishedAt
+                const data = new Date(i.publishedAt)
+                publishedAt.textContent = data.toLocaleString('pt-BR')
 
                 const videoUrl = document.createElement('a')
                 videoUrl.href = i.videoUrl
