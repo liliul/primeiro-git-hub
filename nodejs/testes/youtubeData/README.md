@@ -34,6 +34,15 @@ docker exec -it meu_postgres psql -U root -d youtubedata
 
 ```
 
+configuração do banco de dados postgres
+
+```bash
+
+# para criar as tabelas -> pasta db -> gerar_sql.js
+# ex: node src/db/gerar_sql.js e init.js
+
+```
+
 rotas
 
 ```bash
@@ -43,4 +52,18 @@ localhost:3001/youtube/v1/ytvideo/JP?maxResults=2
 
 # busca por pais
 localhost:3001/youtube/v1/yaltavideos/JP
+```
+
+configuração no google oauth2
+```bash
+
+# auth-google-teste
+
+# colocar em Acesso a dados -> adicionar ou remover escopos
+https://www.googleapis.com/auth/youtube.readonly
+https://www.googleapis.com/auth/youtube.force-ssl
+https://www.googleapis.com/auth/youtube
+
+# adicionar usuario de teste -> em Público-alvo -> Usuario teste + add users colocar email
+exemplo@email.com
 ```

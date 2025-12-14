@@ -1,8 +1,30 @@
+import dotenv from "dotenv";
+import jwt from "jsonwebtoken";
+
+dotenv.config();
+
 function authRequirida(req, res, next) {
-  if (!req.cookies.token) {
+  const token = req.cookies.token;
+
+  if (!token){
     return res.redirect("/");
   }
-  next();
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET, {
+      issuer: "my-video-you",
+      audience: "my-video-you-web",
+    });
+
+    req.user = {
+      googleId: decoded.sub,
+      email: decoded.email,
+    };
+
+    next();
+  } catch (err) {
+    return res.status(401).json({ error: "Token inválido" });
+  }
 }
 
 export default authRequirida;
