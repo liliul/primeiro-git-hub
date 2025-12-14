@@ -4,6 +4,7 @@ import jwt from "jsonwebtoken";
 import cookieParser from "cookie-parser";
 import qs from "qs";
 import dotenv from "dotenv";
+import db from '../db/conection_db.js';
 
 dotenv.config();
 
@@ -22,8 +23,14 @@ routerGoogleAuth.get("/google", (req, res) => {
       client_id: CLIENT_ID,
       redirect_uri: REDIRECT_URI,
       response_type: "code",
-      scope: "openid email profile",
-      prompt: "select_account"
+      scope: [
+        "openid",
+        "email",
+        "profile",
+        "https://www.googleapis.com/auth/youtube.readonly"
+      ].join(" "),
+      access_type: "offline",
+      prompt: "consent"
     })
 
   res.redirect(googleAuthURL);
@@ -51,12 +58,41 @@ routerGoogleAuth.get("/google/callback", async (req, res) => {
     }
     )
 
-    const { id_token } = data;
+    const {
+      access_token,
+      refresh_token,
+      expires_in,
+      id_token
+    } = data;
+
     const googleUser = JSON.parse(
         Buffer.from(id_token.split(".")[1], "base64").toString()
     );
 
     console.log("Usuário Google:", googleUser);
+
+    const expiresAt = new Date(Date.now() + expires_in * 1000);
+
+    await db.query(
+      `
+      INSERT INTO google_oauth_tokens
+        (google_id, email, access_token, refresh_token, expires_at)
+      VALUES ($1, $2, $3, $4, $5)
+      ON CONFLICT (google_id)
+      DO UPDATE SET
+        access_token = EXCLUDED.access_token,
+        refresh_token = COALESCE(EXCLUDED.refresh_token, google_oauth_tokens.refresh_token),
+        expires_at = EXCLUDED.expires_at,
+        updated_at = NOW();
+      `,
+      [
+        googleUser.sub,
+        googleUser.email,
+        access_token,
+        refresh_token,
+        expiresAt,
+      ]
+    );
 
     const token = jwt.sign(
         {
@@ -67,7 +103,9 @@ routerGoogleAuth.get("/google/callback", async (req, res) => {
         },
         process.env.JWT_SECRET,
         { 
-            expiresIn: "1d" 
+            expiresIn: "1d",
+            issuer: "my-video-you",
+            audience: "my-video-you-web",
         }
     );
 
