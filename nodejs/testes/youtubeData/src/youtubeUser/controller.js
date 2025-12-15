@@ -3,7 +3,7 @@ import { getValidGoogleToken } from "./utils.js";
 
 export async function getMyChannel(req, res) {
   try {
-    const googleId = req.user.googleId;
+    const googleId = req.user.sub;
 
     const accessToken = await getValidGoogleToken(googleId);
 
