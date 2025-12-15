@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listando PlayList</title>
+    <style>
+        body {
+            background-color: #191919;
+            color: white;
+        }
+
+        .c-auth {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+
+            padding: 5px;
+            border-radius: 5px;
+            box-shadow: 2px 2px 5px azure;
+            background-color: #191919;
+            color: aliceblue;
+        }
+        button {
+            background-color: #191919;
+            color: aliceblue;
+            border: none;
+            padding: 5px;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+            outline: none;
+        }
+
+        .count {
+            color: blueviolet;
+        }
+        #content {
+            width: 1000px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .card {
+            box-shadow: 1px 1px 5px wheat;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 20px;
+        }
+        .voltar {
+            width: 25px;
+            height: 25px;
+            border-radius: 5px;
+            padding: 3px;
+            background-color: #999;
+
+            font-weight: bold;
+            margin-left: 40px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>Listando Playlist do Youtube</h1>
+    <button class="voltar" onclick="window.history.back()"><</button>
+
+    <div class="c-auth">
+        <button>
+            <a href="/v3/logout">LOGUOT</a>
+        </button>
+    </div>
+
+    <div id="content">
+        <div id="videos"></div>
+    </div>
+
+    <script type="module">
+
+        async function PlayList() {
+
+            const req = await fetch(`http://localhost:3001/ytlist`)
+            const data = await req.json()
+            // console.log(data[2])
+            return data[1]
+        }
+
+        const p = await PlayList()
+        console.log(p)
+
+        async function cardVideos(p) {
+            document.getElementById('videos').innerHTML = ''
+
+            const card = document.createElement('section')
+
+            card.innerHTML = p.videos.map(i => {
+                return `
+                    <div class="card" data-idvideo="${i.videoId}">
+                        <img src="${i.thumbnail}" alt="${i.title}">
+                        <h3>${i.title}</h3>
+                        <a href="${i.url}" target="_blank">Assistir</a>
+                    </div>
+                `
+
+           }).join("")
+
+
+           document.getElementById('videos').append(card)
+
+        }
+
+        cardVideos(p)
+    </script>
+</body>
+</html>
