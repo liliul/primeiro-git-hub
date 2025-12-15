@@ -5,6 +5,7 @@ import cookieParser from "cookie-parser";
 import qs from "qs";
 import dotenv from "dotenv";
 import db from '../db/conection_db.js';
+import { OAuth2Client } from "google-auth-library";
 
 dotenv.config();
 
@@ -15,6 +16,8 @@ routerGoogleAuth.use(cookieParser());
 const CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
 const CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
 const REDIRECT_URI = "http://localhost:3001/auth/google/callback";
+
+const googleClient = new OAuth2Client(CLIENT_ID);
 
 routerGoogleAuth.get("/google", (req, res) => {
   const googleAuthURL =
@@ -65,9 +68,27 @@ routerGoogleAuth.get("/google/callback", async (req, res) => {
       id_token
     } = data;
 
-    const googleUser = JSON.parse(
-        Buffer.from(id_token.split(".")[1], "base64").toString()
-    );
+    // const googleUser = JSON.parse(
+    //     Buffer.from(id_token.split(".")[1], "base64").toString()
+    // );
+
+    const ticket = await googleClient.verifyIdToken({
+      idToken: id_token,
+      audience: CLIENT_ID,
+    });
+
+    const payload = ticket.getPayload();
+
+    if (!payload.email_verified) {
+      return res.status(403).send("Email não verificado");
+    }
+
+    const googleUser = {
+      sub: payload.sub,
+      email: payload.email,
+      name: payload.name,
+      picture: payload.picture,
+    };
 
     console.log("Usuário Google:", googleUser);
 
@@ -99,7 +120,7 @@ routerGoogleAuth.get("/google/callback", async (req, res) => {
             email: googleUser.email,
             name: googleUser.name,
             picture: googleUser.picture,
-            googleId: googleUser.sub,
+            sub: googleUser.sub,
         },
         process.env.JWT_SECRET,
         { 
@@ -120,7 +141,7 @@ routerGoogleAuth.get("/google/callback", async (req, res) => {
     return res.redirect("/v3/home");
 
   } catch (error) {
-    console.log("GOOGLE ERROR:", error.response?.data);
+    console.error("GOOGLE ERROR:", error.response?.data || error.message);
     return res.status(400).send(error.response?.data);
   }
 })
