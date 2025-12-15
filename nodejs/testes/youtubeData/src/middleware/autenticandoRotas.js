@@ -17,7 +17,7 @@ function authRequirida(req, res, next) {
     });
 
     req.user = {
-      googleId: decoded.sub,
+      sub: decoded.sub,
       email: decoded.email,
       name: decoded.name,
       picture: decoded.picture,

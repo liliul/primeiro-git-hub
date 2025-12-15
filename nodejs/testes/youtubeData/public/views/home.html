@@ -15,17 +15,23 @@
             top: 15px;
             right: 20px;
 
-            padding: 5px;
+            padding: 8px;
             border-radius: 5px;
             box-shadow: 2px 2px 5px azure;
             background-color: #191919;
             color: aliceblue;
+
+            display: flex;
+            align-items: center;
+            gap: 15px;
         }
         button {
             background-color: #191919;
             color: aliceblue;
             border: none;
-            padding: 5px;        
+            padding: 2px 25px;
+            height: 40px;
+            box-shadow: 1px 1px 2px #999;        
         }
 
         a {
@@ -42,12 +48,26 @@
         ul {
             list-style: none;
         }
+
+        .c-auth section {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .c-auth section img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+        }
+        .c-auth section div strong,p {
+            font-size: 11px;
+        }
     </style>
 </head>
 <body>
     <h1>Home</h1>
 
-    <div class="c-auth">
+    <div class="c-auth" id="auth">
         <button>
             <a href="/v3/logout">LOGUOT</a>
         </button>
@@ -73,16 +93,6 @@
         </nav>
     </section>
 
-    <script>
-        // exemplo com fetch
-        fetch("http://localhost:3001/v3/me", {
-        method: "GET",
-        credentials: "include", // envia cookies
-        })
-        .then(res => res.json())
-        .then(data => console.log("Usuário logado:", data))
-        .catch(err => console.error(err));
-
-    </script>
+    <script type="module" src="../scripts/me.js"></script>
 </body>
 </html>
