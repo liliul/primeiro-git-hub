@@ -72,5 +72,17 @@
             </ul>
         </nav>
     </section>
+
+    <script>
+        // exemplo com fetch
+        fetch("http://localhost:3001/v3/me", {
+        method: "GET",
+        credentials: "include", // envia cookies
+        })
+        .then(res => res.json())
+        .then(data => console.log("Usuário logado:", data))
+        .catch(err => console.error(err));
+
+    </script>
 </body>
 </html>
