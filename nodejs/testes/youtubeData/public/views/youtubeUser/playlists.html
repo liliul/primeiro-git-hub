@@ -84,34 +84,117 @@
             const req = await fetch(`http://localhost:3001/ytlist`)
             const data = await req.json()
             // console.log(data[2])
-            return data[1]
+            return data
         }
 
-        const p = await PlayList()
-        console.log(p)
+        function renderPlaylists(playlists) {
+            const container = document.getElementById("videos");
+            container.innerHTML = "";
 
-        async function cardVideos(p) {
-            document.getElementById('videos').innerHTML = ''
+            playlists.forEach(p => {
+                const card = document.createElement("div");
+                card.className = "card";
+                card.dataset.playlistId = p.id;
 
-            const card = document.createElement('section')
+                card.innerHTML = `
+                <img src="${p.thumbnailList}" alt="${p.title}">
+                <h3>${p.title}</h3>
+                <button class="btn-playlist">Ver playlist</button>
+                `;
 
-            card.innerHTML = p.videos.map(i => {
-                return `
-                    <div class="card" data-idvideo="${i.videoId}">
-                        <img src="${i.thumbnail}" alt="${i.title}">
-                        <h3>${i.title}</h3>
-                        <a href="${i.url}" target="_blank">Assistir</a>
-                    </div>
-                `
+                container.appendChild(card);
+            })
+        }
+        function renderVideos(playlist) {
+            const container = document.getElementById("videos");
+            container.innerHTML = "";
 
-           }).join("")
+            playlist.videos.forEach(v => {
+                const card = document.createElement("div");
+                card.className = "card";
 
+                card.innerHTML = `
+                <img src="${v.thumbnail}" alt="${v.title}">
+                <h3>${v.title}</h3>
+                <a href="${v.url}" target="_blank">Assistir</a>
+                `;
 
-           document.getElementById('videos').append(card)
-
+                container.appendChild(card);
+            })
         }
 
-        cardVideos(p)
+        document.getElementById("videos").addEventListener("click", async (e) => {
+            if (!e.target.classList.contains("btn-playlist")) return;
+
+            const playlistId = e.target
+                .closest(".card")
+                .dataset.playlistId;
+
+            const playlists = await PlayList();
+            const selected = playlists.find(p => p.id === playlistId);
+
+            if (selected) {
+                renderVideos(selected);
+            }
+        })
+
+        const playlists = await PlayList();
+        renderPlaylists(playlists);
+
+        // const p = await PlayList()
+        // console.log(p)
+
+        // async function cardVideos(p) {
+        //     document.getElementById('videos').innerHTML = ''
+
+        //     const card = document.createElement('section')
+
+        //     card.innerHTML = p.map(i => {
+        //         return `
+        //             <div class="card" data-idvideo="${i.id}">
+        //                 <img src="${i.thumbnailList}" alt="${i.title}">
+        //                 <h3>${i.title}</h3>
+        //                 <button id='list-id-${i.id}'>ver playlist</button>
+        //             </div>
+        //         `
+
+        //    }).join("")
+
+
+        //    document.getElementById('videos').append(card)
+
+        // //    if (!document.getElementById('list-videos')) return
+
+        //    listVideos(p)
+        // }
+
+        // cardVideos(p)
+
+        // function listVideos(p) {
+        //     const idvideo = document.querySelector('[data-idvideo]').dataset
+        //     console.log(idvideo);
+            
+        //     document.getElementById(`list-id-${idvideo}`).addEventListener('click', async () => {
+        //         document.getElementById('videos').innerHTML = ''
+        //          const p = await PlayList()
+        //         console.log(p);
+
+        //         const card = document.createElement('section')
+
+        //         card.innerHTML = p[7].videos.map(i => {
+        //             return `
+        //                 <div class="card" data-idvideo="${i.videoId}">
+        //                     <img src="${i.thumbnail}" alt="${i.title}">
+        //                     <h3>${i.title}</h3>
+        //                     <a href="${i.url}" target="_blank">Assistir</a>
+        //                 </div>
+        //             `
+        //     }).join("")
+
+
+        //     document.getElementById('videos').append(card)
+        //     })
+        // }
     </script>
 </body>
 </html>
