@@ -61,6 +61,18 @@
             margin-left: 40px;
             cursor: pointer;
         }
+        .p-length {
+            margin: 10px;
+        }
+        .b-volta {
+            border-radius: 5px;
+            padding: 3px;
+            background-color: #999;
+            
+            font-weight: bold;
+            margin: 10px 40px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -101,6 +113,12 @@
                 const container = document.getElementById("videos");
                 container.innerHTML = "";
 
+                const playlistsLength = playlists.length
+                const spanLength = document.createElement('span')
+                spanLength.textContent = playlistsLength
+                spanLength.className = 'p-length'
+                container.appendChild(spanLength)
+                
                 playlists.forEach(p => {
                 const card = document.createElement("div");
                 card.className = "card";
@@ -125,9 +143,16 @@
 
                 const container = document.getElementById("videos");
                 container.innerHTML = "";
+                
+                const videosLength = playlist?.videos?.length
+                const spanLength = document.createElement('span')
+                spanLength.textContent = videosLength
+                spanLength.className = 'p-length'
+                container.appendChild(spanLength)
 
                 const backBtn = document.createElement("button");
                 backBtn.textContent = "← Voltar";
+                backBtn.className = 'b-volta'
                 backBtn.onclick = () => renderPlaylists(playlistsCache);
                 container.appendChild(backBtn);
 
