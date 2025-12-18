@@ -6,6 +6,7 @@ YOUTUBE_API_KEY=
 GOOGLE_CLIENT_ID=
 GOOGLE_CLIENT_SECRET=
 JWT_SECRET=
+
 ```
 
 docker postgres
@@ -32,6 +33,22 @@ docker exec -it meu_postgres psql -U root -d youtubedata
 
 \q
 
+
+# criar container redis
+docker run -d \
+  --name redis \
+  -p 6379:6379 \
+  -v redis-data:/data \
+  redis redis-server --appendonly yes
+
+docker exec -it redis redis-cli
+
+SCAN 0
+
+GET minha-chave
+
+info
+
 ```
 
 configuração do banco de dados postgres
@@ -52,9 +69,11 @@ localhost:3001/youtube/v1/ytvideo/JP?maxResults=2
 
 # busca por pais
 localhost:3001/youtube/v1/yaltavideos/JP
+
 ```
 
 configuração no google oauth2
+
 ```bash
 
 # auth-google-teste
@@ -66,4 +85,5 @@ https://www.googleapis.com/auth/youtube
 
 # adicionar usuario de teste -> em Público-alvo -> Usuario teste + add users colocar email
 exemplo@email.com
+
 ```
