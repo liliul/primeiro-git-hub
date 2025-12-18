@@ -1,9 +1,16 @@
 import axios from "axios";
 import { getValidGoogleToken } from "./utils.js";
+import { redis } from "../db/redis.js";
 
 export async function getMyChannel(req, res) {
   try {
     const googleId = req.user.sub;
+    const cacheKey = `youtube:channel:${googleId}`;
+
+    const cached = await redis.get(cacheKey);
+    if (cached) {
+      return res.json({ redisdata: JSON.parse(cached) });
+    }
 
     const accessToken = await getValidGoogleToken(googleId);
 
@@ -18,7 +25,11 @@ export async function getMyChannel(req, res) {
           mine: true,
         },
       }
-    );
+    )
+
+    await redis.set(cacheKey, JSON.stringify(response.data), {
+      EX: 900 // 60 * 15 = 900 -> 15 min
+    })
 
     res.json(response.data);
   } catch (error) {
