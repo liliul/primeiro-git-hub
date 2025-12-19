@@ -9,9 +9,11 @@ export async function getMyChannel(req, res) {
 
     const cached = await redis.get(cacheKey);
     if (cached) {
-      return res.json({ redisdata: JSON.parse(cached) });
+      return res.json({ redisytuser: JSON.parse(cached) });
     }
 
+    console.log('Chamando api ytuser');
+    
     const accessToken = await getValidGoogleToken(googleId);
 
     const response = await axios.get(
@@ -31,7 +33,7 @@ export async function getMyChannel(req, res) {
       EX: 900 // 60 * 15 = 900 -> 15 min
     })
 
-    res.json(response.data);
+    res.json({ apiytuser: response.data });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Erro ao buscar canal" });
