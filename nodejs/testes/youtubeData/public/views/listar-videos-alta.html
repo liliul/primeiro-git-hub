@@ -79,26 +79,25 @@
 
         async function ytvideos() {
             const req = await fetch('http://localhost:3001/youtube/v1/ytvideos')
-            const {data, message, count} = await req.json()
+            const res = await req.json()
 
-            return {data, message, count}
+            return res
         }
 
         async function cardVideos() {
-
             const v = await ytvideos()
-            console.log(v);
+            const ytvideo = v.redisytvideos ? v.redisytvideos : v.ytvideos
+            console.log(ytvideo)
                 
             const h1 = document.createElement('h1')
-            h1.textContent = v.message
+            h1.textContent = ytvideo.message
             const span = document.createElement('span')
-            span.textContent = v.count
+            span.textContent = ytvideo.count
             span.classList.add('count')
 
             const card = document.createElement('section')
 
-            card.innerHTML = v.data.map(i => {
-            // const div = document.createElement('div')
+            card.innerHTML = ytvideo.data.map(i => {
                 return `
                     <div class="card">
                         <img src="${i.thumbnails.default.url}" alt="${i.title}">

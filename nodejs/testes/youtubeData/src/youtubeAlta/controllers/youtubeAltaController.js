@@ -1,3 +1,4 @@
+import { redis } from "../../db/redis.js"
 import YoutubeAltaService from "../services/youtubeAltaService.js"
 
 class YoutubeAlta {
@@ -27,11 +28,27 @@ class YoutubeAlta {
     async buscarDadosDoYoutubeAlta(req, res) {
         try {
             const data = await this.youtubeAltaService.buscarVideosSalvos()
-
-            res.status(200).json({
+           
+            const chave = 'listando-videos-salvos'
+            const cacheKey = `youtube:listavideos:${chave}`
+            const cached = await redis.get(cacheKey)
+            if (cached) {
+                return res.json({redisytvideos: JSON.parse(cached)})
+            }
+            
+            console.log('chamando api de lista videos salvos no banco de dados')
+            
+            const dataCache = {
                 message: 'Vídeos em alta salvos no banco de dados',
                 count: data.rows.length,
                 data: data.rows
+            }
+            await redis.set(cacheKey, JSON.stringify(dataCache), {
+                EX: 900 // 60 * 15 = 900 -> 15 min
+            })
+
+            res.status(200).json({
+               ytvideos: dataCache
             })
         } catch (error) {
             res.status(500).json({
