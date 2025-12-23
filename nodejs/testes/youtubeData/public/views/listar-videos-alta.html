@@ -87,8 +87,13 @@
         async function cardVideos() {
             const v = await ytvideos()
             console.log(v)
-            const ytvideo = v.redisytvideos ? v.redisytvideos : v.ytvideos
+           
+            const ytvideo = v.redisytvideos ?? v.ytvideos
             console.log(ytvideo)
+            if (!ytvideo || !Array.isArray(ytvideo.data)) {
+                console.error('Erro em data: ', v)
+                return
+            }
                 
             const h1 = document.createElement('h1')
             h1.textContent = ytvideo.message
@@ -98,21 +103,22 @@
 
             const card = document.createElement('section')
 
-            card.innerHTML = ytvideo.data.map(i => {
-                return `
-                    <div class="card">
-                        <img src="${i.thumbnails.default.url}" alt="${i.title}">
-                        <h3>${i.title}</h3>
-                        <p>canal: ${i.channel}</p>
-                        <small>data de criação: ${i.published_at}</small>
-                        <br>
-                        <br>
-                        <a href="${i.video_url}" target="_blank">Assistir</a>
-                    </div>
-                `
+            card.innerHTML = ytvideo.data.length
+                ? ytvideo.data.map(i => {
+                    return `
+                        <div class="card">
+                            <img src="${i.thumbnails.default.url}" alt="${i.title}">
+                            <h3>${i.title}</h3>
+                            <p>canal: ${i.channel}</p>
+                            <small>data de criação: ${i.published_at}</small>
+                            <br>
+                            <br>
+                            <a href="${i.video_url}" target="_blank">Assistir</a>
+                        </div>
+                    `
 
-           }).join("")
-          
+                  }).join("")
+                : "<p>Sem videos</p>"
 
            document.getElementById('content').append(h1, span, card)
             
