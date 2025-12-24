@@ -118,7 +118,7 @@
                 spanLength.textContent = playlistsLength
                 spanLength.className = 'p-length'
                 container.appendChild(spanLength)
-                
+
                 playlists.forEach(p => {
                 const card = document.createElement("div");
                 card.className = "card";
@@ -156,7 +156,9 @@
                 backBtn.onclick = () => renderPlaylists(playlistsCache);
                 container.appendChild(backBtn);
 
-                playlist.videos.forEach(v => {
+                const playlistSemVideosErros = playlist.videos.filter(EvitandoVideosPrivateDeleted)
+
+                playlistSemVideosErros.forEach(v => {
                 if (!v.videoId) return;
 
                 const card = document.createElement("div");
@@ -180,6 +182,14 @@
             });
 
             fetchPlaylists().then(renderPlaylists);
+        }
+
+        function EvitandoVideosPrivateDeleted(item) {
+            return (
+                item.title !== "Private video" &&
+                item.title !== "Deleted video" &&
+                item.thumbnail
+            )
         }
 
         ContainerPlaylistsFunction()
