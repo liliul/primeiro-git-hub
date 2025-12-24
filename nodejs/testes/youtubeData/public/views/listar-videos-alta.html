@@ -86,9 +86,9 @@
 
         async function cardVideos() {
             const v = await ytvideos()
-            console.log(v)
+            console.log(v.origindb)
            
-            const ytvideo = v.redisytvideos ?? v.ytvideos
+            const ytvideo = v.ytvideos
             console.log(ytvideo)
             if (!ytvideo || !Array.isArray(ytvideo.data)) {
                 console.error('Erro em data: ', v)

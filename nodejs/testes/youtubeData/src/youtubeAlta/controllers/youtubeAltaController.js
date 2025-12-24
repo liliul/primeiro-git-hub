@@ -33,7 +33,10 @@ class YoutubeAlta {
             const cacheKey = `youtube:listavideos:${chave}`
             const cached = await redis.get(cacheKey)
             if (cached) {
-                return res.json({redisytvideos: JSON.parse(cached)})
+                return res.json({
+                    origindb: 'redis',
+                    ytvideos: JSON.parse(cached)
+                })
             }
             
             console.log('chamando api de lista videos salvos no banco de dados')
@@ -48,7 +51,8 @@ class YoutubeAlta {
             })
 
             res.status(200).json({
-               ytvideos: dataCache
+                origindb: "api",
+                ytvideos: dataCache
             })
         } catch (error) {
             res.status(500).json({
