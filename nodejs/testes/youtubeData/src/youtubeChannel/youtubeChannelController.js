@@ -1,5 +1,5 @@
 import axios from "axios";
-import { getValidGoogleToken } from "./utils.js";
+import { getValidGoogleToken } from "../utils/getValidGoogleToken.js";
 import { redis } from "../db/redis.js";
 
 export async function getMyChannel(req, res) {
