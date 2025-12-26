@@ -1,5 +1,6 @@
 import express from 'express'
-import { getMyChannel, getMyPlayList } from '../youtubeChannel/youtubeChannelController.js'
+import { getMyChannel } from '../youtubeChannel/youtubeChannelController.js'
+import { getMyPlayList } from '../youtubePlaylists/youtubePlaylistsController.js'
 import authRequirida from '../middleware/autenticandoRotas.js'
 
 const routerYoutubeUser = express.Router()

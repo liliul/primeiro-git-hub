@@ -8,7 +8,7 @@ import cors from 'cors'
 import path from 'node:path';
 import cookieParser from 'cookie-parser';
 import routerLogger from './router/logger.js';
-import routerYoutubeUser from './router/routerYoutubeUser.js';
+import routerYoutubeUser from './router/routerYoutubeUserPlaylists.js';
 
 // import './node_cron/index.js'
 
