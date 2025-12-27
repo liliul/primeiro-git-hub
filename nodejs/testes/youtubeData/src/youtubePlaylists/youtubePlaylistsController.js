@@ -1,5 +1,7 @@
 import axios from "axios";
 import { getValidGoogleToken } from "../utils/getValidGoogleToken.js";
+import { playlistLogger } from "./playlistLogger.js";
+import { sanitizeAxiosError } from "../utils/sanitizeAxiosError.js";
 
 export async function getMyPlayList(req, res) {
   try {
@@ -45,6 +47,13 @@ export async function getMyPlayList(req, res) {
     res.json(playListItems);
   } catch (error) {
     console.error('Erro no getMyPlayList: ', error);
+
+    playlistLogger.error({
+      service: 'getMyPlayList',
+      method: 'buscando videos de playlists youtube',
+      error: sanitizeAxiosError(error),
+    })
+
     res.status(500).json({ error: "Erro ao buscar playlists" }); 
   }
 }
