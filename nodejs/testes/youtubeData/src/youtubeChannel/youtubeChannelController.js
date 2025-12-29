@@ -1,6 +1,8 @@
 import axios from "axios";
 import { getValidGoogleToken } from "../utils/getValidGoogleToken.js";
 import { redis } from "../db/redis.js";
+import { channelLogger } from "./channelLogger.js";
+import { sanitizeAxiosError } from "../utils/sanitizeAxiosError.js";
 
 export async function getMyChannel(req, res) {
   try {
@@ -36,6 +38,13 @@ export async function getMyChannel(req, res) {
     res.json({ apiytuser: response.data });
   } catch (error) {
     console.error(error);
+
+    channelLogger.error({
+      service: 'getChannels',
+      method: 'buscando informações do canal do youtube',
+      error: sanitizeAxiosError(error),
+    })
+
     res.status(500).json({ error: "Erro ao buscar canal" });
   }
 }
