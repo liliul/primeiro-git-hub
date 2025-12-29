@@ -87,19 +87,29 @@
         console.log(uf);
 
         uf.addEventListener('keydown', async (e) => {
-            const u = e.target.value
-            console.log(u);
-            const f = await ytvideosUf(u.toUpperCase())
-            console.log(f);
-            const {message, data, length} = await f
-            cardVideos(message, data, length)
+
+            if (e.key === 'Enter') {
+                const u = e.target.value
+                console.log(u);
+                const f = await ytvideosUf(u.toUpperCase())
+                console.log(f);
+                const {message, data, length} = await f
+                cardVideos(message, data, length)
+            }
+
         })
+        
         async function ytvideosUf(uf) {
             
+           try {
             const req = await fetch(`http://localhost:3001/youtube/v1/yaltavideos/${uf}`)
             const data = await req.json()
 
             return data
+           } catch (error) {
+            console.error(error);
+            document.getElementById('videos').innerHTML = '<p style="color: tomato;">Erro ao buscar videos pesquisado.</p>'
+           }
         }
       
         async function cardVideos(message, data, length) {
