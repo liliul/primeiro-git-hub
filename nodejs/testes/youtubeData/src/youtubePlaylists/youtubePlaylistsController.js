@@ -59,19 +59,24 @@ export async function getMyPlayList(req, res) {
 }
 
 async function getPlaylistVideos(accessToken, playlistId) {
-  const response = await axios.get(
-    "https://www.googleapis.com/youtube/v3/playlistItems",
-    {
-      params: {
-        part: "snippet,contentDetails",
-        playlistId,
-        maxResults: 25
-      },
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    }
-  );
+  try {
+    const response = await axios.get(
+      "https://www.googleapis.com/youtube/v3/playlistItems",
+      {
+        params: {
+          part: "snippet,contentDetails",
+          playlistId,
+          maxResults: 25
+        },
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
 
-  return response.data;
+    return response.data;
+  } catch (error) {
+    console.error('Erro em getPlayistVideos: ', error);
+    sanitizeAxiosError(error)
+  }
 }
