@@ -78,10 +78,21 @@
     <script type="module">
 
         async function ytvideos() {
-            const req = await fetch('http://localhost:3001/youtube/v1/ytvideos')
-            const res = await req.json()
+            try {
+                const req = await fetch('http://localhost:3001/youtube/v1/ytvideos')
+                const res = await req.json()
 
-            return res
+                return res
+            } catch(error) {
+                console.error(error)
+                const erroCode = {
+                    'status': 'Listando videos em alta salva no banco de dados',
+                    'codeError': 404,
+                    'erro':error
+                }
+
+                document.getElementById('content').innerHTML = `<pre>${JSON.stringify(erroCode, null, 2)}</pre>`
+            }
         }
 
         async function cardVideos() {

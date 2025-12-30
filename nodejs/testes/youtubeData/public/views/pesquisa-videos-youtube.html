@@ -131,6 +131,7 @@
         }
         buscar()
         async function pesquisandoNoYoutube(query) {
+           try {
             const url = 'http://localhost:3001/youtube/v2/ytsearch'
             const options = {
                 method: 'POST',
@@ -144,7 +145,18 @@
 
             console.log(res)
 
-            return res            
+            return res
+
+          } catch(error) {
+            console.error(error)
+            const erroCode = {
+                'status': 'Pesquisando videos no youtube',
+                'codeError': 404,
+                'erro':error
+            }
+
+            document.getElementById('videos').innerHTML = `<pre>${JSON.stringify(erroCode, null, 2)}</pre>`
+          }
         } 
         
         // pesquisandoNoYoutube('dragon ball z abertura')
