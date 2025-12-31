@@ -110,10 +110,11 @@
     </div>
     
     <script type="module">
-        
-        async function buscar() {
-            document.getElementById('videos').innerHTML = ''
+        document.addEventListener('DOMContentLoaded', () => {
+          buscar()  
+        })
 
+        async function buscar() {
             const formBuscar = document.getElementById('form-buscar')
             
             formBuscar.addEventListener('submit', async (e) => {
@@ -123,16 +124,17 @@
                 
                 console.log(buscar.value.trim());
                 const pesquisando = await pesquisandoNoYoutube(buscar.value.trim())
+                if (!pesquisando) return
 
                 card(pesquisando)
                
             })
 
         }
-        buscar()
+
         async function pesquisandoNoYoutube(query) {
            try {
-            const url = 'http://localhost:3001/youtube/v2/ytsearch'
+            const url = 'http://localhost:3001/youtube/v2/ytsearchs'
             const options = {
                 method: 'POST',
                 headers: {
@@ -145,6 +147,11 @@
 
             console.log(res)
 
+            if (!Array.isArray(res.data) || res.data.length === 0) {   
+                document.getElementById('videos').innerHTML = '<h2 style="color: tomato;">Pesquisa retornou Nemnhum video</h2>'
+                return
+            }
+
             return res
 
           } catch(error) {
@@ -152,10 +159,15 @@
             const erroCode = {
                 'status': 'Pesquisando videos no youtube',
                 'codeError': 404,
-                'erro':error
+                'erro': {
+                    name: error.name,
+                    message: error.message,
+                    stack: error.stack,
+                }
             }
 
             document.getElementById('videos').innerHTML = `<pre>${JSON.stringify(erroCode, null, 2)}</pre>`
+            return
           }
         } 
         
