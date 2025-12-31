@@ -1,5 +1,7 @@
 import axios from 'axios';
 import dotenv from 'dotenv';
+import { searchLogger } from './searchLogger.js';
+import { sanitizeAxiosError } from '../../utils/sanitizeAxiosError.js';
 dotenv.config();
 
 class YoutubeSearchVideoUtils {
@@ -32,6 +34,13 @@ class YoutubeSearchVideoUtils {
         }));
         } catch (error) {
         console.error("Erro ao buscar vídeos:", error.response?.data || error.message);
+
+        searchLogger.error({
+            service: 'searchVideos',
+            method: 'Pesquisando videos no youtube',
+            error: sanitizeAxiosError(error),
+        })
+
         return [];
         }
     }
