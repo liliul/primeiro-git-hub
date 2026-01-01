@@ -78,6 +78,8 @@
     <script type="module">
 
         async function ytvideos() {
+            document.getElementById('content').innerHTML = '<p style="text-align: center;">Carregando...</p>'
+
             try {
                 const req = await fetch('http://localhost:3001/youtube/v1/ytvideos')
                 const res = await req.json()
@@ -92,12 +94,14 @@
                 }
 
                 document.getElementById('content').innerHTML = `<pre>${JSON.stringify(erroCode, null, 2)}</pre>`
+                return null
             }
         }
 
         async function cardVideos() {
             const v = await ytvideos()
             console.log(v.origindb)
+            if (!v) return
            
             const ytvideo = v.ytvideos
             console.log(ytvideo)
@@ -105,6 +109,8 @@
                 console.error('Erro em data: ', v)
                 return
             }
+
+            document.getElementById('content').innerHTML = ''
                 
             const h1 = document.createElement('h1')
             h1.textContent = ytvideo.message
