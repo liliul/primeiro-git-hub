@@ -91,16 +91,24 @@
             if (e.key === 'Enter') {
                 const u = e.target.value
                 console.log(u);
+                
                 const f = await ytvideosUf(u.toUpperCase())
-                console.log(f);
+                if (!f) return
+
                 const {message, data, length} = await f
-                cardVideos(message, data, length)
+
+                setTimeout(() => {
+                    console.log(f);
+
+                    cardVideos(message, data, length)
+                }, 500)
             }
 
         })
         
         async function ytvideosUf(uf) {
-            
+           document.getElementById('videos').innerHTML = '<p>Carregando...</p>'
+           
            try {
             const req = await fetch(`http://localhost:3001/youtube/v1/yaltavideos/${uf}`)
             const data = await req.json()
