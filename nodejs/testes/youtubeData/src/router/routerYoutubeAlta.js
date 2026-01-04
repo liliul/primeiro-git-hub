@@ -1,5 +1,6 @@
 import express from 'express'
 import db from '../db/conection_db.js'
+import { redis } from '../db/redis.js'
 
 import YoutubeAlta from '../youtubeAlta/controllers/youtubeAltaController.js'
 import GetTrendingVideos from '../youtubeAlta/utils/getTrendingVideos.js'
@@ -59,11 +60,33 @@ routerYoutubeAlta.get('/ytalta/:id', async (req, res) => {
 routerYoutubeAlta.get('/yaltavideos/:UF', async (req, res) => {
   try {
     const { UF } = req.params
+    const cacheKey = `youtube:alta:videos:${UF}`
+
+    const cached = await redis.get(cacheKey)
+    if (cached) {
+      return res.status(200).json({
+        source: 'redis',
+        ...JSON.parse(cached)
+      })
+    }
 
     const videos = await db.query(`SELECT * FROM youtube_videos WHERE region_code = $1`, [UF])
-    // console.log(videos)
-    res.status(200).json({ message: 'retornando yaltavideos', length: videos.rows.length, data: videos.rows })
-    
+    // console.log(videos.rows)
+
+    const payload = {
+      message: 'retornando yaltavideos',
+      length: videos.rows.length,
+      data: videos.rows
+    }
+
+    await redis.set(cacheKey, JSON.stringify(payload), {
+      EX: 600
+    })
+
+    res.status(200).json({
+      source: 'postgres',
+      ...payload
+    })
   } catch (error) {
     res.status(401).json({ message: 'Erro ao pegar videos pelo id=JP', erro: error})
   }
