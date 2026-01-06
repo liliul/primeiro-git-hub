@@ -70,7 +70,7 @@ routerYoutubeAlta.get('/yaltavideos/:UF', async (req, res) => {
       })
     }
 
-    const videos = await db.query(`SELECT * FROM youtube_videos WHERE region_code = $1`, [UF])
+    const videos = await db.query(`SELECT * FROM youtube_videos WHERE region_code = $1 ORDER BY criado_em DESC`, [UF])
     // console.log(videos.rows)
 
     const payload = {
