@@ -8,17 +8,25 @@
   <link rel="stylesheet" href="/css/style.css">
   <style>
     #loading {
-     width: 100%;
-     height: 100vh;
-     background-color: #22212C;
+      width: 100%;
+      height: 100vh;
+      background-color: #22212C;
 
-     display: grid;
-     place-items: center;
+      display: grid;
+      place-items: center;
 
-     position: absolute;
-     top: 0;
-     left: 0;
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+
+      transition: opacity 0.3s ease;
     }
+
+    #loading.hide {
+      opacity: 0;
+      pointer-events: none;
+    }
+
     #loading #spinner {
       width: 50px;
       height: 50px;
@@ -26,16 +34,12 @@
 
       border: 3px solid #fa7f72;
       border-top: 1px solid #837E9F;
+      border-left: 1px solid #837E9F;
       border-bottom: 1px solid #837E9F;
+
       animation: spinner 1s linear infinite;
     }
 
-    #spin {
-      width:1px;
-      height: 3px;
-      background-color: tomato;
-      border-radius: 50%;
-    }
     @keyframes spinner {
       0% {
         transform: rotate(0);
@@ -46,18 +50,22 @@
     }
   </style>
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
+    window.addEventListener('load', () => {
+      const loading = document.getElementById('loading');
+      const app = document.getElementById('app');
+
+      loading.classList.add('hide');
+
       setTimeout(() => {
-        document.getElementById('loading').remove()
-      }, 5550)
-    })
+        loading.remove();
+        app.removeAttribute('style');
+      }, 300);
+    });
   </script>
 </head>
 <body>
   <div id="loading">
-    <span id="spinner">
-      <span id="spin"></span>
-    </span>
+    <div id="spinner"></div>
   </div>
   {{ content | safe }}
   <script type="module" src="/js/main.js"></script>
