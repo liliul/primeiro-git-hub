@@ -6,8 +6,59 @@
   <title>Protifolio</title>
   <link rel="icon" type="image/svg+xml" href="/assets/favicon.ico" />
   <link rel="stylesheet" href="/css/style.css">
+  <style>
+    #loading {
+     width: 100%;
+     height: 100vh;
+     background-color: #22212C;
+
+     display: grid;
+     place-items: center;
+
+     position: absolute;
+     top: 0;
+     left: 0;
+    }
+    #loading #spinner {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+
+      border: 3px solid #fa7f72;
+      border-top: 1px solid #837E9F;
+      border-bottom: 1px solid #837E9F;
+      animation: spinner 1s linear infinite;
+    }
+
+    #spin {
+      width:1px;
+      height: 3px;
+      background-color: tomato;
+      border-radius: 50%;
+    }
+    @keyframes spinner {
+      0% {
+        transform: rotate(0);
+      }
+      100% {
+        transform: rotate(360deg)
+      }
+    }
+  </style>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      setTimeout(() => {
+        document.getElementById('loading').remove()
+      }, 5550)
+    })
+  </script>
 </head>
 <body>
+  <div id="loading">
+    <span id="spinner">
+      <span id="spin"></span>
+    </span>
+  </div>
   {{ content | safe }}
   <script type="module" src="/js/main.js"></script>
 </body>
