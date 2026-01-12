@@ -27,9 +27,6 @@ class OpenModalPreview {
               width="100%" 
               height="100%" 
               style="display:none;"
-               loading="lazy"
-              referrerpolicy="no-referrer"
-              sandbox="allow-scripts allow-forms allow-same-origin"
             >
               </iframe>
         `;

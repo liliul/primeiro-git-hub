@@ -39,8 +39,8 @@
   }
 
   #iframe-loader {
-    width: 600px;
-    height: 300px;  
+    width: 100%;
+    height: auto;  
     position: absolute;
    
     display: flex;
@@ -65,7 +65,6 @@
       transform: rotate(360deg);
     }
   }
-
 
   .s-fechar-modal {
     position: absolute;
@@ -582,6 +581,10 @@ a {
 }
 
 @media screen and (max-width: 800px) {
+  .color-txt {
+    color: var(--bg-techs);
+  }
+
   .modal-overlay {
     position: fixed;
     top: 0;
@@ -597,10 +600,16 @@ a {
   .modal {
     margin: 1rem;
     text-align: center;
+    background: var(--bg-cards);
     color: var(--text-color);
     position: relative;
     width: 100%;
     height: 100%;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
   }
 
   .modal img {
@@ -628,8 +637,42 @@ a {
     width: 100%;
     height: 100%;
     border: none;
+
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  .iframe-modal.loaded {
+    opacity: 1;
   }
 
+  #iframe-loader {
+    width: 100%;
+    height: auto;  
+    position: absolute;
+   
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1em;
+    z-index: 2;
+  }
+
+  #iframe-loader .spinner {
+    width: 50px;
+    height: 50px;
+    border: 3px solid var(--bg-techs);
+    border-top: 1px solid transparent;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  
   .container {
     width: 100%;
     display: flex;
