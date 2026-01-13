@@ -627,10 +627,11 @@ a {
     border: none;
     background-color: var(--body-bg-color);
     color: var(--bg-techs);
+    opacity: 0.5;
   }
 
   .s-fechar-modal:hover {
-    opacity: 0.8;
+    opacity: 0.9;
   }
 
   .iframe-modal {
