@@ -9,6 +9,7 @@ import path from 'node:path';
 import cookieParser from 'cookie-parser';
 import routerLogger from './router/logger.js';
 import routerYoutubeUser from './router/routerYoutubeUserPlaylists.js';
+import routerError from './router/routerError.js';
 
 // import './node_cron/index.js'
 
@@ -31,6 +32,7 @@ app.use('/youtube/v2', routerYoutubeSearch)
 app.use("/auth", routerGoogleAuth)
 app.use('/v3', routerLogger)
 app.use('/', routerYoutubeUser)
+app.use('/', routerError)
 
 app.listen(3001, () => {
   console.log('Servidor rodando em http://localhost:3001');
