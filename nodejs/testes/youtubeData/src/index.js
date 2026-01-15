@@ -7,9 +7,9 @@ import routerGoogleAuth from './router/googleAuth2.js';
 import cors from 'cors'
 import path from 'node:path';
 import cookieParser from 'cookie-parser';
-import routerLogger from './router/logger.js';
 import routerYoutubeUser from './router/routerYoutubeUserPlaylists.js';
 import routerError from './router/routerError.js';
+import routerUtils from './router/routerUtils.js';
 
 // import './node_cron/index.js'
 
@@ -30,7 +30,7 @@ app.use(routerAccount)
 app.use('/youtube/v1', routerYoutubeAlta)
 app.use('/youtube/v2', routerYoutubeSearch)
 app.use("/auth", routerGoogleAuth)
-app.use('/v3', routerLogger)
+app.use('/v3', routerUtils)
 app.use('/', routerYoutubeUser)
 app.use('/', routerError)
 
