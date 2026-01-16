@@ -3,7 +3,7 @@ import routerHealth from './router/health.js';
 import routerAccount from './router/routerAccount.js';
 import routerYoutubeAlta from './router/routerYoutubeAlta.js';
 import routerYoutubeSearch from './router/routerYoutubeSearch.js';
-import routerGoogleAuth from './router/googleAuth2.js';
+import routerGoogleAuth from './router/routerGoogleAuth2.js';
 import cors from 'cors'
 import path from 'node:path';
 import cookieParser from 'cookie-parser';
