@@ -22,4 +22,8 @@ routerUtils.get("/me", authRequirida, (req, res) => {
   });
 });
 
+routerUtils.get("/error", (req, res, next) => {
+  next(new Error("Erro de teste"));
+});
+
 export default routerUtils;
