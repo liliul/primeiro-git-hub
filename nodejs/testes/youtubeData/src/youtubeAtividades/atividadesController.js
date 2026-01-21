@@ -38,7 +38,7 @@ class AtividadesYoutube {
             const response = await fetch(urlParams.toString(), options)
 
             if (!response.ok) { 
-                const resError = await req.json().catch(() => null)
+                const resError = await response.json().catch(() => null)
                 
                 throw new AppError(
                     resError?.error?.message || 'Erro a buscar dados de atividades.',
