@@ -1,3 +1,4 @@
+import { AppError } from '../errors/AppError.js'
 import { getValidGoogleToken } from '../utils/getValidGoogleToken.js'
 
 class AtividadesYoutube {
@@ -6,36 +7,59 @@ class AtividadesYoutube {
     }
 
     async atividades(req, res) {
-        const googleId = req.user.sub
-
-        const getAtividades = await this.getFetchAtividades(googleId)
-
-        res.status(200).json(getAtividades)
+       try {
+            const googleId = req.user.sub
+            const getAtividades = await this.getFetchAtividades(googleId)
+            res.status(200).json(getAtividades)
+       
+        } catch (error) {
+            console.error(error)
+            return res.status(error.statusCode || 500).json({ error: error.message })    
+        }
     }
 
     async getFetchAtividades(googleId) {
-        const accessToken = await getValidGoogleToken(googleId)
+        try {
+            const accessToken = await getValidGoogleToken(googleId)
         
-        const options = {
-            headers: {
-                Authorization: `Bearer ${accessToken}`,
+            const options = {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`,
+                }
             }
+            
+            const urlParams = new URL(this.BASE_URL)
+            urlParams.search = new URLSearchParams({
+                part: 'snippet,contentDetails',
+                maxResults: 5,
+                mine: true
+            })
+
+            const response = await fetch(urlParams.toString(), options)
+
+            if (!response.ok) { 
+                const resError = await req.json().catch(() => null)
+                
+                throw new AppError(
+                    resError?.error?.message || 'Erro a buscar dados de atividades.',
+                    response.status
+                ) 
+            }
+
+            const data = await response.json()
+
+            return data 
+
+        } catch (error) {
+            if (error instanceof AppError) {
+                throw error
+            }
+
+            throw new AppError(
+                'Erro interno ao comunicar com o YouTube',
+                500
+            )
         }
-        
-        const urlParams = new URL(this.BASE_URL)
-        urlParams.search = new URLSearchParams({
-            part: 'snippet,contentDetails',
-            maxResults: 5,
-            mine: true
-        })
-
-        const response = await fetch(urlParams, options)
-
-        if (!response.ok) return { error: 'Erro a buscar dados de atividades.'}
-
-        const data = await response.json()
-
-        return data 
     }
 }
 
