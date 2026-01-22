@@ -8,6 +8,10 @@ class AtividadesYoutube {
 
     async atividades(req, res) {
        try {
+            if (!req.user || !req.user.sub) {
+                throw new AppError('Usuário não autenticado', 401)
+            }
+            
             const googleId = req.user.sub
             const getAtividades = await this.getFetchAtividades(googleId)
             res.status(200).json(getAtividades)
