@@ -77,7 +77,9 @@
     <div id="content"></div>
     
     <script>
-        
+        let nextPageToken = null
+        let prevPageToken = null
+
         async function getAtividades(pageToken = null) {
             const req = await fetch(`http://localhost:3001/atividades${pageToken ? '?pageToken=' + pageToken : ''}`)
             const res = await req.json()
@@ -110,38 +112,44 @@
             document.getElementById('content').appendChild(sectionContainerItems)
         }
 
-        async function pageToken() {
+        async function renderizarControles() {
             const atividadesApi = await getAtividades()
 
             const controlePages = document.createElement('div')
             controlePages.innerHTML = `
-                <button id="prev" class="voltar" data-pagetokenprev="${atividadesApi.prevPageToken ?? ''}"><</button>
-                <button id="next" class="voltar" data-pagetokennext="${atividadesApi.nextPageToken}">></button>
-
+                <button id="prev" class="voltar" ${!prevPageToken ? 'disabled' : ''}>&lt;</button>
+                <button id="next" class="voltar" ${!nextPageToken ? 'disabled' : ''}>&gt;</button>
             `
 
             document.getElementById('content').appendChild(controlePages)
 
-            const next = document.getElementById('next')
-            if (!next) return
+            document.getElementById('next')?.addEventListener('click', carregarProxima)
+            document.getElementById('prev')?.addEventListener('click', carregarAnterior)
+        }
+        async function carregarProxima() {
+            if (!nextPageToken) return
 
-            next.addEventListener('click', async (e) => {
-                const eventData = e.currentTarget.dataset.pagetokennext
-                console.log(eventData);
-                
-                const nextPage = await getAtividades(eventData)
-                
-                if (!nextPage) return
+            const data = await getAtividades(nextPageToken)
+            atualizarEstado(data)
+        }
 
-                renderizarAtividadesHtml(nextPage)
-            })
+        async function carregarAnterior() {
+            if (!prevPageToken) return
+
+            const data = await getAtividades(prevPageToken)
+            atualizarEstado(data)
+        }
+        function atualizarEstado(data) {
+            nextPageToken = data.nextPageToken || null
+            prevPageToken = data.prevPageToken || null
+            
+            renderizarAtividadesHtml(data)
+            renderizarControles()
         }
 
         async function main() {
-            const atividadesApi = await getAtividades()
-            console.log(atividadesApi)
-            renderizarAtividadesHtml(atividadesApi)
-            pageToken()
+            const data = await getAtividades()
+            atualizarEstado(data)
         }
 
         main()
