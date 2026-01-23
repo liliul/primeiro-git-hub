@@ -27,6 +27,7 @@ class AtividadesYoutube {
             const accessToken = await getValidGoogleToken(googleId)
         
             const options = {
+                method: 'GET',
                 headers: {
                     Authorization: `Bearer ${accessToken}`,
                 }
