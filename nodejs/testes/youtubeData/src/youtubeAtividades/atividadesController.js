@@ -12,8 +12,10 @@ class AtividadesYoutube {
                 throw new AppError('Usuário não autenticado', 401)
             }
             
+            const { pageToken } = req.query
             const googleId = req.user.sub
-            const getAtividades = await this.getFetchAtividades(googleId)
+            const getAtividades = await this.getFetchAtividades(googleId, pageToken)
+            
             res.status(200).json(getAtividades)
        
         } catch (error) {
@@ -22,7 +24,7 @@ class AtividadesYoutube {
         }
     }
 
-    async getFetchAtividades(googleId) {
+    async getFetchAtividades(googleId, pageToken = null) {
         try {
             const accessToken = await getValidGoogleToken(googleId)
         
@@ -34,11 +36,17 @@ class AtividadesYoutube {
             }
             
             const urlParams = new URL(this.BASE_URL)
-            urlParams.search = new URLSearchParams({
+            const params = {
                 part: 'snippet,contentDetails',
                 maxResults: 5,
                 mine: true
-            })
+            }
+            
+            if (pageToken) {
+                params.pageToken = pageToken
+            }
+            
+            urlParams.search = new URLSearchParams(params)
 
             const response = await fetch(urlParams.toString(), options)
 

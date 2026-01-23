@@ -77,21 +77,22 @@
     <div id="content"></div>
     
     <script>
-        async function getAtividades() {
-            const req = await fetch('http://localhost:3001/atividades')
+        
+        async function getAtividades(pageToken = null) {
+            const req = await fetch(`http://localhost:3001/atividades${pageToken ? '?pageToken=' + pageToken : ''}`)
             const res = await req.json()
 
             return res
         }
 
-        async function renderizarAtividadesHtml() {
-            const atividadesApi = await getAtividades()
-                        
+        async function renderizarAtividadesHtml(atividadesApi) {
+            document.getElementById('content').innerHTML = ''
+
             const sectionContainerItems = document.createElement('section')
             sectionContainerItems.innerHTML = atividadesApi.items?.length ? (
                 atividadesApi.items.map(item => {
                     return (`
-                        <div class='card' data-idat='${item.snippet.id}'>
+                        <div class='card' data-idat='${item.id}'>
                             <img src="${item.snippet.thumbnails.medium.url}" alt="${item.snippet.title}">
 
                             <p>${item.snippet.description}</p>
@@ -109,8 +110,38 @@
             document.getElementById('content').appendChild(sectionContainerItems)
         }
 
-        function main() {
-            renderizarAtividadesHtml()
+        async function pageToken() {
+            const atividadesApi = await getAtividades()
+
+            const controlePages = document.createElement('div')
+            controlePages.innerHTML = `
+                <button id="prev" class="voltar" data-pagetokenprev="${atividadesApi.prevPageToken ?? ''}"><</button>
+                <button id="next" class="voltar" data-pagetokennext="${atividadesApi.nextPageToken}">></button>
+
+            `
+
+            document.getElementById('content').appendChild(controlePages)
+
+            const next = document.getElementById('next')
+            if (!next) return
+
+            next.addEventListener('click', async (e) => {
+                const eventData = e.currentTarget.dataset.pagetokennext
+                console.log(eventData);
+                
+                const nextPage = await getAtividades(eventData)
+                
+                if (!nextPage) return
+
+                renderizarAtividadesHtml(nextPage)
+            })
+        }
+
+        async function main() {
+            const atividadesApi = await getAtividades()
+            console.log(atividadesApi)
+            renderizarAtividadesHtml(atividadesApi)
+            pageToken()
         }
 
         main()
