@@ -103,12 +103,35 @@
     <script>
         let nextPageToken = null
         let prevPageToken = null
+        const pagesCache = new Map()
+        
+        async function getAtividades(pageToken) {
+            const cacheKey = getCacheKey(pageToken)
+            
+            // console.log({
+            //     pageToken,
+            //     cacheKey,
+            //     cacheKeys: [...pagesCache.keys()]
+            // })
 
-        async function getAtividades(pageToken = null) {
-            const req = await fetch(`http://localhost:3001/atividades${pageToken ? '?pageToken=' + pageToken : ''}`)
+            if (pagesCache.has(cacheKey)) {
+                // console.log('cache: ', cacheKey)
+                return pagesCache.get(cacheKey)
+            }
+
+            const url = cacheKey === 'FIRST_PAGE'
+                ? 'http://localhost:3001/atividades'
+                : `http://localhost:3001/atividades?pageToken=${cacheKey}`
+            const req = await fetch(url)
             const res = await req.json()
-
+            
+            pagesCache.set(cacheKey, res)
+            
             return res
+        }
+        
+        function getCacheKey(pageToken) {
+            return pageToken || 'FIRST_PAGE'
         }
 
         async function renderizarAtividadesHtml(atividadesApi) {
@@ -137,9 +160,6 @@
         }
 
         async function renderizarControles() {
-            const atividadesApi = await getAtividades()
-            console.log(atividadesApi);
-            
             const controlePages = document.createElement('div')
             controlePages.innerHTML = `
                 <button id="prev" class="voltar" ${!prevPageToken ? 'disabled' : ''}>&lt;</button>
@@ -157,7 +177,7 @@
 
             renderizarSkeleton()
             const data = await getAtividades(nextPageToken)
-            atualizarEstado(data)
+            atualizarEstado(data, nextPageToken)
         }
 
         async function carregarAnterior() {
@@ -165,13 +185,13 @@
 
             renderizarSkeleton()
             const data = await getAtividades(prevPageToken)
-            atualizarEstado(data)
+            atualizarEstado(data, prevPageToken)
         }
 
-        function atualizarEstado(data) {
+        function atualizarEstado(data, pageToken = 'FIRST_PAGE') {
             nextPageToken = data.nextPageToken || null
             prevPageToken = data.prevPageToken || null
-            
+              
             renderizarAtividadesHtml(data)
             renderizarControles()
         }
