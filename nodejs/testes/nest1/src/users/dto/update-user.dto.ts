@@ -13,4 +13,3 @@ export class UpdateUserDto {
   @IsString()
   role?: string;
 }
-
