@@ -34,26 +34,27 @@ class RefreshController {
 			return res.status(401).json({ message: "Refresh token inválido" });
 		}
 
-		const tokenExists = await this.pool.query(
-			"SELECT id FROM refresh_tokens WHERE token = $1",
-			[refreshToken],
+		const storedToken = await this.pool.query(
+			`SELECT token FROM refresh_tokens WHERE user_id = $1`,
+			[payload.sub],
 		);
 
-		if (!tokenExists.rowCount) {
-			return res.status(401).json({ message: "Refresh token revogado" });
+		if (!storedToken.rowCount) {
+			return res.status(401).json({ message: "Refresh token inexistente" });
 		}
 
-		await this.pool.query("DELETE FROM refresh_tokens WHERE token = $1", [
-			refreshToken,
-		]);
+		if (storedToken.rows[0].token !== refreshToken) {
+			return res.status(401).json({ message: "Refresh token revogado" });
+		}
 
 		const newAccessToken = generateAccessToken(payload.sub);
 		const newRefreshToken = generateRefreshToken(payload.sub);
 
 		await this.pool.query(
-			`INSERT INTO refresh_tokens (user_id, token, expires_at)
-       VALUES ($1, $2, NOW() + INTERVAL '7 days')`,
-			[payload.sub, newRefreshToken],
+			`UPDATE refresh_tokens
+			 SET token = $1, expires_at = NOW() + INTERVAL '7 days'
+			 WHERE user_id = $2`,
+			[newRefreshToken, payload.sub],
 		);
 
 		return res.json({

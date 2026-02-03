@@ -23,6 +23,11 @@ export const refreshSchema = z.object({
 	refreshToken: z.string().min(1, "Refresh token é obrigatório"),
 });
 
+export const logoutSchema = z.object({
+	refreshToken: z.string().min(10),
+});
+
 export type CreateUserDTO = z.infer<typeof createUserSchema>;
 export type LoginDTO = z.infer<typeof loginSchema>;
 export type RefreshDTO = z.infer<typeof refreshSchema>;
+export type LogoutDTO = z.infer<typeof logoutSchema>;

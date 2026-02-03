@@ -2,7 +2,7 @@ import bcrypt from "bcrypt";
 import type { Request, Response } from "express";
 import type { Pool } from "pg";
 import { generateAccessToken, generateRefreshToken } from "../../auth/jwt";
-import { createUserSchema, loginSchema } from "./user.schema";
+import { createUserSchema, loginSchema, logoutSchema } from "./user.schema";
 
 class UserController {
 	constructor(private readonly pool: Pool) {}
@@ -75,8 +75,14 @@ class UserController {
 		const refreshToken = generateRefreshToken(user.id);
 
 		await this.pool.query(
-			`INSERT INTO refresh_tokens (user_id, token, expires_at)
-       VALUES ($1, $2, NOW() + INTERVAL '7 days')`,
+			`
+		INSERT INTO refresh_tokens (user_id, token, expires_at)
+		VALUES ($1, $2, NOW() + INTERVAL '7 days')
+		ON CONFLICT (user_id)
+		DO UPDATE SET
+			token = EXCLUDED.token,
+			expires_at = EXCLUDED.expires_at
+		`,
 			[user.id, refreshToken],
 		);
 
@@ -84,6 +90,46 @@ class UserController {
 			accessToken,
 			refreshToken,
 		});
+	}
+
+	async me(req: Request, res: Response) {
+		if (!req.userId) {
+			return res.status(401).json({ message: "Não autenticado" });
+		}
+
+		const result = await this.pool.query(
+			`SELECT id, name, email, roles, created_at
+       FROM users
+       WHERE id = $1`,
+			[req.userId],
+		);
+
+		if (!result.rowCount) {
+			return res.status(404).json({ message: "Usuário não encontrado" });
+		}
+
+		return res.json({
+			user: result.rows[0],
+		});
+	}
+
+	async logout(req: Request, res: Response) {
+		const result = logoutSchema.safeParse(req.body);
+
+		if (!result.success) {
+			return res.status(400).json({
+				message: "Dados inválidos",
+				errors: result.error.flatten().fieldErrors,
+			});
+		}
+
+		const { refreshToken } = result.data;
+
+		await this.pool.query(`DELETE FROM refresh_tokens WHERE token = $1`, [
+			refreshToken,
+		]);
+
+		return res.status(204).send();
 	}
 }
 
