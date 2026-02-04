@@ -16,3 +16,10 @@ CREATE TABLE refresh_tokens (
   expires_at TIMESTAMP WITH TIME ZONE NOT NULL,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
+
+-- INSERT INTO refresh_tokens (user_id, token, expires_at)
+-- VALUES (
+--   'testando cron id user',
+--   gen_random_uuid(),
+--   NOW() - INTERVAL '1 day'
+-- );

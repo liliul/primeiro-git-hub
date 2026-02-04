@@ -1,5 +1,6 @@
 import { AppError } from "../../errors/appErrors/index.js";
 import AuthRefreshTokenService from "./authRefreshTokenService.js";
+import { refreshTokenSchema } from "./authSchema.js";
 
 class AuthRefreshTokenController {
 	constructor(pool) {
@@ -8,7 +9,7 @@ class AuthRefreshTokenController {
 	}
 
 	async refresh(req, res) {
-		const { refreshToken } = req.body;
+		const { refreshToken } = refreshTokenSchema.parse(req.body);
 
 		if (!refreshToken) {
 			throw new AppError("Refresh token obrigatório", 400);
@@ -21,7 +22,7 @@ class AuthRefreshTokenController {
 	}
 
 	async logout(req, res) {
-		const { refreshToken } = req.body;
+		const { refreshToken } = refreshTokenSchema.parse(req.body);
 
 		if (!refreshToken) {
 			throw new AppError("Refresh token obrigatório", 400);

@@ -13,7 +13,7 @@ class AuthRefreshTokenService {
 			await this.authRefreshTokenRepository.findByToken(refreshToken);
 
 		if (!token) {
-			throw new AppError("Refresh token inválido", 401);
+			throw new AppError("Refresh token não existe no banco", 401);
 		}
 
 		await this.authRefreshTokenRepository.deleteById(token.id);
@@ -26,10 +26,22 @@ class AuthRefreshTokenService {
 			expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
 		});
 
-		const newAccessToken = jwt.sign({}, process.env.JWT_SECRET, {
-			subject: token.user_id,
-			expiresIn: process.env.JWT_EXPIRES_IN,
-		});
+		const userId = await this.authRefreshTokenRepository.findByUserId(
+			token.user_id,
+		);
+
+		if (!userId) {
+			throw new AppError("Busca pelo o user_id falhou ou não existe", 401);
+		}
+
+		const newAccessToken = jwt.sign(
+			{ roles: userId.roles },
+			process.env.JWT_SECRET,
+			{
+				subject: userId.id,
+				expiresIn: process.env.JWT_EXPIRES_IN,
+			},
+		);
 
 		return {
 			token: newAccessToken,
@@ -38,8 +50,11 @@ class AuthRefreshTokenService {
 	}
 
 	async logoutService(refreshToken) {
-		if (!refreshToken) {
-			throw new AppError("Refresh token obrigatório", 400);
+		const verificarTokenExiste =
+			await this.authRefreshTokenRepository.findByToken(refreshToken);
+
+		if (!verificarTokenExiste) {
+			throw new AppError("Refresh token não existe no banco", 401);
 		}
 
 		await this.authRefreshTokenRepository.deleteByToken(refreshToken);

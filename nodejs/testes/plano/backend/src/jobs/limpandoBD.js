@@ -9,7 +9,7 @@ class LimpandoDB {
 	async limpandoRefreshToken() {
 		if (this.started) return;
 		this.started = true;
-		cron.schedule("*/1 * * * *", async () => {
+		cron.schedule("0 3 * * *", async () => {
 			try {
 				const result = await this.pool.query(
 					`DELETE FROM refresh_tokens WHERE expires_at < NOW()`,

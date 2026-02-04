@@ -77,7 +77,10 @@ class UserService {
 		const user = await this.userRepository.meUserRepository(id);
 
 		if (!user) {
-			throw new AppError("ErrorPostgres me service", 500);
+			throw new AppError(
+				"ErrorPostgres id usuario pode não existir me service",
+				500,
+			);
 		}
 
 		return user;
