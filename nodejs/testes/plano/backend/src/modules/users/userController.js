@@ -1,3 +1,5 @@
+import AuditoriaService from "../auditoria/auditoriaService.js";
+import { AuditoriaAction } from "../auditoria/domain/auditoriaActive.js";
 import {
 	createUserSchema,
 	loginSchema,
@@ -10,6 +12,7 @@ class UserController {
 		this.pool = pool;
 
 		this.userService = new UserService(this.pool);
+		this.auditoriaService = new AuditoriaService(this.pool);
 	}
 
 	async create(req, res) {
@@ -31,9 +34,36 @@ class UserController {
 	async login(req, res) {
 		const { email, password } = loginSchema.parse(req.body);
 
-		const response = await this.userService.loginUserService(email, password);
+		try {
+			const response = await this.userService.loginUserService(email, password);
 
-		return res.status(200).json(response);
+			try {
+				await this.auditoriaService.log({
+					userId: response.user.id,
+					email: response.user.email,
+					action: AuditoriaAction.LOGIN_SUCCESS,
+					ip: req.ip,
+					userAgent: req.headers["user-agent"],
+				});
+			} catch (err) {
+				console.error("Falha ao auditar LOGIN_SUCCESS", err);
+			}
+
+			return res.status(200).json(response);
+		} catch (error) {
+			try {
+				await this.auditoriaService.log({
+					email,
+					action: AuditoriaAction.LOGIN_FAIL,
+					ip: req.ip,
+					userAgent: req.headers["user-agent"],
+				});
+			} catch (err) {
+				console.error("Falha ao auditar LOGIN_FAIL", err);
+			}
+
+			throw error;
+		}
 	}
 
 	async me(req, res) {

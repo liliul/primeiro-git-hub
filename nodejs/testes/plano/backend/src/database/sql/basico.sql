@@ -23,3 +23,14 @@ CREATE TABLE refresh_tokens (
 --   gen_random_uuid(),
 --   NOW() - INTERVAL '1 day'
 -- );
+
+CREATE TABLE auth_audit_logs (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID NULL,
+  email TEXT,
+  action VARCHAR(20) NOT NULL,
+  ip TEXT,
+  user_agent TEXT,
+  created_at TIMESTAMP DEFAULT now()
+);
+

@@ -1,4 +1,6 @@
 import { AppError } from "../../errors/appErrors/index.js";
+import AuditoriaService from "../auditoria/auditoriaService.js";
+import { AuditoriaAction } from "../auditoria/domain/auditoriaActive.js";
 import AuthRefreshTokenService from "./authRefreshTokenService.js";
 import { refreshTokenSchema } from "./authSchema.js";
 
@@ -6,6 +8,7 @@ class AuthRefreshTokenController {
 	constructor(pool) {
 		this.pool = pool;
 		this.authRefreshTokenService = new AuthRefreshTokenService(this.pool);
+		this.auditoriaService = new AuditoriaService(this.pool);
 	}
 
 	async refresh(req, res) {
@@ -28,7 +31,23 @@ class AuthRefreshTokenController {
 			throw new AppError("Refresh token obrigatório", 400);
 		}
 
-		await this.authRefreshTokenService.logoutService(refreshToken);
+		const userId = req.user?.id;
+
+		try {
+			await this.authRefreshTokenService.logoutService(refreshToken);
+			
+		} finally {
+			try {
+				await this.auditoriaService.log({
+					userId,
+					action: AuditoriaAction.LOGOUT,
+					ip: req.ip,
+					userAgent: req.headers["user-agent"],
+				});
+			} catch (err) {
+				console.error("Falha ao auditar LOGOUT", err);
+			}
+		}
 
 		return res.status(204).send();
 	}
