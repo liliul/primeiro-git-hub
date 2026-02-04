@@ -2,6 +2,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import crypto from "node:crypto";
 import { AppError } from "../../errors/appErrors/index.js";
+import { resolvePermissionsJwt } from "../../utils/resolvePermissions.js";
 import AuthRefreshTokenRepository from "../auth/authRefreshTokenRepository.js";
 import UserRepository from "./userRepository.js";
 
@@ -42,28 +43,31 @@ class UserService {
 			throw new AppError("ErrorPassword password bcrypt", 401);
 		}
 
-		const token = jwt.sign(
+		const permissions = resolvePermissionsJwt(user.roles);
+
+		const newAccessToken = jwt.sign(
 			{
-				sub: user.id,
 				roles: user.roles,
+				permissions,
 			},
 			process.env.JWT_SECRET,
 			{
+				subject: user.id,
 				expiresIn: process.env.JWT_EXPIRES_IN || "15m",
 			},
 		);
 
-		const refreshToken = crypto.randomUUID();
+		const newRefreshToken = crypto.randomUUID();
 
 		await this.authRefreshTokenRepository.create({
 			userId: user.id,
-			token: refreshToken,
+			token: newRefreshToken,
 			expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
 		});
 
 		return {
-			token,
-			refreshToken,
+			accessToken: newAccessToken,
+			refreshToken: newRefreshToken,
 			user: {
 				id: user.id,
 				name: user.name,
@@ -84,6 +88,20 @@ class UserService {
 		}
 
 		return user;
+	}
+
+	async updateUserService(userId, name, password) {
+		let hashedPassword;
+
+		if (password) {
+			hashedPassword = await bcrypt.hash(password, 10);
+		}
+
+		await this.userRepository.updateUserRepository(
+			userId,
+			name,
+			hashedPassword,
+		);
 	}
 }
 

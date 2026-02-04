@@ -35,18 +35,6 @@ class AuthRefreshTokenRepository {
 			token,
 		]);
 	}
-
-	async findByUserId(id) {
-		const query = `
-      SELECT id, roles
-      FROM users
-      WHERE id = $1
-      LIMIT 1
-    `;
-
-		const { rows } = await this.pool.query(query, [id]);
-		return rows[0];
-	}
 }
 
 export default AuthRefreshTokenRepository;

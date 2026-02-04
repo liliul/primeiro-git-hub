@@ -39,6 +39,33 @@ class UserRepository {
 		const { rows } = await this.pool.query(query, [id]);
 		return rows[0];
 	}
+
+	async findByUserId(id) {
+		const query = `
+      SELECT id, roles
+      FROM users
+      WHERE id = $1
+      LIMIT 1
+    `;
+
+		const { rows } = await this.pool.query(query, [id]);
+		return rows[0];
+	}
+
+	async updateUserRepository(userId, name, hashedPassword) {
+		const query = `
+      UPDATE users
+      SET
+        name = COALESCE($1, name),
+        password = COALESCE($2, password)
+      WHERE id = $3
+      `;
+
+		const value = [name ?? null, hashedPassword ?? null, userId];
+		const { rows } = await this.pool.query(query, value);
+
+		return rows[0];
+	}
 }
 
 export default UserRepository;

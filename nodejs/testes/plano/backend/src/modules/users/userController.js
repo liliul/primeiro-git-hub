@@ -1,4 +1,8 @@
-import { createUserSchema, loginSchema } from "./userSchema.js";
+import {
+	createUserSchema,
+	loginSchema,
+	updateUserSchema,
+} from "./userSchema.js";
 import UserService from "./userService.js";
 
 class UserController {
@@ -42,6 +46,20 @@ class UserController {
 		const response = await this.userService.meUserService(userId);
 
 		return res.status(200).json(response);
+	}
+
+	async update(req, res) {
+		const userId = req.user.id;
+
+		if (!userId) {
+			return res.status(401).json({ message: "Usuário não autenticado" });
+		}
+
+		const { name, password } = updateUserSchema.parse(req.body);
+
+		await this.userService.updateUserService(userId, name, password);
+
+		return res.status(204).send();
 	}
 }
 
