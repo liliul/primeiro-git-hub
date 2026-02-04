@@ -26,8 +26,14 @@ class AuthRefreshTokenRepository {
 		return rows[0];
 	}
 
-	async delete(id) {
+	async deleteById(id) {
 		await this.pool.query(`DELETE FROM refresh_tokens WHERE id = $1`, [id]);
+	}
+
+	async deleteByToken(token) {
+		await this.pool.query(`DELETE FROM refresh_tokens WHERE token = $1`, [
+			token,
+		]);
 	}
 }
 
