@@ -3,14 +3,21 @@ class Policies {
 		return user.id === resource.id;
 	}
 
-	alterarRoles({ user, resource }) {
-		if (user.id === resource.id) {
-			return false;
+	alterarRoles({ user, resource, body }) {
+		if (user.id === resource.id) return false;
+
+		if (body.roles?.includes("superadmin")) return false;
+
+		if (user.roles.includes("superadmin")) return true;
+
+		if (user.roles.includes("admin") && resource.roles?.includes("user")) {
+			return true;
 		}
-		return user.roles.includes("admin");
+
+		return false;
 	}
 
-	user({ user, resource }) {
+	acessoUser({ user, resource }) {
 		if (user.roles.includes("admin")) return true;
 		return user.id === resource.id;
 	}

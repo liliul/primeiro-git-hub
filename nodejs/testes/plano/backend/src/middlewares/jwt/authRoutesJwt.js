@@ -48,15 +48,14 @@ class AuthRoutesJwt {
 		return (req, res, next) => {
 			const { permissions } = req.user;
 
-			const hasPermission = permissions.some((p) =>
-				allowedPermissions.includes(p),
-			);
-
-			if (!hasPermission) {
-				throw new AppError("Permissão insuficiente", 403);
+			if (
+				permissions.includes("*") ||
+				permissions.some((p) => allowedPermissions.includes(p))
+			) {
+				return next();
 			}
 
-			return next();
+			throw new AppError("Permissão insuficiente", 403);
 		};
 	}
 

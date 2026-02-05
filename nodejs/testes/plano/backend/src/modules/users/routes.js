@@ -20,11 +20,8 @@ userRoutes.get("/me", JWT.auth, userController.me.bind(userController));
 userRoutes.put(
 	"/update",
 	JWT.auth,
-	JWT.ensureRole("user"),
-	JWT.ensurePermission("USER_UPDATE"),
-	JWT.ensurePolicy(({ user, resource }) => {
-		return user.id != resource.id;
-	}),
+	JWT.ensureRole("user", "superadmin"),
+	JWT.ensurePermission("USER_UPDATE_SELF"),
 	userController.update.bind(userController),
 );
 
