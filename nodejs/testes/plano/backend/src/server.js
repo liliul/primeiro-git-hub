@@ -1,4 +1,5 @@
 import app from "./app.js";
+import "./configs/env.js";
 import { pool } from "./database/postgres.js";
 import LimpandoDB from "./jobs/limpandoBD.js";
 

@@ -35,7 +35,6 @@ class AuthRefreshTokenController {
 
 		try {
 			await this.authRefreshTokenService.logoutService(refreshToken);
-			
 		} finally {
 			try {
 				await this.auditoriaService.log({
