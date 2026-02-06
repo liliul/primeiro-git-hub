@@ -33,4 +33,6 @@ CREATE TABLE auth_audit_logs (
   user_agent TEXT,
   created_at TIMESTAMP DEFAULT now()
 );
+ALTER TABLE auth_audit_logs
+ADD COLUMN metadata JSONB;
 

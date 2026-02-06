@@ -2,7 +2,7 @@ class AuditoriaService {
 	constructor(pool) {
 		this.pool = pool;
 	}
-	async log({ userId, email, action, ip, userAgent }) {
+	async log({ userId, email, action, ip, userAgent, metadata }) {
 		await this.pool.query(
 			`
       INSERT INTO auth_audit_logs (
@@ -10,10 +10,18 @@ class AuditoriaService {
         email,
         action,
         ip,
-        user_agent
-      ) VALUES ($1, $2, $3, $4, $5)
+        user_agent,
+		metadata
+      ) VALUES ($1, $2, $3, $4, $5, $6)
       `,
-			[userId || null, email || null, action, ip, userAgent],
+			[
+				userId || null,
+				email || null,
+				action,
+				ip,
+				userAgent,
+				metadata ? JSON.stringify(metadata) : null,
+			],
 		);
 	}
 }

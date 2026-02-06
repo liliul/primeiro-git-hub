@@ -2,6 +2,7 @@ import express from "express";
 import { corsMiddleware } from "./middlewares/cors/index.js";
 import ErrorGlobal from "./middlewares/err/errorHandler.js";
 import requestGlobal from "./middlewares/loggerGlobal/request.js";
+import adminsRoutes from "./modules/admins/routes/routes.js";
 import authRefresToken from "./modules/auth/routes.js";
 import healthRoutes from "./modules/health/routes.js";
 import userRoutes from "./modules/users/routes.js";
@@ -18,6 +19,8 @@ app.use(requestGlobal);
 app.use("/health", healthRoutes);
 app.use("/user", userRoutes);
 app.use("/auth", authRefresToken);
+app.use("/admin", adminsRoutes);
+
 app.use(errorGlobal.errorHandler);
 
 export default app;
