@@ -1,8 +1,8 @@
-import { AppError } from "../../errors/appErrors/index.js";
-import AuditoriaService from "../auditoria/auditoriaService.js";
-import { AuditoriaAction } from "../auditoria/domain/auditoriaActive.js";
+import { AppError } from "../../../errors/appErrors/index.js";
+import AuditoriaService from "../../auditoria/auditoriaService.js";
+import { AuditoriaAction } from "../../auditoria/domain/auditoriaActive.js";
+import { refreshTokenSchema } from "./authRefreshTokenSchema.js";
 import AuthRefreshTokenService from "./authRefreshTokenService.js";
-import { refreshTokenSchema } from "./authSchema.js";
 
 class AuthRefreshTokenController {
 	constructor(pool) {

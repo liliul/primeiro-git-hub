@@ -1,12 +1,12 @@
 import cron from "node-cron";
 
-class LimpandoDB {
+class CronAgendamentos {
 	constructor(pool) {
 		this.pool = pool;
 		this.started = false;
 	}
 
-	async limpandoRefreshToken() {
+	async limpandoRefreshTokenExpirados() {
 		if (this.started) return;
 		this.started = true;
 		cron.schedule("0 3 * * *", async () => {
@@ -25,4 +25,4 @@ class LimpandoDB {
 	}
 }
 
-export default LimpandoDB;
+export default CronAgendamentos;

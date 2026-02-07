@@ -1,9 +1,9 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import crypto from "node:crypto";
-import { AppError } from "../../errors/appErrors/index.js";
-import { resolvePermissionsJwt } from "../../utils/resolvePermissions.js";
-import AuthRefreshTokenRepository from "../auth/authRefreshTokenRepository.js";
+import { AppError } from "../../../errors/appErrors/index.js";
+import { resolvePermissionsJwt } from "../../../utils/resolvePermissions.js";
+import AuthRefreshTokenRepository from "../refreshToken/authRefreshTokenRepository.js";
 import UserRepository from "./userRepository.js";
 
 class UserService {

@@ -1,4 +1,5 @@
 import express from "express";
+import { constsRole } from "../../../consts/index.js";
 import { pool } from "../../../database/postgres.js";
 import AuthRoutesJwt from "../../../middlewares/jwt/authRoutesJwt.js";
 import Policies from "../../../middlewares/jwt/policies.js";
@@ -13,9 +14,9 @@ const superAdminController = new SuperAdminController(pool);
 adminsRoutes.get(
 	"/roles/:id",
 	JWT.auth,
-	JWT.ensureRole("superadmin"),
-	JWT.ensurePermission("*"),
-	JWT.ensurePolicy(policies.alterarRoles),
+	JWT.garantirRole(constsRole.ROLES_SUPERADMIN),
+	JWT.validarPermissao(constsRole.PERMISSIONS_SUPER_ADMIN),
+	JWT.garantirPolitica(policies.alterarRoles),
 	superAdminController.alterarRoles.bind(superAdminController),
 );
 export default adminsRoutes;

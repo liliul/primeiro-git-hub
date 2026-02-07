@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 import crypto from "node:crypto";
-import { AppError } from "../../errors/appErrors/index.js";
-import { resolvePermissionsJwt } from "../../utils/resolvePermissions.js";
+import { AppError } from "../../../errors/appErrors/index.js";
+import { resolvePermissionsJwt } from "../../../utils/resolvePermissions.js";
 import UserRepository from "../users/userRepository.js";
 import AuthRefreshTokenRepository from "./authRefreshTokenRepository.js";
 

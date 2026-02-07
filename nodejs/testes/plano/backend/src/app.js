@@ -1,11 +1,16 @@
 import express from "express";
+import { pool } from "./database/postgres.js";
+import CronAgendamentos from "./jobs/limpandoRefreshTokenExpirados.js";
 import { corsMiddleware } from "./middlewares/cors/index.js";
 import ErrorGlobal from "./middlewares/err/errorHandler.js";
 import requestGlobal from "./middlewares/loggerGlobal/request.js";
 import adminsRoutes from "./modules/admins/routes/routes.js";
-import authRefresToken from "./modules/auth/routes.js";
+import authRefresToken from "./modules/auth/refreshToken/routes.js";
+import userRoutes from "./modules/auth/users/routes.js";
 import healthRoutes from "./modules/health/routes.js";
-import userRoutes from "./modules/users/routes.js";
+
+const cronAgendamentos = new CronAgendamentos(pool);
+cronAgendamentos.limpandoRefreshTokenExpirados();
 
 const app = express();
 

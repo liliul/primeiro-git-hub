@@ -1,5 +1,5 @@
-import AuditoriaService from "../auditoria/auditoriaService.js";
-import { AuditoriaAction } from "../auditoria/domain/auditoriaActive.js";
+import AuditoriaService from "../../auditoria/auditoriaService.js";
+import { AuditoriaAction } from "../../auditoria/domain/auditoriaActive.js";
 import {
 	createUserSchema,
 	loginSchema,

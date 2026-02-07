@@ -1,4 +1,4 @@
-import { ROLE_PERMISSIONS } from "../configs/permissions.js";
+import { ROLE_PERMISSIONS } from "../configs/rolePermissions.js";
 
 export function resolvePermissionsJwt(roles) {
 	const roleList = Array.isArray(roles) ? roles : [roles];

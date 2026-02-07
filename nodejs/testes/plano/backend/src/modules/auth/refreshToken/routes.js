@@ -1,5 +1,5 @@
 import exepress from "express";
-import { pool } from "../../database/postgres.js";
+import { pool } from "../../../database/postgres.js";
 import AuthRefreshTokenController from "./authRefreshTokenController.js";
 
 const authRefresToken = exepress.Router();

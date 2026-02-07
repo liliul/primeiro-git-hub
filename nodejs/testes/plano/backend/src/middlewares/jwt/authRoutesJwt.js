@@ -1,4 +1,5 @@
 import jwt from "jsonwebtoken";
+import { constsRole } from "../../consts/index.js";
 import { AppError } from "../../errors/appErrors/index.js";
 
 class AuthRoutesJwt {
@@ -26,7 +27,7 @@ class AuthRoutesJwt {
 		}
 	}
 
-	ensureRole(...allowedRoles) {
+	garantirRole(...rolesPermitidas) {
 		return (req, res, next) => {
 			const { user } = req;
 
@@ -34,9 +35,9 @@ class AuthRoutesJwt {
 				throw new AppError("Permissão não encontrada", 403);
 			}
 
-			const hasRole = user.roles.some((role) => allowedRoles.includes(role));
+			const temRole = user.roles.some((role) => rolesPermitidas.includes(role));
 
-			if (!hasRole) {
+			if (!temRole) {
 				throw new AppError("Acesso negado", 403);
 			}
 
@@ -44,13 +45,13 @@ class AuthRoutesJwt {
 		};
 	}
 
-	ensurePermission(...allowedPermissions) {
+	validarPermissao(...permissaoPermitidas) {
 		return (req, res, next) => {
 			const { permissions } = req.user;
 
 			if (
-				permissions.includes("*") ||
-				permissions.some((p) => allowedPermissions.includes(p))
+				permissions.includes(constsRole.PERMISSIONS_SUPER_ADMIN) ||
+				permissions.some((p) => permissaoPermitidas.includes(p))
 			) {
 				return next();
 			}
@@ -59,15 +60,15 @@ class AuthRoutesJwt {
 		};
 	}
 
-	ensurePolicy(policy) {
+	garantirPolitica(politica) {
 		return (req, res, next) => {
-			const allowed = policy({
+			const permitir = politica({
 				user: req.user,
 				resource: req.params,
 				body: req.body,
 			});
 
-			if (!allowed) {
+			if (!permitir) {
 				throw new AppError("Acesso negado pela política", 403);
 			}
 
