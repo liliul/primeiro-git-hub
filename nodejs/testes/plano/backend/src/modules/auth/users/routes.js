@@ -21,8 +21,15 @@ userRoutes.get("/me", JWT.auth, userController.me.bind(userController));
 userRoutes.put(
 	"/update",
 	JWT.auth,
-	JWT.garantirRole(constsRole.ROLES_USER, constsRole.ROLES_ADMIN, constsRole.ROLES_SUPERADMIN),
-	JWT.validarPermissao(constsRole.PERMISSIONS_USER_UPDATE, constsRole.PERMISSIONS_ADMIN_UPDATE),
+	JWT.garantirRole(
+		constsRole.ROLES_USER,
+		constsRole.ROLES_ADMIN,
+		constsRole.ROLES_SUPERADMIN,
+	),
+	JWT.validarPermissao(
+		constsRole.PERMISSIONS_USER_UPDATE,
+		constsRole.PERMISSIONS_ADMIN_UPDATE,
+	),
 	userController.update.bind(userController),
 );
 

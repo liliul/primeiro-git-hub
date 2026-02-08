@@ -5,14 +5,17 @@ class Policies {
 		return user.id === resource.id;
 	}
 
-	alterarRoles({ user, resource, body }) {
+	alterarRole({ user, resource, body }) {
 		if (user.id === resource.id) return false;
 
 		if (body.roles?.includes(constsRole.ROLES_SUPERADMIN)) return false;
 
 		if (user.roles?.includes(constsRole.ROLES_SUPERADMIN)) return true;
 
-		if (user.roles?.includes(constsRole.ROLES_ADMIN) && resource.roles?.includes(constsRole.ROLES_USER)) {
+		if (
+			user.roles?.includes(constsRole.ROLES_ADMIN) &&
+			resource.roles?.includes(constsRole.ROLES_USER)
+		) {
 			return true;
 		}
 

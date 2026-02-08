@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { constsRole } from "../../../consts/index.js";
+import { constsRole } from "../../../../consts/index.js";
 
 export const RoleSchema = z.enum([
 	constsRole.ROLES_USER,

@@ -4,7 +4,7 @@ import CronAgendamentos from "./jobs/limpandoRefreshTokenExpirados.js";
 import { corsMiddleware } from "./middlewares/cors/index.js";
 import ErrorGlobal from "./middlewares/err/errorHandler.js";
 import requestGlobal from "./middlewares/loggerGlobal/request.js";
-import adminsRoutes from "./modules/admins/routes/routes.js";
+import superAdminRoutes from "./modules/admins/superAdmin/routes/routes.js";
 import authRefresToken from "./modules/auth/refreshToken/routes.js";
 import userRoutes from "./modules/auth/users/routes.js";
 import healthRoutes from "./modules/health/routes.js";
@@ -24,7 +24,7 @@ app.use(requestGlobal);
 app.use("/health", healthRoutes);
 app.use("/user", userRoutes);
 app.use("/auth", authRefresToken);
-app.use("/admin", adminsRoutes);
+app.use("/superadmin", superAdminRoutes);
 
 app.use(errorGlobal.errorHandler);
 

@@ -1,6 +1,6 @@
-import { AppError } from "../../../errors/appErrors/index.js";
-import AuditoriaService from "../../auditoria/auditoriaService.js";
-import { AuditoriaAction } from "../../auditoria/domain/auditoriaActive.js";
+import { AppError } from "../../../../errors/appErrors/index.js";
+import AuditoriaService from "../../../auditoria/auditoriaService.js";
+import { AuditoriaAction } from "../../../auditoria/domain/auditoriaActive.js";
 import { RoleSchema, uuidSchema } from "../models/zodSchema.js";
 
 class SuperAdminController {
@@ -10,7 +10,7 @@ class SuperAdminController {
 		this.auditoriaService = new AuditoriaService(this.pool);
 	}
 
-	async alterarRoles(req, res) {
+	async alterarRole(req, res) {
 		const userId = uuidSchema.parse(req.user.id);
 		const id = uuidSchema.parse(req.params.id);
 		const roles = RoleSchema.parse(req.body.roles);
