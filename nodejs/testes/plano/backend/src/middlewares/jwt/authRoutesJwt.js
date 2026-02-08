@@ -4,7 +4,8 @@ import { AppError } from "../../errors/appErrors/index.js";
 
 class AuthRoutesJwt {
 	auth(req, res, next) {
-		const authHeader = req.headers.authorization;
+		// const authHeader = req.headers.authorization;
+		const authHeader = req.cookies.accessToken || req.headers.authorization;
 
 		if (!authHeader) {
 			throw new AppError("Token não informado", 401);

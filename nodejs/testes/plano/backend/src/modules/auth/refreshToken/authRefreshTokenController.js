@@ -13,6 +13,7 @@ class AuthRefreshTokenController {
 
 	async refresh(req, res) {
 		const { refreshToken } = refreshTokenSchema.parse(req.body);
+		// const refreshToken = req.cookies.refreshToken
 
 		if (!refreshToken) {
 			throw new AppError("Refresh token obrigatório", 400);
@@ -21,24 +22,33 @@ class AuthRefreshTokenController {
 		const tokenData =
 			await this.authRefreshTokenService.refreshService(refreshToken);
 
+		res.cookie("accessToken", tokenData.accessToken, {
+			httpOnly: true,
+			secure: false,
+			sameSite: "lax",
+			maxAge: 15 * 60 * 1000,
+		});
+
 		return res.json(tokenData);
 	}
 
 	async logout(req, res) {
 		const { refreshToken } = refreshTokenSchema.parse(req.body);
+		// const refreshToken = req.cookies.refreshToken
 
 		if (!refreshToken) {
 			throw new AppError("Refresh token obrigatório", 400);
 		}
 
-		const userId = req.user?.id;
-
 		try {
 			await this.authRefreshTokenService.logoutService(refreshToken);
+
+			res.clearCookie("accessToken");
+			res.clearCookie("refreshToken");
 		} finally {
 			try {
 				await this.auditoriaService.log({
-					userId,
+					userId: req.user.id,
 					action: AuditoriaAction.LOGOUT,
 					ip: req.ip,
 					userAgent: req.headers["user-agent"],

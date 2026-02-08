@@ -49,6 +49,20 @@ class UserController {
 				console.error("Falha ao auditar LOGIN_SUCCESS", err);
 			}
 
+			res.cookie("accessToken", response.accessToken, {
+				httpOnly: true,
+				secure: false,
+				sameSite: "lax",
+				maxAge: 15 * 60 * 1000,
+			});
+
+			res.cookie("refreshToken", response.refreshToken, {
+				httpOnly: true,
+				secure: false,
+				sameSite: "lax",
+				maxAge: 7 * 24 * 60 * 60 * 1000,
+			});
+
 			return res.status(200).json(response);
 		} catch (error) {
 			try {

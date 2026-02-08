@@ -1,3 +1,4 @@
+import cookieParser from "cookie-parser";
 import express from "express";
 import { pool } from "./database/postgres.js";
 import CronAgendamentos from "./jobs/limpandoRefreshTokenExpirados.js";
@@ -18,6 +19,7 @@ const errorGlobal = new ErrorGlobal();
 
 app.set("trust proxy", 1);
 app.use(corsMiddleware);
+app.use(cookieParser());
 app.use(express.json());
 app.use(requestGlobal);
 
