@@ -6,3 +6,5 @@ export const USER_UPDATE_RATELIMIT = "Atualizar informações do usuario";
 
 export const REFRESH_RATELIMIT = "Fazer refresh token";
 export const REFRESH_LOGOUT_RATELIMIT = "Fazer logout";
+
+export const SUPERADMIN_NEWROLE_RATELIMIT = "Alterar a role do usuario";

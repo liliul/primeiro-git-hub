@@ -4,6 +4,9 @@
   "description": "",
   "main": "index.js",
   "type": "module",
+  "imports": {
+    "#consts": "./src/consts/index.js"
+  },
   "scripts": {
     "dev": "node --watch src/server.js",
     "start": "node src/server.js",
