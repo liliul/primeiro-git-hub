@@ -104,9 +104,14 @@ class UserController {
 			return res.status(401).json({ message: "Usuário não autenticado" });
 		}
 
-		const { name, password } = updateUserSchema.parse(req.body);
+		const { name, password, newpassword } = updateUserSchema.parse(req.body);
 
-		await this.userService.updateUserService(userId, name, password);
+		await this.userService.updateUserService(
+			userId,
+			name,
+			password,
+			newpassword,
+		);
 
 		return res.status(204).send();
 	}

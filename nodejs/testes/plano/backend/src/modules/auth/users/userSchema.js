@@ -15,7 +15,8 @@ export const updateUserSchema = z
 	.object({
 		name: z.string().min(2, "Nome muito curto").optional(),
 		password: z.string().min(6, "Senha muito curta").optional(),
+		newpassword: z.string().min(6, "Senha muito curta").optional(),
 	})
-	.refine((data) => data.name || data.password, {
+	.refine((data) => data.name || data.password || data.newpassword, {
 		message: "Informe ao menos nome ou senha para atualizar",
 	});
