@@ -1,6 +1,6 @@
-import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import crypto from "node:crypto";
+import IsPassword from "../../../configs/argon2.js";
 import { AppError } from "../../../errors/appErrors/index.js";
 import { resolvePermissionsJwt } from "../../../utils/resolvePermissions.js";
 import AuthRefreshTokenRepository from "../refreshToken/authRefreshTokenRepository.js";
@@ -12,10 +12,12 @@ class UserService {
 
 		this.userRepository = new UserRepository(this.pool);
 		this.authRefreshTokenRepository = new AuthRefreshTokenRepository(pool);
+
+		this.isPassword = new IsPassword();
 	}
 
 	async createUserService(name, email, password) {
-		const passwordHash = await bcrypt.hash(password, 10);
+		const passwordHash = await this.isPassword.hashPassword(password);
 
 		const user = await this.userRepository.createUserRepository({
 			name,
@@ -37,10 +39,13 @@ class UserService {
 			throw new AppError("ErrorPostgres login user service", 401);
 		}
 
-		const passwordMatch = await bcrypt.compare(password, user.password);
+		const passwordMatch = await this.isPassword.verifyPassword(
+			password,
+			user.password,
+		);
 
 		if (!passwordMatch) {
-			throw new AppError("ErrorPassword password bcrypt", 401);
+			throw new AppError("ErrorLoginService senha errada.", 401);
 		}
 
 		const permissions = resolvePermissionsJwt(user.roles);
@@ -94,7 +99,7 @@ class UserService {
 		let hashedPassword;
 
 		if (password) {
-			hashedPassword = await bcrypt.hash(password, 10);
+			hashedPassword = await this.isPassword.hashPassword(password);
 		}
 
 		await this.userRepository.updateUserRepository(
