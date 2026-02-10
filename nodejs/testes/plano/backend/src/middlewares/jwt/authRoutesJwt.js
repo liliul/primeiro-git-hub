@@ -28,6 +28,18 @@ class AuthRoutesJwt {
 		}
 	}
 
+	authRefreshToken(req, res, next) {
+		const token = req.body.refreshToken;
+
+		if (!token) {
+			throw new AppError("Refresh token ausente", 401);
+		}
+
+		req.refreshToken = token;
+
+		return next();
+	}
+
 	garantirRole(...rolesPermitidas) {
 		return (req, res, next) => {
 			const { user } = req;
