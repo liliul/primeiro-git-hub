@@ -16,7 +16,7 @@ export const loginSchema = z.object({
 });
 
 export const updateUserSchema = z.object({
-	name: z.string().min(2, "Nome muito curto"),
+	name: z.string().min(3, "Nome muito curto"),
 });
 
 export const updatePasswordSchema = z.object({

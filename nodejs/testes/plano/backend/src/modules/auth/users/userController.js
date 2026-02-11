@@ -19,15 +19,13 @@ class UserController {
 	async create(req, res) {
 		const { name, email, password } = createUserSchema.parse(req.body);
 
-		if (!name || !email || !password) {
-			return res.status(400).json({ message: "Dados obrigatórios ausentes" });
-		}
-
 		const user = await this.userService.createUserService(
 			name,
 			email,
 			password,
 		);
+
+		req.logger.info({ event: "AUTH_CREATED_SUCCESS", userId: user.id });
 
 		return res.status(201).json(user);
 	}
@@ -64,6 +62,11 @@ class UserController {
 				maxAge: 7 * 24 * 60 * 60 * 1000,
 			});
 
+			req.logger.info({
+				event: "AUTH_LOGIN_SUCCESS",
+				userId: response?.user?.id,
+			});
+
 			return res.status(200).json(response);
 		} catch (error) {
 			try {
@@ -76,6 +79,12 @@ class UserController {
 			} catch (err) {
 				console.error("Falha ao auditar LOGIN_FAIL", err);
 			}
+
+			req.logger.warn({
+				event: "AUTH_LOGIN_FAIL",
+				email,
+				ip: req.ip,
+			});
 
 			throw error;
 		}
@@ -95,6 +104,12 @@ class UserController {
 			response,
 			permissions,
 		};
+
+		req.logger.info({
+			event: "USER_ME_FETCHED",
+			userId,
+		});
+
 		return res.status(200).json(data);
 	}
 
@@ -102,12 +117,16 @@ class UserController {
 		const userId = req.user.id;
 
 		if (!userId) {
+			req.logger.warn({ event: "AUTH_REQUIRED" });
+
 			return res.status(401).json({ message: "Usuário não autenticado" });
 		}
 
 		const { name } = updateUserSchema.parse(req.body);
 
 		await this.userService.updateNameService(userId, name);
+
+		req.logger.info({ event: "USER_NAME_UPDATED", userId });
 
 		return res.status(204).send();
 	}
@@ -116,12 +135,16 @@ class UserController {
 		const userId = req.user.id;
 
 		if (!userId) {
+			req.logger.warn({ event: "AUTH_REQUIRED" });
+
 			return res.status(401).json({ message: "Usuário não autenticado" });
 		}
 
 		const { password, newpassword } = updatePasswordSchema.parse(req.body);
 
 		await this.userService.updatePasswordService(userId, password, newpassword);
+
+		req.logger.info({ event: "USER_NEWPASSWORD_UPDATED", userId });
 
 		return res.status(204).send();
 	}
