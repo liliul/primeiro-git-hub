@@ -66,6 +66,30 @@ class UserRepository {
 
 		return rows[0];
 	}
+
+	async findByUpdatePassword(userId) {
+		const query = `
+		 SELECT id, password FROM users WHERE id = $1 LIMIT 1
+		`;
+		const { rows } = await this.pool.query(query, [userId]);
+
+		return rows[0];
+	}
+
+	async updatePasswordRepository(userId, hashedPassword) {
+		const query = `
+      UPDATE users
+      SET
+        password = $2
+      WHERE id = $1
+	  RETURNING id
+      `;
+
+		const value = [userId, hashedPassword ?? null];
+		const { rows } = await this.pool.query(query, value);
+
+		return rows[0];
+	}
 }
 
 export default UserRepository;

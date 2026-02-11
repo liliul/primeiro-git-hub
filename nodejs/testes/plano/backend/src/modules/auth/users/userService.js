@@ -110,6 +110,33 @@ class UserService {
 			hashedPassword,
 		);
 	}
+
+	async updatePasswordService(userId, password, newpassword) {
+		const user = await this.userRepository.findByUpdatePassword(userId);
+
+		if (!user) {
+			throw new AppError("Usuário não encontrado", 404);
+		}
+
+		const verificaPasswords = await this.isPassword.verifyPassword(
+			password,
+			user.password,
+		);
+
+		if (!verificaPasswords) {
+			throw new AppError(
+				"ErrorUpdatePassword verificação da senha deu errada.",
+			);
+		}
+
+		if (password === newpassword) {
+			throw new AppError("A nova senha deve ser diferente da atual", 401);
+		}
+
+		const hashedPassword = await this.isPassword.hashPassword(newpassword);
+
+		await this.userRepository.updatePasswordRepository(userId, hashedPassword);
+	}
 }
 
 export default UserService;

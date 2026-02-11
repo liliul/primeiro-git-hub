@@ -3,6 +3,7 @@ import { AuditoriaAction } from "../../auditoria/domain/auditoriaActive.js";
 import {
 	createUserSchema,
 	loginSchema,
+	updatePasswordSchema,
 	updateUserSchema,
 } from "./userSchema.js";
 import UserService from "./userService.js";
@@ -112,6 +113,20 @@ class UserController {
 			password,
 			newpassword,
 		);
+
+		return res.status(204).send();
+	}
+
+	async updatePassword(req, res) {
+		const userId = req.user.id;
+
+		if (!userId) {
+			return res.status(401).json({ message: "Usuário não autenticado" });
+		}
+
+		const { password, newpassword } = updatePasswordSchema.parse(req.body);
+
+		await this.userService.updatePasswordService(userId, password, newpassword);
 
 		return res.status(204).send();
 	}

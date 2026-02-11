@@ -46,4 +46,20 @@ userRoutes.put(
 	userController.update.bind(userController),
 );
 
+userRoutes.put(
+	"/update/newpassword",
+	JWT.auth,
+	authRateLimit(constsRateLimit.USER_UPDATEPASSWORD_RETALIMIT),
+	JWT.garantirRole(
+		constsRole.ROLES_USER,
+		constsRole.ROLES_ADMIN,
+		constsRole.ROLES_SUPERADMIN,
+	),
+	JWT.validarPermissao(
+		constsRole.PERMISSIONS_USER_UPDATE,
+		constsRole.PERMISSIONS_ADMIN_UPDATE,
+	),
+	userController.updatePassword.bind(userController),
+);
+
 export default userRoutes;

@@ -20,3 +20,12 @@ export const updateUserSchema = z
 	.refine((data) => data.name || data.password || data.newpassword, {
 		message: "Informe ao menos nome ou senha para atualizar",
 	});
+
+export const updatePasswordSchema = z.object({
+	password: z.string().min(6, "Senha muito curta"),
+	newpassword: z
+		.string()
+		.min(8)
+		.regex(/[A-Z]/, "Precisa de letra maiúscula")
+		.regex(/[0-9]/, "Precisa de número"),
+});
