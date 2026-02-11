@@ -52,16 +52,15 @@ class UserRepository {
 		return rows[0];
 	}
 
-	async updateUserRepository(userId, name, hashedPassword) {
+	async updateNameRepository(userId, name) {
 		const query = `
       UPDATE users
       SET
-        name = COALESCE($1, name),
-        password = COALESCE($2, password)
-      WHERE id = $3
+        name = COALESCE($2, name)
+      WHERE id = $1
       `;
 
-		const value = [name ?? null, hashedPassword ?? null, userId];
+		const value = [userId, name ?? null];
 		const { rows } = await this.pool.query(query, value);
 
 		return rows[0];

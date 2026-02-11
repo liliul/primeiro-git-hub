@@ -31,7 +31,7 @@ userRoutes.get(
 	userController.me.bind(userController),
 );
 userRoutes.put(
-	"/update",
+	"/update/name",
 	JWT.auth,
 	authRateLimit(constsRateLimit.USER_UPDATE_RATELIMIT),
 	JWT.garantirRole(
@@ -43,7 +43,7 @@ userRoutes.put(
 		constsRole.PERMISSIONS_USER_UPDATE,
 		constsRole.PERMISSIONS_ADMIN_UPDATE,
 	),
-	userController.update.bind(userController),
+	userController.updateName.bind(userController),
 );
 
 userRoutes.put(

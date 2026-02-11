@@ -98,21 +98,16 @@ class UserController {
 		return res.status(200).json(data);
 	}
 
-	async update(req, res) {
+	async updateName(req, res) {
 		const userId = req.user.id;
 
 		if (!userId) {
 			return res.status(401).json({ message: "Usuário não autenticado" });
 		}
 
-		const { name, password, newpassword } = updateUserSchema.parse(req.body);
+		const { name } = updateUserSchema.parse(req.body);
 
-		await this.userService.updateUserService(
-			userId,
-			name,
-			password,
-			newpassword,
-		);
+		await this.userService.updateNameService(userId, name);
 
 		return res.status(204).send();
 	}

@@ -95,20 +95,8 @@ class UserService {
 		return user;
 	}
 
-	async updateUserService(userId, name, password, newpassword) {
-		if (password) {
-			if (!newpassword) {
-				throw new AppError("Senha atual obrigatória para trocar a senha", 401);
-			}
-		}
-
-		const hashedPassword = await this.isPassword.hashPassword(newpassword);
-
-		await this.userRepository.updateUserRepository(
-			userId,
-			name,
-			hashedPassword,
-		);
+	async updateNameService(userId, name) {
+		await this.userRepository.updateNameRepository(userId, name);
 	}
 
 	async updatePasswordService(userId, password, newpassword) {
