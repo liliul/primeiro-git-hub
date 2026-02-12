@@ -31,7 +31,7 @@ class UserService {
 				event: "USER_NOT_FOUND",
 				userId: user.id,
 			});
-			
+
 			throw new AppError("ErroPostgres criando user service", 500);
 		}
 
