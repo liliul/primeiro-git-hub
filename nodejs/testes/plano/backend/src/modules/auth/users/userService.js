@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 import crypto from "node:crypto";
-import IsPassword from "../../../configs/argon2.js";
+import IsPasswordArgon2 from "../../../configs/argon2.js";
 import { AppError } from "../../../errors/appErrors/index.js";
 import logger from "../../../logger/pino.js";
 import { resolvePermissionsJwt } from "../../../utils/resolvePermissions.js";
@@ -14,11 +14,11 @@ class UserService {
 		this.userRepository = new UserRepository(this.pool);
 		this.authRefreshTokenRepository = new AuthRefreshTokenRepository(pool);
 
-		this.isPassword = new IsPassword();
+		this.IsPasswordArgon2 = new IsPasswordArgon2();
 	}
 
 	async createUserService(name, email, password) {
-		const passwordHash = await this.isPassword.hashPassword(password);
+		const passwordHash = await this.IsPasswordArgon2.hashPassword(password);
 
 		const user = await this.userRepository.createUserRepository({
 			name,
@@ -55,7 +55,7 @@ class UserService {
 			throw new AppError("ErrorPostgres login user service", 401);
 		}
 
-		const passwordMatch = await this.isPassword.verifyPassword(
+		const passwordMatch = await this.IsPasswordArgon2.verifyPassword(
 			password,
 			user.password,
 		);
@@ -146,7 +146,7 @@ class UserService {
 			throw new AppError("Usuário não encontrado", 404);
 		}
 
-		const verificaPasswords = await this.isPassword.verifyPassword(
+		const verificaPasswords = await this.IsPasswordArgon2.verifyPassword(
 			password,
 			user.password,
 		);
@@ -171,7 +171,7 @@ class UserService {
 			throw new AppError("A nova senha deve ser diferente da atual", 401);
 		}
 
-		const hashedPassword = await this.isPassword.hashPassword(newpassword);
+		const hashedPassword = await this.IsPasswordArgon2.hashPassword(newpassword);
 
 		await this.userRepository.updatePasswordRepository(userId, hashedPassword);
 

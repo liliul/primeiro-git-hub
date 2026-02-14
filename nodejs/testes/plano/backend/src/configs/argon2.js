@@ -1,6 +1,6 @@
 import argon2 from "argon2";
 
-class IsPassword {
+class IsPasswordArgon2 {
 	constructor() {
 		this.PEPPER = process.env.PASSWORD_PEPPER;
 
@@ -26,4 +26,4 @@ class IsPassword {
 	}
 }
 
-export default IsPassword;
+export default IsPasswordArgon2;
