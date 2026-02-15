@@ -17,12 +17,14 @@ CREATE TABLE refresh_tokens (
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
+
 -- INSERT INTO refresh_tokens (user_id, token, expires_at)
 -- VALUES (
 --   'testando cron id user',
 --   gen_random_uuid(),
 --   NOW() - INTERVAL '1 day'
 -- );
+
 
 CREATE TABLE auth_audit_logs (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -36,3 +38,12 @@ CREATE TABLE auth_audit_logs (
 ALTER TABLE auth_audit_logs
 ADD COLUMN metadata JSONB;
 
+
+CREATE TABLE password_resets (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID REFERENCES users(id) ON DELETE CASCADE,
+  token_hash TEXT NOT NULL,
+  expires_at TIMESTAMP NOT NULL,
+  used BOOLEAN DEFAULT FALSE,
+  created_at TIMESTAMP DEFAULT NOW()
+);

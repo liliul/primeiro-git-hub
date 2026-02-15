@@ -89,6 +89,18 @@ class UserRepository {
 
 		return rows[0];
 	}
+
+	async findByEmail(email) {
+		const query = `
+      SELECT id, name, email
+      FROM users
+      WHERE email = $1
+      LIMIT 1
+    `;
+
+		const { rows } = await this.pool.query(query, [email]);
+		return rows[0];
+	}
 }
 
 export default UserRepository;

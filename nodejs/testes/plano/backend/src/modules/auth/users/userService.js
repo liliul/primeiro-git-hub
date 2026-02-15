@@ -45,7 +45,7 @@ class UserService {
 
 	async loginUserService(email, password) {
 		const user = await this.userRepository.loginUserRepository(email);
-
+			
 		if (!user) {
 			logger.warn({
 				event: "USER_NOT_FOUND",
@@ -171,7 +171,8 @@ class UserService {
 			throw new AppError("A nova senha deve ser diferente da atual", 401);
 		}
 
-		const hashedPassword = await this.IsPasswordArgon2.hashPassword(newpassword);
+		const hashedPassword =
+			await this.IsPasswordArgon2.hashPassword(newpassword);
 
 		await this.userRepository.updatePasswordRepository(userId, hashedPassword);
 
