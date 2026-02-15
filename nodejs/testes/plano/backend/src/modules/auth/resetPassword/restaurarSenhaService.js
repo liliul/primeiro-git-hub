@@ -10,18 +10,17 @@ class RestaurarSenhaService {
 		this.pool = pool;
 
 		this.restaurarSenhaRepository = new RestaurarSenhaRepository(this.pool);
-        this.userRepository = new UserRepository(this.pool)
-        this.isPasswordArgon2 = new IsPasswordArgon2()
+		this.userRepository = new UserRepository(this.pool);
+		this.isPasswordArgon2 = new IsPasswordArgon2();
 	}
 
 	async resetPasswordService(token, newPassword) {
-		const tokenHash = crypto
-    .createHash("sha256")
-    .update(token)
-    .digest("hex");
+		const tokenHash = crypto.createHash("sha256").update(token).digest("hex");
+		
 		const restaurarRegistro =
-			await this.restaurarSenhaRepository.findValidByTokenHash(tokenHash);
-			console.log(restaurarRegistro);
+		await this.restaurarSenhaRepository.findValidByTokenHash(tokenHash);
+		
+		console.log(restaurarRegistro);
 
 		if (!restaurarRegistro) {
 			logger.warn({
@@ -31,11 +30,15 @@ class RestaurarSenhaService {
 			throw new AppError("Token inválido ou expirado", 400);
 		}
 
-        const hashedPassword = await this.isPasswordArgon2.hashPassword(newPassword)
-		
-		await this.userRepository.updatePasswordRepository(restaurarRegistro.user_id, hashedPassword);
+		const hashedPassword =
+			await this.isPasswordArgon2.hashPassword(newPassword);
 
-		await this.restaurarSenhaRepository.invalidateAll(restaurarRegistro.id);
+		await this.userRepository.updatePasswordRepository(
+			restaurarRegistro.user_id,
+			hashedPassword,
+		);
+
+		await this.restaurarSenhaRepository.invalidateAll(restaurarRegistro.user_id);
 
 		logger.info({
 			event: "PASSWORD_RESET_SUCCESS",

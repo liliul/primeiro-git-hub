@@ -5,15 +5,21 @@ import RestaurarSenhaController from "./restaurarSenhaControlle.js";
 
 const resetPassword = express.Router();
 
-const esqueciSenha = new EsqueciSenhaController(pool)
-const restaurarSenha = new RestaurarSenhaController(pool)
+const esqueciSenha = new EsqueciSenhaController(pool);
+const restaurarSenha = new RestaurarSenhaController(pool);
 
-resetPassword.post("/esqueci-senha", esqueciSenha.forgotPassword.bind(esqueciSenha));
-resetPassword.post("/restaurar-senha", restaurarSenha.resetPassword.bind(restaurarSenha));
+resetPassword.post(
+	"/esqueci-senha",
+	esqueciSenha.forgotPassword.bind(esqueciSenha),
+);
+resetPassword.post(
+	"/restaurar-senha",
+	restaurarSenha.resetPassword.bind(restaurarSenha),
+);
 resetPassword.get("/restaurar-senha", (req, res) => {
-  const { token } = req.query;
+	const { token } = req.query;
 
-  res.send(`
+	res.send(`
     <form method="POST" action="/auth/restaurar-senha">
       <input type="hidden" name="token" value="${token}" />
       <input type="password" name="newPassword" placeholder="Nova senha" />

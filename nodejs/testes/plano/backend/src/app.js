@@ -22,13 +22,14 @@ app.set("trust proxy", 1);
 app.use(corsMiddleware);
 app.use(cookieParser());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(requestGlobal);
 
 app.use("/health", healthRoutes);
 app.use("/user", userRoutes);
 app.use("/auth", authRefresToken);
 app.use("/superadmin", superAdminRoutes);
-app.use("/auth", resetPassword)
+app.use("/auth", resetPassword);
 
 app.use(errorGlobal.errorHandler);
 

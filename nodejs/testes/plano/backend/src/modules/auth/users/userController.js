@@ -33,7 +33,6 @@ class UserController {
 	async login(req, res) {
 		const { email, password } = loginSchema.parse(req.body);
 
-		console.log(email, password);
 		try {
 			const response = await this.userService.loginUserService(email, password);
 			

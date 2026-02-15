@@ -11,7 +11,7 @@ class EsqueciSenhaController {
 
 		this.esqueciSenhaService = new EsqueciSenhaService(this.pool);
 	}
-    
+
 	async forgotPassword(req, res) {
 		const { email } = validarEmailSchema.parse(req.body);
 

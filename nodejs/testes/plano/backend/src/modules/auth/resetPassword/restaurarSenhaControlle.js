@@ -19,12 +19,12 @@ class RestaurarSenhaController {
 
 	async resetPassword(req, res) {
 		const { newPassword } = updatePasswordSchema.parse(req.body);
-		
-		const token = req.body.token
-		
+
+		const token = req.body.token;
+
 		if (!token) {
-  throw new AppError("Token não informado", 401);
-}
+			throw new AppError("Token não informado", 401);
+		}
 		await this.restaurarSenhaService.resetPasswordService(token, newPassword);
 
 		return res.status(204).send();

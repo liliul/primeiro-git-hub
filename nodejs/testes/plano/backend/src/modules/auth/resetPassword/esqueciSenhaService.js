@@ -1,5 +1,4 @@
 import crypto from "crypto";
-import IsPasswordArgon2 from "../../../configs/argon2.js";
 import { AppError } from "../../../errors/appErrors/index.js";
 import logger from "../../../logger/pino.js";
 import UserRepository from "../users/userRepository.js";
@@ -12,8 +11,7 @@ class EsqueciSenhaService {
 
 		this.userRepository = new UserRepository(pool);
 		this.restaurarSenhaRepository = new RestaurarSenhaRepository(pool);
-		this.isPasswordArgon2 = new IsPasswordArgon2();
-        this.mailService = new MailService(logger)
+		this.mailService = new MailService(logger);
 	}
 
 	async forgotPasswordService(email) {
@@ -25,12 +23,15 @@ class EsqueciSenhaService {
 				email,
 			});
 
-			throw new AppError('Error buscar user via email em esqueci senha.', 401);
+			throw new AppError("Error buscar user via email em esqueci senha.", 401);
 		}
-        
+
 		const rawToken = crypto.randomBytes(32).toString("hex");
 
-		const tokenHash = await this.isPasswordArgon2.hashPassword(rawToken);
+		const tokenHash = crypto
+			.createHash("sha256")
+			.update(rawToken)
+			.digest("hex");
 
 		const expiresAt = new Date(Date.now() + 15 * 60 * 1000);
 
