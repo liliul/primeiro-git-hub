@@ -1,3 +1,4 @@
+import crypto from "crypto";
 import IsPasswordArgon2 from "../../../configs/argon2.js";
 import { AppError } from "../../../errors/appErrors/index.js";
 import logger from "../../../logger/pino.js";
@@ -14,8 +15,13 @@ class RestaurarSenhaService {
 	}
 
 	async resetPasswordService(token, newPassword) {
+		const tokenHash = crypto
+    .createHash("sha256")
+    .update(token)
+    .digest("hex");
 		const restaurarRegistro =
-			await this.restaurarSenhaRepository.findValidByUser(token);
+			await this.restaurarSenhaRepository.findValidByTokenHash(tokenHash);
+			console.log(restaurarRegistro);
 
 		if (!restaurarRegistro) {
 			logger.warn({
@@ -26,14 +32,14 @@ class RestaurarSenhaService {
 		}
 
         const hashedPassword = await this.isPasswordArgon2.hashPassword(newPassword)
-        
-		await this.userRepository.updatePasswordRepository(restaurarRegistro.userId, hashedPassword);
+		
+		await this.userRepository.updatePasswordRepository(restaurarRegistro.user_id, hashedPassword);
 
 		await this.restaurarSenhaRepository.invalidateAll(restaurarRegistro.id);
 
 		logger.info({
 			event: "PASSWORD_RESET_SUCCESS",
-			userId: restaurarRegistro.userId,
+			userId: restaurarRegistro.user_id,
 		});
 	}
 }

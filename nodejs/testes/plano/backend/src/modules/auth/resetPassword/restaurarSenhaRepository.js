@@ -44,6 +44,22 @@ class RestaurarSenhaRepository {
 
 		await this.pool.query(query, [userId]);
 	}
+
+	async findValidByTokenHash(tokenHash) {
+  const query = `
+    SELECT *
+    FROM password_resets
+    WHERE token_hash = $1
+      AND used = false
+      AND expires_at > NOW()
+    LIMIT 1
+  `;
+
+  const { rows } = await this.pool.query(query, [tokenHash]);
+
+  return rows[0];
+}
+
 }
 
 export default RestaurarSenhaRepository;

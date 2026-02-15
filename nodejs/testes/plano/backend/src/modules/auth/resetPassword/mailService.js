@@ -9,18 +9,19 @@ class MailService {
   async sendResetEmail(email, rawToken) {
     const resetUrl = `${process.env.APP_URL}/auth/restaurar-senha?token=${rawToken}`;
 
-    if (process.env.NODE_ENV === "development") {
-      this.logger.info({
-        event: "DEV_PASSWORD_RESET_LINK",
-        email,
-        resetUrl,
-      });
+    // if (process.env.NODE_ENV === "development") {
+    //   this.logger.info({
+    //     event: "DEV_PASSWORD_RESET_LINK",
+    //     email,
+    //     resetUrl,
+    //   });
 
-      return;
-    }
+    //   throw new AppError('DEV: desenvolvimento', 401);
+    // }
+console.log(process.env.MAIL_FROM);
 
     try {
-      await this.resend.emails.send({
+      const {data, error} = await this.resend.emails.send({
         from: process.env.MAIL_FROM,
         to: email,
         subject: "Redefinição de senha",
@@ -30,6 +31,8 @@ class MailService {
       this.logger.info({
         event: "PASSWORD_RESET_EMAIL_SENT",
         email,
+        data,
+        error
       });
 
     } catch (err) {
