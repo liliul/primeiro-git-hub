@@ -45,7 +45,7 @@ class UserService {
 
 	async loginUserService(email, password) {
 		const user = await this.userRepository.loginUserRepository(email);
-			
+
 		if (!user) {
 			logger.warn({
 				event: "USER_NOT_FOUND",

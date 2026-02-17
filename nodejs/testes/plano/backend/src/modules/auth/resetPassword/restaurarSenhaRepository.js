@@ -6,15 +6,11 @@ class RestaurarSenhaRepository {
 	async create({ userId, tokenHash, expiresAt }) {
 		const query = `
       INSERT INTO password_resets (user_id, token_hash, expires_at)
-      VALUES ($1, $2, $3)
+      VALUES ($1, $2, NOW() + INTERVAL '15 minutes')
       RETURNING id
     `;
 
-		const { rows } = await this.pool.query(query, [
-			userId,
-			tokenHash,
-			expiresAt,
-		]);
+		const { rows } = await this.pool.query(query, [userId, tokenHash]);
 
 		return rows[0];
 	}
@@ -46,19 +42,36 @@ class RestaurarSenhaRepository {
 	}
 
 	async findValidByTokenHash(tokenHash) {
-  const query = `
+		const query = `
+    SELECT *
+	FROM password_resets
+	WHERE token_hash = $1
+	AND used = false
+	AND expires_at > NOW()
+	LIMIT 1
+  `;
+
+		const { rows } = await this.pool.query(query, [tokenHash]);
+
+		console.log("RAW RESULT:", rows);
+
+		return rows[0];
+	}
+
+	async findValidByToken(tokenHash) {
+		const query = `
     SELECT *
     FROM password_resets
     WHERE token_hash = $1
+      AND used = false
+      AND expires_at > NOW()
+    LIMIT 1
   `;
 
-  const { rows } = await this.pool.query(query, [tokenHash]);
+		const { rows } = await this.pool.query(query, [tokenHash]);
 
-  console.log("RAW RESULT:", rows);
-
-  return rows[0];
-}
-
+		return rows[0];
+	}
 }
 
 export default RestaurarSenhaRepository;

@@ -47,3 +47,7 @@ CREATE TABLE password_resets (
   used BOOLEAN DEFAULT FALSE,
   created_at TIMESTAMP DEFAULT NOW()
 );
+
+ALTER TABLE password_resets
+ALTER COLUMN expires_at
+TYPE TIMESTAMPTZ;

@@ -35,7 +35,7 @@ class UserController {
 
 		try {
 			const response = await this.userService.loginUserService(email, password);
-			
+
 			try {
 				await this.auditoriaService.log({
 					userId: response.user.id,

@@ -16,10 +16,10 @@ class RestaurarSenhaService {
 
 	async resetPasswordService(token, newPassword) {
 		const tokenHash = crypto.createHash("sha256").update(token).digest("hex");
-		
+
 		const restaurarRegistro =
-		await this.restaurarSenhaRepository.findValidByTokenHash(tokenHash);
-		
+			await this.restaurarSenhaRepository.findValidByTokenHash(tokenHash);
+
 		console.log(restaurarRegistro);
 
 		if (!restaurarRegistro) {
@@ -38,7 +38,9 @@ class RestaurarSenhaService {
 			hashedPassword,
 		);
 
-		await this.restaurarSenhaRepository.invalidateAll(restaurarRegistro.user_id);
+		await this.restaurarSenhaRepository.invalidateAll(
+			restaurarRegistro.user_id,
+		);
 
 		logger.info({
 			event: "PASSWORD_RESET_SUCCESS",
