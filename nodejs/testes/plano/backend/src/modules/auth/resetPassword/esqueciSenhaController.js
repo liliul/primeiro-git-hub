@@ -1,9 +1,5 @@
-import { z } from "zod";
 import EsqueciSenhaService from "./esqueciSenhaService.js";
-
-export const validarEmailSchema = z.object({
-	email: z.string().email("Email inválido"),
-});
+import { validarEmailSchema } from "./schemaZod.js";
 
 class EsqueciSenhaController {
 	constructor(pool) {

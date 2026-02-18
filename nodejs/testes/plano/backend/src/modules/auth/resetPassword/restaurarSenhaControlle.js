@@ -1,14 +1,6 @@
-import z from "zod";
 import { AppError } from "../../../errors/appErrors/index.js";
 import RestaurarSenhaService from "./restaurarSenhaService.js";
-
-export const updatePasswordSchema = z.object({
-	newPassword: z
-		.string()
-		.min(8)
-		.regex(/[A-Z]/, "Precisa de letra maiúscula")
-		.regex(/[0-9]/, "Precisa de número"),
-});
+import { updatePasswordSchema } from "./schemaZod.js";
 
 class RestaurarSenhaController {
 	constructor(pool) {
