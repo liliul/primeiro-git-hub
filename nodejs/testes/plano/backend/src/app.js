@@ -1,7 +1,7 @@
 import cookieParser from "cookie-parser";
 import express from "express";
 import { pool } from "./database/postgres.js";
-import CronAgendamentos from "./jobs/limpandoRefreshTokenExpirados.js";
+import CronAgendamentos from "./jobs/cronTabAgendamentos.js";
 import { corsMiddleware } from "./middlewares/cors/index.js";
 import ErrorGlobal from "./middlewares/err/errorHandler.js";
 import requestGlobal from "./middlewares/loggerGlobal/request.js";
@@ -13,6 +13,7 @@ import healthRoutes from "./modules/health/routes.js";
 
 const cronAgendamentos = new CronAgendamentos(pool);
 cronAgendamentos.limpandoRefreshTokenExpirados();
+cronAgendamentos.limpandoTokensExpiradosEsqueceuSenha()
 
 const app = express();
 
