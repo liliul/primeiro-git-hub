@@ -176,6 +176,8 @@ class UserService {
 
 		await this.userRepository.updatePasswordRepository(userId, hashedPassword);
 
+		await this.authRefreshTokenRepository.deleteByUserId(userId);
+
 		logger.info({
 			event: "UPDATE_PASSWORD_SUCCESS",
 			userId: user.id,
