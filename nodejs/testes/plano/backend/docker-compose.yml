@@ -4,7 +4,7 @@ services:
   postgres:
     image: postgres:16
     container_name: postgres-plano
-    restart: always
+    restart: ${RESTART_CONTAINER}
     environment:
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_USER: ${POSTGRES_USER}
