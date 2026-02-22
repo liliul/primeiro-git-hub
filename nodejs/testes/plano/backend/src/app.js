@@ -1,9 +1,10 @@
 import cookieParser from "cookie-parser";
 import express from "express";
+import { corsMiddleware } from "./configs/cors.js";
+import { helmetConfig } from "./configs/helmet.js";
 import { pool } from "./database/postgres.js";
 import CronAgendamentos from "./jobs/cronTabAgendamentos.js";
 import logger from "./logger/pino.js";
-import { corsMiddleware } from "./middlewares/cors/index.js";
 import ErrorGlobal from "./middlewares/err/errorHandler.js";
 import requestGlobal from "./middlewares/loggerGlobal/request.js";
 import superAdminRoutes from "./modules/admins/superAdmin/routes/routes.js";
@@ -24,6 +25,7 @@ app.set("trust proxy", 1);
 app.use(corsMiddleware);
 app.use(cookieParser());
 app.use(express.json());
+app.use(helmetConfig);
 app.use(express.urlencoded({ extended: true }));
 app.use(requestGlobal);
 
