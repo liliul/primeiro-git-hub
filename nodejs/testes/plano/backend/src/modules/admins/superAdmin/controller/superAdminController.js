@@ -7,7 +7,7 @@ class SuperAdminController {
 	}
 
 	async alterarRole(req, res) {
-		await this.superAdminService.alterarRole(req);
+		await this.superAdminService.alterarRoleService(req);
 		return res.status(200).send();
 	}
 }

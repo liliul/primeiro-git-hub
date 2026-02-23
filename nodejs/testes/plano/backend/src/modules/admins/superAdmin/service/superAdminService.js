@@ -12,7 +12,7 @@ class SuperAdminService {
 		this.superAdminRepository = new SuperAdminRepository();
 	}
 
-	async alterarRole(req) {
+	async alterarRoleService(req) {
 		const userId = uuidSchema.parse(req.user.id);
 		const id = uuidSchema.parse(req.params.id);
 		const roles = RoleSchema.parse(req.body.roles);
