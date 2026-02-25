@@ -61,11 +61,14 @@ class AuthRoutesJwt {
 	validarPermissao(...permissaoPermitidas) {
 		return (req, res, next) => {
 			const { permissions } = req.user;
+			const permissaoSuperAdmin = permissions.includes(
+				constsRole.PERMISSIONS_SUPER_ADMIN,
+			);
+			const permissaoPermitida = permissions.some((p) =>
+				permissaoPermitidas.includes(p),
+			);
 
-			if (
-				permissions.includes(constsRole.PERMISSIONS_SUPER_ADMIN) ||
-				permissions.some((p) => permissaoPermitidas.includes(p))
-			) {
+			if (permissaoSuperAdmin || permissaoPermitida) {
 				return next();
 			}
 
