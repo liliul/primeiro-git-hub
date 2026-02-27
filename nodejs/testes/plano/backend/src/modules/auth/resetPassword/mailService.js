@@ -1,4 +1,5 @@
 import { Resend } from "resend";
+import RedefinirSenhaTemplate from "../../mail/templates/redefinirSenha.js";
 
 class MailService {
 	constructor(logger) {
@@ -25,7 +26,7 @@ class MailService {
 				from: process.env.MAIL_FROM,
 				to: email,
 				subject: "Redefinição de senha",
-				html: this.resetTemplate(resetUrl),
+				html: RedefinirSenhaTemplate(resetUrl),
 			});
 
 			this.logger.info({
