@@ -48,3 +48,19 @@ export const refreshRateLimit = (rotaLimitada) => {
 		legacyHeaders: false,
 	});
 };
+
+export const resetPasswordRateLimit = (rotaLimitada) => {
+	return rateLimit({
+		windowMs: 15 * 60 * 1000,
+		max: 5,
+		keyGenerator: (req) => {
+			const token = req.body?.token ?? "unknown";
+			return `${ipKeyGenerator(req)}-${token}`;
+		},
+		message: {
+			error: `Muitas tentativas de ${rotaLimitada}. Tente novamente em 15 minutos.`,
+		},
+		standardHeaders: true,
+		legacyHeaders: false,
+	});
+};

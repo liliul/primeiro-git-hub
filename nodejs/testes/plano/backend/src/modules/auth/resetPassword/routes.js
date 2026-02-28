@@ -1,6 +1,9 @@
 import express from "express";
 import { pool } from "../../../database/postgres.js";
-import { publicRateLimit } from "../../../middlewares/rateLimit/rateLimit.js";
+import {
+	publicRateLimit,
+	resetPasswordRateLimit,
+} from "../../../middlewares/rateLimit/rateLimit.js";
 import EsqueciSenhaController from "./esqueciSenhaController.js";
 import RestaurarSenhaController from "./restaurarSenhaControlle.js";
 
@@ -11,19 +14,19 @@ const restaurarSenha = new RestaurarSenhaController(pool);
 
 resetPassword.post(
 	"/esqueci-senha",
-	publicRateLimit("esqueci senha"),
+	publicRateLimit("Esqueci senha"),
 	esqueciSenha.forgotPassword.bind(esqueciSenha),
 );
 
 resetPassword.post(
 	"/restaurar-senha",
-	publicRateLimit("restaurar senha"),
+	resetPasswordRateLimit("Restaurar senha"),
 	restaurarSenha.resetPassword.bind(restaurarSenha),
 );
 
 resetPassword.get(
 	"/restaurar-senha",
-	publicRateLimit("alterando senha"),
+	resetPasswordRateLimit("Alterando senha"),
 	(req, res) => {
 		const { token } = req.query;
 
