@@ -1,7 +1,5 @@
 ---
 permalink: /css/style.css
 ---
-{% set css %}
-{% include "../css/style.css" %}
-{% endset %}
-{{ css | cssmin | safe }}
+
+{{ "css/style.src.css" | cssmin | safe }}

@@ -1,6 +1,7 @@
 const htmlmin = require("html-minifier");
 const CleanCSS = require("clean-css");
 const { minify } = require("terser");
+const fs = require("fs");
 
 module.exports = function (eleventyConfig) {
   // Minify HTML
@@ -25,6 +26,17 @@ module.exports = function (eleventyConfig) {
     return new CleanCSS({}).minify(code).styles;
   });
 
+  eleventyConfig.addNunjucksAsyncFilter("cssmin", async function (filePath, callback) {
+    try {
+      const css = fs.readFileSync(filePath, "utf8");
+      const minified = new CleanCSS({}).minify(css).styles;
+      callback(null, minified);
+    } catch (err) {
+      console.error(err);
+      callback(null, "");
+    }
+  });
+
   // Minify JS
   eleventyConfig.addNunjucksAsyncFilter("jsmin", async function (
     code,
@@ -41,7 +53,7 @@ module.exports = function (eleventyConfig) {
   });
 
   // Tell Eleventy to process CSS and JS files
-  eleventyConfig.setTemplateFormats(["html", "njk", "md", "css"]);
+  eleventyConfig.setTemplateFormats(["html", "njk", "md"]);
 
   // Pass through fonts and images
   eleventyConfig.addPassthroughCopy("fonts");
