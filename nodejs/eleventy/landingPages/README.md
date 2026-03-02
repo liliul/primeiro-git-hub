@@ -1,3 +1,16 @@
+### iniciar projeto
+
+```bash
+
+"start": "eleventy --serve",
+"build": "ELEVENTY_ENV=production eleventy",
+"test": "echo && exit 1",
+"build:js": "esbuild js/script.js --bundle --minify --outfile=js/main.js",
+"build:es": "npm run build:js && eleventy",
+"dev:js": "esbuild js/script.js --bundle --outfile=js/main.js --watch"
+
+```
+
 ### configurações do tema
 
 ```bash
