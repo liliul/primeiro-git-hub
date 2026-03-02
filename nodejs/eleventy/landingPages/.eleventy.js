@@ -41,13 +41,13 @@ module.exports = function (eleventyConfig) {
   });
 
   // Tell Eleventy to process CSS and JS files
-  eleventyConfig.setTemplateFormats(["html", "njk", "md", "css", "js"]);
+  eleventyConfig.setTemplateFormats(["html", "njk", "md", "css"]);
 
   // Pass through fonts and images
   eleventyConfig.addPassthroughCopy("fonts");
   eleventyConfig.addPassthroughCopy("img");
   eleventyConfig.addPassthroughCopy("assets");
-
+  
   return {
     dir: {
       input: ".",

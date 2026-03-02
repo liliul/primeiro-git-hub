@@ -5,7 +5,10 @@
   "scripts": {
     "start": "eleventy --serve",
     "build": "ELEVENTY_ENV=production eleventy",
-    "test": "echo && exit 1"
+    "test": "echo && exit 1",
+    "build:js": "esbuild js/script.js --bundle --minify --outfile=js/main.js",
+    "build:es": "npm run build:js && eleventy",
+    "dev:js": "esbuild js/script.js --bundle --outfile=js/main.js --watch"
   },
   "keywords": [],
   "author": "",
@@ -14,6 +17,7 @@
   "devDependencies": {
     "@11ty/eleventy": "^3.1.2",
     "clean-css": "^5.3.3",
+    "esbuild": "^0.27.3",
     "html-minifier": "^4.0.0",
     "terser": "^5.43.1"
   }
