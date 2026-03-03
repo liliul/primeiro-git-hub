@@ -425,7 +425,13 @@
     margin: 10px 0px;
   }
 
-  .container .content .cards-container .card button {
+  .container .content .cards-container .card .card-link-projeto {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .container .content .cards-container .card .card-link-projeto button {
     margin-top: 8px;
     padding: 8px 25px;
     font-size: var(--small-font-size);
@@ -1031,7 +1037,13 @@ a {
     margin: 10px 0px;
   }
 
-  .container .content .cards-container .card button {
+  .container .content .cards-container .card .card-link-projeto {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .container .content .cards-container .card .card-link-projeto button {
     margin-top: 8px;
     padding: 8px 25px;
     font-size: var(--small-font-size);

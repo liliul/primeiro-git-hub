@@ -22,7 +22,25 @@
                         {% endif %}
                     </div>
                 </div>
-                <button class="js-open-modal" data-url="{{ cards.iframe }}">Preview</button>
+                
+                <div class="card-link-projeto">
+                    {% if cards.iframe | length > 0 %}
+                        <button class="js-open-modal" data-url="{{ cards.iframe }}">Preview</button>
+                    {% endif %}
+
+                    {% if cards.repo | length > 0 %}
+                        <a href="{{ cards.repo }}" target="_blank">
+                            <button class="js-open-modal">Github</button>
+                        </a>
+                    {% endif %}
+
+                    {% if cards.demo | length > 0 %}
+                        <a href="{{ cards.demo }}" target="_blank">
+                            <button class="js-open-modal">Demo</button>
+                        </a>
+                    {% endif %}
+                </div>
+
             </section>
         {% endfor %}
     {% else %}
