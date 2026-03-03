@@ -1,0 +1,205 @@
+<aside id="menu-contatos" class="menu">
+    <div class="txt-h1">
+        <h1>Contatos</h1>
+    </div>
+    <ul class="m-ul">
+
+        <li class="m-li">
+            <div>
+                <img class="iconMenuSize" src="./assets/map-pin.svg">
+            </div>
+
+            <div class="m-li-contato">
+                <span class="text">Localidade</span>
+                <span id="followers" class="text numStyle">
+                    {% if config.location | length > 0 %}
+                        {{ config.location }}
+                    {% else %}
+                        sem localidade
+                    {% endif %}
+                </span>
+            </div>
+        </li>
+
+        <li class="m-li">
+            <div>
+                <img class="iconMenuSize" src="./assets/github.svg">
+            </div>
+
+            <div class="m-li-contato">
+                <span class="text">github</span>
+                
+                {%if config.githublink | length > 0 %}
+                    
+                    <a href="{{ config.githublink }}" target="_blank" class="text ">
+                        <p>
+                            {% if config.githubnome | length > 0 %}
+                                {{ config.githubnome}}
+                            {% else %}
+                                sem nome
+                            {% endif%}
+                        </p>
+
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" width="16"
+                            height="16">
+                            <path
+                                d="M15 1v6h-2V4.41L7.41 10 6 8.59 11.59 3H9V1zm-4 10a1 1 0 01-1 1H5a1 1 0 01-1-1V6a1 1 0 011-1h2V3H5a3 3 0 00-3 3v5a3 3 0 003 3h5a3 3 0 003-3V9h-2z">
+                            </path>
+                        </svg>
+                    </a>
+
+                {%else%}
+
+                    <a href="#" class="text ">
+                        <p>
+                            {% if config.githubnome | length > 0 %}
+                                {{ config.githubnome}}
+                            {% else %}
+                                sem nome
+                            {% endif%}
+                        </p>
+
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" width="16"
+                            height="16">
+                            <path
+                                d="M15 1v6h-2V4.41L7.41 10 6 8.59 11.59 3H9V1zm-4 10a1 1 0 01-1 1H5a1 1 0 01-1-1V6a1 1 0 011-1h2V3H5a3 3 0 00-3 3v5a3 3 0 003 3h5a3 3 0 003-3V9h-2z">
+                            </path>
+                        </svg>
+                    </a>
+                    
+                {%endif%}
+
+            </div>
+        </li>
+
+        <li class="m-li">
+            <div>
+                <img class="iconMenuSize" src="./assets/linkedin.svg">
+            </div>
+
+            <div class="m-li-contato">
+                <span class="text">Linkedin</span>
+                {% if config.linkedinlink | length > 0 %}
+                    <a href="{{ config.linkedinlink }}" target="_blank" class="text">
+                        <p>{{ config.linkedinnome }}</p>
+
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" width="16"
+                            height="16">
+                            <path
+                                d="M15 1v6h-2V4.41L7.41 10 6 8.59 11.59 3H9V1zm-4 10a1 1 0 01-1 1H5a1 1 0 01-1-1V6a1 1 0 011-1h2V3H5a3 3 0 00-3 3v5a3 3 0 003 3h5a3 3 0 003-3V9h-2z">
+                            </path>
+                        </svg>
+                    </a>
+                {% else %}
+
+                    <a href="#" target="_blank" class="text">
+                        <p>sem nome</p>
+
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" width="16"
+                            height="16">
+                            <path
+                                d="M15 1v6h-2V4.41L7.41 10 6 8.59 11.59 3H9V1zm-4 10a1 1 0 01-1 1H5a1 1 0 01-1-1V6a1 1 0 011-1h2V3H5a3 3 0 00-3 3v5a3 3 0 003 3h5a3 3 0 003-3V9h-2z">
+                            </path>
+                        </svg>
+                    </a>
+
+                {% endif%}
+            </div>
+        </li>
+
+        <li class="m-li">
+            <div>
+                <img class="iconMenuSize" src="./assets/mail.svg">
+            </div>
+
+            <div class="m-li-contato">
+                <span class="text">Email</span>
+
+                {% if config.email | length > 0 %}
+
+                    <a id="button-copy" href="#" class="text">
+                        <p 
+                            id="copy-email" 
+                            data-emailgithub="{{ config.email }}"
+                            role="button"
+                            tabindex="0"
+                            aria-label="Copiar e-mail para a área de transferência"
+                        >
+                            {{ config.emailnome }}    
+                        </p>
+
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" width="16"
+                            height="16">
+                            <path
+                                d="M15 1v6h-2V4.41L7.41 10 6 8.59 11.59 3H9V1zm-4 10a1 1 0 01-1 1H5a1 1 0 01-1-1V6a1 1 0 011-1h2V3H5a3 3 0 00-3 3v5a3 3 0 003 3h5a3 3 0 003-3V9h-2z">
+                            </path>
+                        </svg>
+                    </a>
+
+                {% else %}
+
+                        <a id="button-copy" href="#" class="text">
+                        <p 
+                            id="copy-email" 
+                            data-emailgithub="#"
+                            role="button"
+                            tabindex="0"
+                            aria-label="Copiar e-mail para a área de transferência"
+                            >
+                            @TagEmail
+                        </p>
+
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" width="16"
+                            height="16">
+                            <path
+                                d="M15 1v6h-2V4.41L7.41 10 6 8.59 11.59 3H9V1zm-4 10a1 1 0 01-1 1H5a1 1 0 01-1-1V6a1 1 0 011-1h2V3H5a3 3 0 00-3 3v5a3 3 0 003 3h5a3 3 0 003-3V9h-2z">
+                            </path>
+                        </svg>
+                    </a>
+
+                {% endif %}
+                
+            </div>
+        </li>
+
+        <li class="m-li">   
+            <div>
+                <img class="iconMenuSize" src="./assets/folder.svg">
+            </div>
+
+            <div class="m-li-contato">
+                <span class="text">Curriculo</span>
+                {% if config.curriculolink | length > 0 %}
+
+                        <a href="{{ config.curriculolink }}" target="_blank" class="text">
+                        <p>{{ config.curriculonome}}</p>
+
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" width="16"
+                            height="16">
+                            <path
+                                d="M15 1v6h-2V4.41L7.41 10 6 8.59 11.59 3H9V1zm-4 10a1 1 0 01-1 1H5a1 1 0 01-1-1V6a1 1 0 011-1h2V3H5a3 3 0 00-3 3v5a3 3 0 003 3h5a3 3 0 003-3V9h-2z">
+                            </path>
+                        </svg>
+                    </a>
+
+                {% else %}
+
+                    <a href="#" target="_blank" class="text">
+                        <p>sem link</p>
+
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" width="16"
+                            height="16">
+                            <path
+                                d="M15 1v6h-2V4.41L7.41 10 6 8.59 11.59 3H9V1zm-4 10a1 1 0 01-1 1H5a1 1 0 01-1-1V6a1 1 0 011-1h2V3H5a3 3 0 00-3 3v5a3 3 0 003 3h5a3 3 0 003-3V9h-2z">
+                            </path>
+                        </svg>
+                    </a>
+
+                {% endif %}
+            </div>
+        </li>
+
+    </ul>
+</aside>
+
+    

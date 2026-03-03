@@ -1,0 +1,34 @@
+<section id="cards" class="cards-container">
+    <div class="text-github">
+        <h1>Projetos</h1>
+    </div>
+
+    {% if config.cardInfos | length > 0 %}
+        {% for cards in config.cardInfos %}
+            <section class="card">
+                <h1>{{ cards.title }}</h1>
+                <p>{{ cards.description}}</p>
+                <img src="{{ cards.snapshot }}" width="100" height="100" alt="{{ cards.title }}">
+                <div class="tech">
+                    <div class="spanWrap">
+                        {% if cards.linguagens | length > 0 %}
+
+                            {% for lang in cards.linguagens %}
+                                <span class="spanLang">{{ lang }} <b class="numStyle">|</b></span>
+                            {% endfor %}
+                            
+                        {% else %}
+                            <p class="sem-linguagens">Sem tecnologias</p>
+                        {% endif %}
+                    </div>
+                </div>
+                <button class="js-open-modal" data-url="{{ cards.iframe }}">Preview</button>
+            </section>
+        {% endfor %}
+    {% else %}
+        <section class="card">
+            <h1>Adicionar informações para o card em _data config</h1>
+        </section>
+    {% endif %}
+
+</section>

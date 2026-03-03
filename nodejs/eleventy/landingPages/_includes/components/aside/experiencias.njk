@@ -1,0 +1,38 @@
+<aside id="menu-experiencias" class="menu-experiencia">
+    <div class="txt-h1">
+        <h1>Experiência</h1>
+    </div>
+
+    <section id="c-experinecia" class="c-experiencia">
+
+        {% for experiencia in config.experienciaMenu %}
+            <div class="experiencia">
+
+                <header class="ex-header">
+                    <img src="{{ experiencia.img }}" alt="{{ experiencia.nome }}" class="ex-img">
+
+                    <div class="ex-info">
+                        <h1>{{ experiencia.nome}}</h1>
+                        <span>{{ experiencia.data}}</span>
+                    </div>
+                </header>
+
+                <section class="ex-conteudo">
+                    <ul class="ex-ul">
+                        <li class="ex-li">
+                            <h2>o que faz: <span>{{ experiencia.oquefaz}}</span></h2>
+                            <p>competência: <span>{{ experiencia.competencia}}</span></p>
+
+                            <div class="ex-sub-infos">
+                                <h3>atuação na empresa: <span>{{ experiencia.atuacao }}</span></h3>
+                                <p>fez o que: <span>{{ experiencia.fezoque}}</span></p>
+                            </div>
+                        </li>
+                    </ul>
+                </section>
+
+            </div>
+        {% endfor%}
+        
+    </section>
+</aside>
