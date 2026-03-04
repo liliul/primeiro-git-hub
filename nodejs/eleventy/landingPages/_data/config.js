@@ -84,7 +84,10 @@ module.exports = {
 			],
 			iframe: 'https://climatempo-6f654.web.app/',
 			repo: 'https://github.com/liliul/docker_nginx_app_climaTempo',
-			demo: 'https://climatempo-6f654.web.app/'
+			demo: 'https://climatempo-6f654.web.app/',
+			status: '',
+			tipo: '',
+			data: ''
 		},
 		{
 			title: "LanginPage Naruto",
@@ -95,7 +98,10 @@ module.exports = {
 			],
 			iframe: 'https://naruto-classico.firebaseapp.com/',
 			repo: '',
-			demo: ''
+			demo: '',
+			status: '',
+			tipo: '',
+			data: ''
 		},
 		{
 			title: "LanginPage Blgor",
@@ -106,7 +112,10 @@ module.exports = {
 			],
 			iframe: 'https://liliul.github.io/blogr-landing-page/',
 			repo: '',
-			demo: ''
+			demo: '',
+			status: '',
+			tipo: '',
+			data: ''
 		}
 	]
 };
