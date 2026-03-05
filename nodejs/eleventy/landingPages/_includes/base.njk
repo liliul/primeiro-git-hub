@@ -21,9 +21,9 @@
   </script>
 </head>
 <body>
-  <div id="loading">
-    <div id="spinner"></div>
-  </div>
+  
+  {% include "components/ui/loading.njk" %}
+
   {{ content | safe }}
   <script type="module" src="/js/main.js"></script>
 </body>
