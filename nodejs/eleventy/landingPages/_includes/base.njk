@@ -51,7 +51,7 @@
     }
   </style>
   <script>
-    window.addEventListener('load', () => {
+    function loadingSpinner() {
       const loading = document.getElementById('loading');
       const app = document.getElementById('app');
 
@@ -61,7 +61,9 @@
         loading.remove();
         app.removeAttribute('style');
       }, 300);
-    });
+     } 
+
+    window.addEventListener('load', loadingSpinner);
   </script>
 </head>
 <body>
