@@ -6,6 +6,50 @@
   <title>Protifolio</title>
   <link rel="icon" type="image/svg+xml" href="/assets/favicon.ico" />
   <link rel="stylesheet" href="/css/style.css">
+  <style> 
+    :root {
+      --body-bg-color: #22212C;
+      --bg-techs: #75D7EC;
+    }
+    #loading {
+      width: 100%;
+      height: 100vh;
+      background-color: {{ config.cores.loadingBgColor or "var(--body-bg-color)" }};
+
+      display: grid;
+      place-items: center;
+
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+
+      transition: opacity 0.3s ease;
+    }
+
+    #loading.hide {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    #loading #spinner {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+
+      border: 3px solid {{ config.cores.spinnerCor or "var(--bg-techs)" }};
+      border-top: 1px solid transparent;
+
+      animation: spinner 1s linear infinite;
+    }
+    @keyframes spinner {
+      0% {
+        transform: rotate(0);
+      }
+      100% {
+        transform: rotate(360deg)
+      }
+    }
+  </style>
   <script>
     window.addEventListener('load', () => {
       const loading = document.getElementById('loading');

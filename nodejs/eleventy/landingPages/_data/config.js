@@ -1,4 +1,8 @@
 module.exports = {
+	cores: {
+        "spinnerCor": "#fa7f72",
+		"loadingBgColor": "#22212C"    
+    },
     simonao: true,
     nome: "Liliul",
 	bio: `
