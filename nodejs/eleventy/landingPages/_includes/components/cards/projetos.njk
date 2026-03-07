@@ -24,7 +24,7 @@
                         {% endif %}
                     </div>
                 </div>
-                
+
                 <div class="card-link-projeto">
                     {% if cards.iframe | length > 0 %}
                         <button class="js-open-modal" data-url="{{ cards.iframe }}">Preview</button>
@@ -43,6 +43,19 @@
                     {% endif %}
                 </div>
 
+                <footer class="card-footer">
+                    {% if cards.tipo | length > 0 %}
+                        <small class="card-footer-infos">{{ cards.tipo }}</small>
+                    {% endif %}
+
+                    {% if cards.status | length > 0 %}
+                        <small class="card-footer-infos">{{ cards.status }}</small>
+                    {% endif %}
+
+                    {% if cards.data | length > 0 %}
+                        <small class="card-footer-infos">{{ cards.data }}</small>
+                    {% endif %}
+                </footer>
             </section>
         {% endfor %}
     {% else %}

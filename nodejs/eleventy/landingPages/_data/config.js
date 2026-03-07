@@ -89,9 +89,9 @@ module.exports = {
 			iframe: 'https://climatempo-6f654.web.app/',
 			repo: 'https://github.com/liliul/docker_nginx_app_climaTempo',
 			demo: 'https://climatempo-6f654.web.app/',
-			status: '',
-			tipo: '',
-			data: ''
+			status: 'Finalizado',
+			tipo: 'Projeto pessoal',
+			data: '2021-2022'
 		},
 		{
 			title: "LanginPage Naruto",
@@ -103,7 +103,7 @@ module.exports = {
 			iframe: 'https://naruto-classico.firebaseapp.com/',
 			repo: '',
 			demo: '',
-			status: '',
+			status: 'Finalizado',
 			tipo: '',
 			data: ''
 		},
@@ -118,7 +118,7 @@ module.exports = {
 			repo: '',
 			demo: '',
 			status: '',
-			tipo: '',
+			tipo: 'Projeto pessoal',
 			data: ''
 		}
 	]
