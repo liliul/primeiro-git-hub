@@ -36,7 +36,9 @@ module.exports = function (eleventyConfig) {
       callback(null, "");
     }
   });
-
+  
+  eleventyConfig.addWatchTarget("./css/");
+  
   // Minify JS
   eleventyConfig.addNunjucksAsyncFilter("jsmin", async function (
     code,
