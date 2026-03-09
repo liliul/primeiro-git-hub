@@ -1,4 +1,5 @@
 module.exports = {
+	titulo: "Protifolio",
 	cores: {
         "spinnerCor": "#fa7f72",
 		"loadingBgColor": "#22212C"    

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Protifolio</title>
+  <title>{{ config.titulo or "Protifolio" }}</title>
   <link rel="icon" type="image/svg+xml" href="/assets/favicon.ico" />
   <link rel="stylesheet" href="/css/style.css">
   <style> 
@@ -25,12 +25,10 @@
 
       transition: opacity 0.3s ease;
     }
-
     #loading.hide {
       opacity: 0;
       pointer-events: none;
     }
-
     #loading #spinner {
       width: 50px;
       height: 50px;
