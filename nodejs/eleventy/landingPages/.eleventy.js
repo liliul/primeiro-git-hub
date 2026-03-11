@@ -54,6 +54,9 @@ module.exports = function (eleventyConfig) {
     }
   });
 
+  eleventyConfig.addWatchTarget("./js/src/");
+  eleventyConfig.watchIgnores.add("./js/main.js");
+
   // Tell Eleventy to process CSS and JS files
   eleventyConfig.setTemplateFormats(["html", "njk", "md"]);
 
