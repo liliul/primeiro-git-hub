@@ -1,5 +1,7 @@
 class CopyEmail {
     static copy() {
+        if (!document.getElementById('copy-email')) return
+
         document.getElementById('copy-email').addEventListener('click', (event) => {
             event.preventDefault()
             

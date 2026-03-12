@@ -2,6 +2,7 @@
   // js/src/copyEmail.js
   var CopyEmail = class {
     static copy() {
+      if (!document.getElementById("copy-email")) return;
       document.getElementById("copy-email").addEventListener("click", (event) => {
         event.preventDefault();
         const copyEmail = event.currentTarget.dataset.emailgithub;
