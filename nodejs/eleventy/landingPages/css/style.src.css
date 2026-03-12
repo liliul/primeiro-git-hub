@@ -1,4 +1,10 @@
-@import url("https://fonts.googleapis.com/css2?family=Merriweather+Sans:wght@400;500;700&display=swap");
+@font-face {
+  font-family: 'Merriweather Sans';
+  src: url('/assets/fonts/Merriweather-sans-latin.woff2') format('woff2');
+  font-weight: 400;
+  font-display: swap;
+}
+
 @media (min-width: 801px) {
   .color-txt {
     color: var(--bg-techs);
@@ -424,13 +430,13 @@
 
   .container .content .cards-container .card .card-link-projeto {
     display: flex;
-    gap: 10px;
+    gap: 19px;
     flex-wrap: wrap;
   }
 
   .container .content .cards-container .card .card-link-projeto button {
     margin-top: 8px;
-    padding: 8px 25px;
+    padding: 15px 28px;
     font-size: var(--small-font-size);
     font-family: var(--font-family);
     font-weight: var(--bold);
@@ -532,7 +538,7 @@
   --normal-font-size: .938rem;
   --small-font-size: .813rem;
   --smaller-font-size: .75rem;
-  --font-family: "Merriweather Sans", sans-serif;
+  --font-family: "Merriweather Sans", "Ubuntu", Arial, sans-serif;
   /* Font Weight */
   --font-normal: 400;
   --semi-bold: 500;
@@ -1018,12 +1024,12 @@ a {
   .container .content .cards-container .card .card-link-projeto {
     display: flex;
     flex-wrap: wrap;
-    gap: 6px;
+    gap: 12px;
   }
 
   .container .content .cards-container .card .card-link-projeto button {
     margin-top: 8px;
-    padding: 8px 25px;
+    padding: 11px 25px;
     font-size: var(--small-font-size);
     font-family: var(--font-family);
     font-weight: var(--bold);
