@@ -122,5 +122,9 @@ module.exports = {
 			tipo: 'Projeto pessoal',
 			data: ''
 		}
-	]
+	],
+	seoDescription: "Programador Fullstack especializado em Node.js, Express, Docker, PostgreSQL e TypeScript, criando aplicações web eficientes e escaláveis.",
+	seoAuthor: "Liliu portifolio",
+	seoTitle: "Liliu - Desenvolvedor Fullstack",
+	seoUrlseusite: "https://protifolio-liliu.netlify.app"
 };
