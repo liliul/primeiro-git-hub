@@ -3,37 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
- 
-  {% if config.seoDescription %}
-    <meta name="description" content="{{ config.seoDescription }}">
-  {% endif %}
 
-  {% if config.seoAuthor %}
-    <meta name="author" content="{{ config.seoAuthor }}">
-  {% endif %}
-
-  {% if config.seoTitle or config.seoDescription %}
-    <meta property="og:title" content="{{ config.seoTitle or config.seoAuthor or '' }}">
-    <meta property="og:description" content="{{ config.seoDescription }}">
-    <meta property="og:type" content="website">
-  {% endif %}
-
-  {% if config.seoUrlseusite %}
-    <meta property="og:url" content="{{ config.seoUrlseusite }}">
-  {% endif %}
-
-  {% if config.seoTitle or config.seoDescription %}
-    <meta name="twitter:card" content="summary">
-    <meta name="twitter:title" content="{{ config.seoTitle or config.seoAuthor or '' }}">
-    <meta name="twitter:description" content="{{ config.seoDescription }}">
-  {% endif %}
-
-  <meta name="robots" content="index, follow">
-  <title>{{ config.titulo or "Protifolio" }}</title>
-  <link rel="canonical" href="{{ config.seoUrlseusite }}">
-  <link rel="preload" href="/assets/fonts/Merriweather-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="icon" type="image/svg+xml" href="/assets/favicon.ico" />
-  <link rel="stylesheet" href="/css/style.css">
   <style> 
     :root {
       --body-bg-color: #22212C;
@@ -76,7 +46,71 @@
       }
     }
   </style>
-  <script type="application/ld+json">
+  
+  <script>
+    function loadingSpinner() {
+      const loading = document.getElementById('loading');
+      const app = document.getElementById('app');
+
+      loading.classList.add('hide');
+
+      setTimeout(() => {
+        loading.remove();
+        app.removeAttribute('style');
+      }, 300);
+     } 
+
+    window.addEventListener('load', loadingSpinner);
+  </script>
+
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon.ico" />
+  <link rel="stylesheet" href="/css/style.css" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="/css/style.css"></noscript>
+  <link rel="preload" href="/assets/fonts/Merriweather-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
+ 
+  {% if config.seoDescription %}
+    <meta name="description" content="{{ config.seoDescription }}">
+  {% endif %}
+
+  {% if config.seoAuthor %}
+    <meta name="author" content="{{ config.seoAuthor }}">
+  {% endif %}
+
+  {% if config.seoTitle or config.seoDescription %}
+    <meta property="og:title" content="{{ config.seoTitle or config.seoAuthor or '' }}">
+    <meta property="og:description" content="{{ config.seoDescription }}">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="{{ config.seoSitename }}">
+  {% endif %}
+
+  {% if config.avatar %}
+    <meta property="og:image" content="{{ config.seoUrlseusite + config.avatar }}">
+    <meta property="og:image:alt" content="{{ config.seoTitle }}">
+  {% endif %}
+
+  {% if config.seoUrlseusite %}
+    <meta property="og:url" content="{{ config.seoUrlseusite }}">
+  {% endif %}
+
+  {% if config.seoTitle or config.seoDescription %}
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{{ config.seoTitle or config.seoAuthor or '' }}">
+    <meta name="twitter:description" content="{{ config.seoDescription }}">
+  {% endif %}
+
+  {% if config.avatar %}
+    <meta name="twitter:image" content="{{ config.seoUrlseusite + config.avatar }}">
+  {% endif %}
+
+  <meta name="robots" content="index, follow">
+
+  {% if config.cores.loadingBgColor %}
+    <meta name="theme-color" content="{{ config.cores.loadingBgColor }}">
+  {% endif %}
+  <title>{{ config.titulo or "Protifolio" }}</title>
+  <link rel="canonical" href="{{ config.seoUrlseusite }}">
+  
+  <script type="application/ld+json" defer>
     [
       {
         "@context": "https://schema.org",
@@ -98,27 +132,12 @@
       }
     ]
   </script>
-  <script>
-    function loadingSpinner() {
-      const loading = document.getElementById('loading');
-      const app = document.getElementById('app');
-
-      loading.classList.add('hide');
-
-      setTimeout(() => {
-        loading.remove();
-        app.removeAttribute('style');
-      }, 300);
-     } 
-
-    window.addEventListener('load', loadingSpinner);
-  </script>
 </head>
 <body>
   
   {% include "components/ui/loading.njk" %}
 
   {{ content | safe }}
-  <script type="module" src="/js/main.js"></script>
+  <script type="module" src="/js/main.js" defer></script>
 </body>
 </html>

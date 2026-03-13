@@ -5,6 +5,7 @@ module.exports = {
 		"loadingBgColor": "#22212C"    
     },
     simonao: true,
+	avatar: "/assets/artista-1.png",
     nome: "Liliul",
 	bio: `
         Meu nome é Liliul e sou desenvolvedor Full Stack. 
@@ -19,7 +20,7 @@ module.exports = {
 	linkedinnome: "@Liliu",
 	emailnome: "@liliuContato",
 	email: "liliugithub@gmail.com",
-	curriculonome: "liliu",
+	curriculonome: "liliuCV",
 	curriculolink: "./assets/pdfs/c1.pdf",
     skillsTech: [
 	'Javascript',
@@ -126,5 +127,6 @@ module.exports = {
 	seoDescription: "Programador Fullstack especializado em Node.js, Express, Docker, PostgreSQL e TypeScript, criando aplicações web eficientes e escaláveis.",
 	seoAuthor: "Liliu portifolio",
 	seoTitle: "Liliu - Desenvolvedor Fullstack",
+	seoSitename: "Liliuzers Desenvolvimento FullStack",
 	seoUrlseusite: "https://protifolio-liliu.netlify.app"
 };

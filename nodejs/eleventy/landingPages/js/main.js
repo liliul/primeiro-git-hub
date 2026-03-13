@@ -45,7 +45,7 @@
   function Cor() {
     const cores = {
       textoCor: "#fa7f72",
-      cardHoverCor: "#E9967A",
+      cardHoverCor: "#a99ded",
       txtPskills1: "#111111"
     };
     let txt = "--bg-techs";
