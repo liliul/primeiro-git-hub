@@ -444,7 +444,7 @@
     font-weight: var(--bold);
     border: none;
     border-radius: 8px;
-    background-color: var(--body-bg-color);
+    background-color: var(--cardbutton-bg-color);
     color: var(--bg-techs);
     box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
   }
@@ -547,6 +547,7 @@
   --bold: 700;
   /* Cors */
   --card-hover-cor: #75D7EC;
+  --cardbutton-bg-color: #2d2c39;
 }
 
 body {
@@ -634,15 +635,15 @@ a {
   .alert-custom button {
     border: none;
     background-color: transparent;
-    padding: 5px;
+    padding: 8px;
     position: absolute;
     top: 10px;
     right: 10px;
     color: var(--bg-techs);
   }
   .alert-custom button svg {
-    width: 15px;
-    height: 15px;
+    width: 22px;
+    height: 22px;
   }
 
   .alert-custom h1 {
@@ -1039,7 +1040,7 @@ a {
     font-weight: var(--bold);
     border: none;
     border-radius: 8px;
-    background-color: var(--body-bg-color);
+    background-color: var(--cardbutton-bg-color);
     color: var(--bg-techs);
     box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.5);
   }
