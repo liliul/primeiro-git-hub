@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pesquisando no Youtube</title>
-     <style>
+    <style>
         body {
             background-color: #191919;
             color: white;
@@ -21,11 +22,12 @@
             background-color: #191919;
             color: aliceblue;
         }
+
         button {
             background-color: #191919;
             color: aliceblue;
             border: none;
-            padding: 5px;        
+            padding: 5px;
         }
 
         a {
@@ -37,6 +39,7 @@
         .count {
             color: blueviolet;
         }
+
         #content {
             width: 1000px;
             margin: 0 auto;
@@ -44,12 +47,14 @@
             flex-direction: column;
             gap: 20px;
         }
+
         .card {
             box-shadow: 1px 1px 5px wheat;
             border-radius: 10px;
             padding: 25px;
             margin-bottom: 20px;
         }
+
         .voltar {
             width: 25px;
             height: 25px;
@@ -65,6 +70,7 @@
         .busca {
             width: 100%;
         }
+
         .busca input {
             width: 100%;
             padding: 10px 5px;
@@ -80,131 +86,134 @@
             padding: 25px;
             margin-bottom: 20px;
         }
+
         .buscar-card img {
             width: 120px;
             height: 90px;
         }
     </style>
 </head>
+
 <body>
 
     <h1>Pesquisando no Youtube</h1>
 
-    <button class="voltar" onclick="window.history.back()"><</button>
+    <button class="voltar" onclick="window.history.back()">
+        << /button>
 
-    <div class="c-auth">
-        <button>
-            <a href="/v3/logout">LOGUOT</a>
-        </button>
-    </div>
+            <div class="c-auth">
+                <button>
+                    <a href="/v3/logout">LOGUOT</a>
+                </button>
+            </div>
 
-    <div id="content">
-        <div class="busca">
-            <form id="form-buscar">
-                <label for="buscar">Buscar</label>
-                <input type="text" name="buscar" id="buscar">
-            </form>
-        </div>
+            <div id="content">
+                <div class="busca">
+                    <form id="form-buscar">
+                        <label for="buscar">Buscar</label>
+                        <input type="text" name="buscar" id="buscar">
+                    </form>
+                </div>
 
-        <div id="videos"></div>
-    </div>
-    
-    <script type="module">
-        document.addEventListener('DOMContentLoaded', () => {
-          buscar()  
-        })
+                <div id="videos"></div>
+            </div>
 
-        async function buscar() {
-            const formBuscar = document.getElementById('form-buscar')
-            
-            formBuscar.addEventListener('submit', async (e) => {
-                e.preventDefault()
-                
-                const buscar = document.getElementById('buscar')
-                
-                console.log(buscar.value.trim());
-                const pesquisando = await pesquisandoNoYoutube(buscar.value.trim())
-                if (!pesquisando) return
+            <script type="module">
+                document.addEventListener('DOMContentLoaded', () => {
+                    buscar()
+                })
 
-                card(pesquisando)
-               
-            })
+                async function buscar() {
+                    const formBuscar = document.getElementById('form-buscar')
 
-        }
+                    formBuscar.addEventListener('submit', async (e) => {
+                        e.preventDefault()
 
-        async function pesquisandoNoYoutube(query) {
-           try {
-            const url = 'http://localhost:3001/youtube/v2/ytsearchs'
-            const options = {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({query})
-            }
-            const req = await fetch(url, options)
-            const res = await req.json()
+                        const buscar = document.getElementById('buscar')
 
-            console.log(res)
+                        const pesquisando = await pesquisandoNoYoutube(buscar.value.trim())
+                        if (!pesquisando) return
 
-            if (!Array.isArray(res.data) || res.data.length === 0) {   
-                document.getElementById('videos').innerHTML = '<h2 style="color: tomato;">Pesquisa retornou Nemnhum video</h2>'
-                return
-            }
+                        card(pesquisando)
 
-            return res
+                    })
 
-          } catch(error) {
-            console.error(error)
-            const erroCode = {
-                'status': 'Pesquisando videos no youtube',
-                'codeError': 404,
-                'erro': {
-                    name: error.name,
-                    message: error.message,
-                    stack: error.stack,
                 }
-            }
 
-            document.getElementById('videos').innerHTML = `<pre>${JSON.stringify(erroCode, null, 2)}</pre>`
-            return
-          }
-        } 
-        
-        // pesquisandoNoYoutube('dragon ball z abertura')
+                async function pesquisandoNoYoutube(query) {
+                    try {
+                        const url = 'http://localhost:3001/youtube/v2/ytsearch'
+                        const options = {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({ query })
+                        }
 
-        function card(data) {
-            document.getElementById('videos').innerHTML = ''
+                        const req = await fetch(url, options)
+                        const res = await req.json()
 
-            return data.data.map((i) => {
 
-                const section = document.createElement('section')
-                section.setAttribute('id', i.videoId)
-                section.setAttribute('class', 'buscar-card')
+                        if (!Array.isArray(res.data) || res.data.length === 0) {
+                            document.getElementById('videos').innerHTML = '<h2 style="color: tomato;">Pesquisa retornou Nemnhum video</h2>'
+                            return
+                        }
 
-                const title = document.createElement('h1')
-                title.textContent = i.title 
+                        return res
 
-                const thumbnails = document.createElement('img')
-                thumbnails.src = i.thumbnails.default.url 
+                    } catch (error) {
+                        console.error(error)
+                        const erroCode = {
+                            'status': 'Pesquisando videos no youtube',
+                            'codeError': 404,
+                            'erro': {
+                                name: error.name,
+                                message: error.message,
+                                stack: error.stack,
+                            }
+                        }
 
-                const description = document.createElement('p')
-                description.textContent = i.description
+                        document.getElementById('videos').innerHTML = `<pre>${JSON.stringify(erroCode, null, 2)}</pre>`
+                        return
+                    }
+                }
 
-                const publishedAt = document.createElement('small')
-                const data = new Date(i.publishedAt)
-                publishedAt.textContent = data.toLocaleString('pt-BR')
+                // pesquisandoNoYoutube('dragon ball z abertura')
 
-                const videoUrl = document.createElement('a')
-                videoUrl.href = i.videoUrl
-                videoUrl.textContent = 'Assistir'
+                function card(data) {
+                    document.getElementById('videos').innerHTML = ''
 
-                section.append(title, thumbnails, description, publishedAt, videoUrl)
+                    return data.data.map((i) => {
 
-                document.getElementById('videos').append(section)
-                
-            })
-        }
-    </script>
+                        const section = document.createElement('section')
+                        section.setAttribute('id', i.videoId)
+                        section.setAttribute('class', 'buscar-card')
+
+                        const title = document.createElement('h1')
+                        title.textContent = i.title
+
+                        const thumbnails = document.createElement('img')
+                        thumbnails.src = i.thumbnails.default.url
+
+                        const description = document.createElement('p')
+                        description.textContent = i.description
+
+                        const publishedAt = document.createElement('small')
+                        const data = new Date(i.publishedAt)
+                        publishedAt.textContent = data.toLocaleString('pt-BR')
+
+                        const videoUrl = document.createElement('a')
+                        videoUrl.href = i.videoUrl
+                        videoUrl.textContent = 'Assistir'
+
+                        section.append(title, thumbnails, description, publishedAt, videoUrl)
+
+                        document.getElementById('videos').append(section)
+
+                    })
+                }
+            </script>
 </body>
+
 </html>
