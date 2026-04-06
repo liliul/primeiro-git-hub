@@ -8,6 +8,10 @@ const allowedOrigins = [
 
 export const corsMiddleware = cors({
 	origin: (origin, callback) => {
+		if (process.env.NODE_ENV === "development") {
+			return callback(null, true);
+		}
+
 		if (!origin) return callback(null, true);
 
 		if (allowedOrigins.includes(origin)) {

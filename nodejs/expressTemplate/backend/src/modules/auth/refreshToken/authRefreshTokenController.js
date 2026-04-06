@@ -1,6 +1,7 @@
 import { AppError } from "../../../errors/appErrors/index.js";
 import AuditoriaService from "../../auditoria/auditoriaService.js";
 import { AuditoriaAction } from "../../auditoria/domain/auditoriaActive.js";
+import AuthRefreshTokenRepository from "./authRefreshTokenRepository.js";
 import { refreshTokenSchema } from "./authRefreshTokenSchema.js";
 import AuthRefreshTokenService from "./authRefreshTokenService.js";
 
@@ -9,6 +10,7 @@ class AuthRefreshTokenController {
 		this.pool = pool;
 		this.authRefreshTokenService = new AuthRefreshTokenService(this.pool);
 		this.auditoriaService = new AuditoriaService(this.pool);
+		this.authRefreshTokenRepository = new AuthRefreshTokenRepository(this.pool);
 	}
 
 	async refresh(req, res) {
@@ -40,6 +42,13 @@ class AuthRefreshTokenController {
 			throw new AppError("Refresh token obrigatório", 400);
 		}
 
+		const verificarTokenExiste =
+			await this.authRefreshTokenRepository.findByToken(refreshToken);
+
+		if (!verificarTokenExiste) {
+			throw new AppError("Refresh token não existe no banco", 401);
+		}
+
 		try {
 			await this.authRefreshTokenService.logoutService(refreshToken);
 
@@ -48,7 +57,7 @@ class AuthRefreshTokenController {
 		} finally {
 			try {
 				await this.auditoriaService.log({
-					userId: req.user.id,
+					userId: verificarTokenExiste.user_id,
 					action: AuditoriaAction.LOGOUT,
 					ip: req.ip,
 					userAgent: req.headers["user-agent"],

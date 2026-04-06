@@ -52,18 +52,53 @@ class UserRepository {
 		return rows[0];
 	}
 
-	async updateUserRepository(userId, name, hashedPassword) {
+	async updateNameRepository(userId, name) {
 		const query = `
       UPDATE users
       SET
-        name = COALESCE($1, name),
-        password = COALESCE($2, password)
-      WHERE id = $3
+        name = COALESCE($2, name)
+      WHERE id = $1
       `;
 
-		const value = [name ?? null, hashedPassword ?? null, userId];
+		const value = [userId, name ?? null];
 		const { rows } = await this.pool.query(query, value);
 
+		return rows[0];
+	}
+
+	async findByUpdatePassword(userId) {
+		const query = `
+		 SELECT id, password FROM users WHERE id = $1 LIMIT 1
+		`;
+		const { rows } = await this.pool.query(query, [userId]);
+
+		return rows[0];
+	}
+
+	async updatePasswordRepository(userId, hashedPassword) {
+		const query = `
+      UPDATE users
+      SET
+        password = $2
+      WHERE id = $1
+	  RETURNING id
+      `;
+
+		const value = [userId, hashedPassword ?? null];
+		const { rows } = await this.pool.query(query, value);
+
+		return rows[0];
+	}
+
+	async findByEmail(email) {
+		const query = `
+      SELECT id, name, email
+      FROM users
+      WHERE email = $1
+      LIMIT 1
+    `;
+
+		const { rows } = await this.pool.query(query, [email]);
 		return rows[0];
 	}
 }

@@ -1,7 +1,8 @@
-import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import crypto from "node:crypto";
+import IsPasswordArgon2 from "../../../configs/argon2.js";
 import { AppError } from "../../../errors/appErrors/index.js";
+import logger from "../../../logger/pino.js";
 import { resolvePermissionsJwt } from "../../../utils/resolvePermissions.js";
 import AuthRefreshTokenRepository from "../refreshToken/authRefreshTokenRepository.js";
 import UserRepository from "./userRepository.js";
@@ -12,10 +13,12 @@ class UserService {
 
 		this.userRepository = new UserRepository(this.pool);
 		this.authRefreshTokenRepository = new AuthRefreshTokenRepository(pool);
+
+		this.IsPasswordArgon2 = new IsPasswordArgon2();
 	}
 
 	async createUserService(name, email, password) {
-		const passwordHash = await bcrypt.hash(password, 10);
+		const passwordHash = await this.IsPasswordArgon2.hashPassword(password);
 
 		const user = await this.userRepository.createUserRepository({
 			name,
@@ -24,8 +27,18 @@ class UserService {
 		});
 
 		if (!user) {
+			logger.warn({
+				event: "USER_NOT_FOUND",
+				userId: user.id,
+			});
+
 			throw new AppError("ErroPostgres criando user service", 500);
 		}
+
+		logger.info({
+			event: "CREATE_USER_SUCCESS",
+			userId: user.id,
+		});
 
 		return user;
 	}
@@ -34,13 +47,26 @@ class UserService {
 		const user = await this.userRepository.loginUserRepository(email);
 
 		if (!user) {
+			logger.warn({
+				event: "USER_NOT_FOUND",
+				userId: user.id,
+			});
+
 			throw new AppError("ErrorPostgres login user service", 401);
 		}
 
-		const passwordMatch = await bcrypt.compare(password, user.password);
+		const passwordMatch = await this.IsPasswordArgon2.verifyPassword(
+			password,
+			user.password,
+		);
 
 		if (!passwordMatch) {
-			throw new AppError("ErrorPassword password bcrypt", 401);
+			logger.warn({
+				event: "INVALID_PASSWORD_ATTEMPT",
+				userId: user.id,
+			});
+
+			throw new AppError("ErrorLoginService senha errada.", 401);
 		}
 
 		const permissions = resolvePermissionsJwt(user.roles);
@@ -65,6 +91,11 @@ class UserService {
 			expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
 		});
 
+		logger.info({
+			event: "AUTH_LOGIN_REQUEST",
+			userId: user.id,
+		});
+
 		return {
 			accessToken: newAccessToken,
 			refreshToken: newRefreshToken,
@@ -81,27 +112,76 @@ class UserService {
 		const user = await this.userRepository.meUserRepository(id);
 
 		if (!user) {
+			logger.warn({
+				event: "USER_NOT_FOUND",
+				userId: user.id,
+			});
+
 			throw new AppError(
 				"ErrorPostgres id usuario pode não existir me service",
 				500,
 			);
 		}
 
+		logger.info({
+			event: "ME_REQUEST",
+			userId: user.id,
+		});
 		return user;
 	}
 
-	async updateUserService(userId, name, password) {
-		let hashedPassword;
+	async updateNameService(userId, name) {
+		await this.userRepository.updateNameRepository(userId, name);
+	}
 
-		if (password) {
-			hashedPassword = await bcrypt.hash(password, 10);
+	async updatePasswordService(userId, password, newpassword) {
+		const user = await this.userRepository.findByUpdatePassword(userId);
+
+		if (!user) {
+			logger.warn({
+				event: "USER_NOT_FOUND",
+				userId: user.id,
+			});
+
+			throw new AppError("Usuário não encontrado", 404);
 		}
 
-		await this.userRepository.updateUserRepository(
-			userId,
-			name,
-			hashedPassword,
+		const verificaPasswords = await this.IsPasswordArgon2.verifyPassword(
+			password,
+			user.password,
 		);
+
+		if (!verificaPasswords) {
+			logger.warn({
+				event: "VERIFY_PASSWORD_FOUND",
+				userId: user.id,
+			});
+
+			throw new AppError(
+				"ErrorUpdatePassword verificação da senha deu errada.",
+			);
+		}
+
+		if (password === newpassword) {
+			logger.warn({
+				event: "CURRENT_PASSWORD_FOUND",
+				userId: user.id,
+			});
+
+			throw new AppError("A nova senha deve ser diferente da atual", 401);
+		}
+
+		const hashedPassword =
+			await this.IsPasswordArgon2.hashPassword(newpassword);
+
+		await this.userRepository.updatePasswordRepository(userId, hashedPassword);
+
+		await this.authRefreshTokenRepository.deleteByUserId(userId);
+
+		logger.info({
+			event: "UPDATE_PASSWORD_SUCCESS",
+			userId: user.id,
+		});
 	}
 }
 
