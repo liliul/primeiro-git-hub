@@ -10,3 +10,13 @@
 | POST   | /auth/esqueci-senha | esqueceu senha           |
 | POST   | /auth/restaurar-senha | restaurando senha      |
 | GET    | /superadmin/roles/:id | alterando roles do user|
+
+
+## inicar container docker
+```bash
+# 1. criar e configurar .env
+
+docker compose up -d # criar container
+
+docker compose down -v # deletar container
+```
