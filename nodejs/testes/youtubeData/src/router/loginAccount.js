@@ -2,19 +2,12 @@ import express from 'express'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import db from '../db/conection_db.js'
-// console.log(await db.query('select * from usuarios;'));
-// console.log(await db.query('SELECT name, email, criado_em, id FROM usuarios WHERE email = uzumaki@email.com'))
 
 class HashService {
-//   async compare(plain, hashed) {
-//     return bcrypt.compare(plain, hashed)
-//   }
-
-  async compare(password, userPassword) {
-    if (password === userPassword) return true;
-    
-    return false;
+  async compare(plain, hashed) {
+    return bcrypt.compare(plain, hashed)
   }
+
   async hash(plain, rounds = 10) {
     return bcrypt.hash(plain, rounds)
   }
@@ -66,7 +59,7 @@ class LoginRepository {
     }
 
     async buscaPorEmail(email) {
-        const resultado = await this.pool.query('SELECT name, password, email, criado_em, id FROM usuarios WHERE email = $1', [email]);
+        const resultado = await this.pool.query('SELECT name, password, email, criado_em, role, id FROM usuarios WHERE email = $1', [email]);
 
         return resultado.rows[0] ?? null;
     }
@@ -86,13 +79,15 @@ class AuthLoginService {
         const valida = await this.hashService.compare(password, user.password);
         if (!valida) throw new Error('Comparação de senhas invalidas.');
 
-        const jwtToken = this.tokenService.sign({sub: user.id, role: user.name})
+        const jwtToken = this.tokenService.sign({sub: user.id, role: user.role})
 
         return {
             jwtToken,
             user: {
                 id: user.id,
-                email: user.email
+                name: user.name,
+                email: user.email,
+                role: user.role
             }
         }
     }
@@ -118,7 +113,7 @@ class AuthController {
 }
 
 const hashService = new HashService()
-const tokenService = new TokenService(process.env.JWT_SECRET)
+const tokenService = new TokenService(process.env.JWT_SECRET, process.env.NODE_ENV === "product" ? process.env.JWT_EXPIRES : "5h")
 const userRepository = new LoginRepository(db)
 
 const authLoginService = new AuthLoginService({loginRepository: userRepository, hashService, tokenService})
@@ -136,7 +131,7 @@ routerInjectDepedency.get('/me', authenticate, (req, res) => {
 })
 
 // Rota protegida — somente admins
-routerInjectDepedency.get('/admin', authenticate, requireRole('Naruto uzumaki'), (req, res) => {
+routerInjectDepedency.get('/admin', authenticate, requireRole('admin'), (req, res) => {
   res.json({ message: 'Área administrativa' })
 })
 

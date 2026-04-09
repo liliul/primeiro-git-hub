@@ -1,25 +1,19 @@
 import express from 'express'
+import bcrypt from 'bcrypt'
 import db from '../db/conection_db.js'
 
 const routerAccount = express.Router()
 
 routerAccount.post('/account', async (req, res) => {
   const { name, email, password } = req.body
+  const role = 'user'
+
   try {
+    const hashPassword = await bcrypt.hash(password, 10)
 
-    await db.query(`
-    CREATE TABLE IF NOT EXISTS usuarios (
-        id SERIAL PRIMARY KEY,
-        name VARCHAR(100) NOT NULL,
-        email VARCHAR(100) UNIQUE NOT NULL,
-        password VARCHAR(150) UNIQUE NOT NULL,
-        criado_em TIMESTAMP DEFAULT NOW()
-    )
-    `);
-
-     const result = await db.query(
-      `INSERT INTO usuarios (name, email, password) VALUES ($1, $2, $3) RETURNING *`,
-      [name, email, password]
+    const result = await db.query(
+      `INSERT INTO usuarios (name, email, password, role) VALUES ($1, $2, $3, $4) RETURNING *`,
+      [name, email, hashPassword, role] 
     );
 
     res.send({ message : 'Usuario criado com sucesso!', db: result.rows[0] })
@@ -34,7 +28,7 @@ routerAccount.get('/account', async (req, res) => {
   try {
 
     const result = await db.query(`
-      SELECT * FROM usuarios;
+      SELECT id, name, email, role, criado_em FROM usuarios;
     `);
 
     res.send({ message : result.rows})
