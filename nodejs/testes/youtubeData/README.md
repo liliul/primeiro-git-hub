@@ -57,8 +57,8 @@ configuração do banco de dados postgres
 
 ```bash
 
-# para criar as tabelas -> pasta db -> gerar_sql.js
-# ex: node src/db/gerar_sql.js e init.js
+# para criar as tabelas -> pasta db -> init.js
+npm run init:db
 
 ```
 

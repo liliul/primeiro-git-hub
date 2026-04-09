@@ -1,7 +1,7 @@
+CREATE EXTENSION IF NOT EXISTS "pgcrypto";
+
 CREATE TABLE google_users (
-    -- CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
-    
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
 
     sub TEXT UNIQUE NOT NULL,                 
     email TEXT UNIQUE NOT NULL,
@@ -34,3 +34,30 @@ CREATE TABLE google_oauth_tokens (
   updated_at TIMESTAMP DEFAULT NOW()
 );
 
+CREATE TYPE user_role AS ENUM ('user', 'admin');
+
+CREATE TABLE IF NOT EXISTS usuarios (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    password VARCHAR(150) NOT NULL,
+    role user_role DEFAULT 'user',
+    criado_em TIMESTAMP DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS youtube_videos (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    video_id VARCHAR(30) UNIQUE NOT NULL,
+    title TEXT NOT NULL,
+    description TEXT,
+    channel VARCHAR(100),
+    published_at TIMESTAMP,
+    thumbnails JSONB,
+    tags TEXT[],
+    statistics JSONB,
+    video_url TEXT,
+    etag TEXT,
+    channel_id VARCHAR(50),
+    region_code VARCHAR(5),
+    criado_em TIMESTAMP DEFAULT NOW()
+);
