@@ -33,6 +33,8 @@ docker exec -it meu_postgres psql -U root -d youtubedata
 
 \q
 
+# descobrir ip do container docker
+docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' NOME_OU_ID_DO_CONTAINER
 
 # criar container redis
 docker run -d \
