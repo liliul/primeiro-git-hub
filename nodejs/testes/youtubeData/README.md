@@ -60,6 +60,10 @@ configuração do banco de dados postgres
 # para criar as tabelas -> pasta db -> init.js
 npm run init:db
 
+# criar usuario admin no banco -> pasta db -> admin.js
+npm run admin
+
+
 ```
 
 rotas

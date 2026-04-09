@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "node --watch src/index.js",
     "test": "NODE_OPTIONS=--experimental-vm-modules jest --runInBand --coverage",
-    "init:db": "node src/db/init.js"
+    "init:db": "node src/db/init.js",
+    "admin": "node src/db/admin.js"
   },
   "keywords": [],
   "author": "",
