@@ -1,4 +1,4 @@
-import express from 'express'
+import express from 'express';
 import routerHealth from './router/health.js';
 import routerAccount from './router/routerAccount.js';
 import routerYoutubeAlta from './router/routerYoutubeAlta.js';
@@ -11,7 +11,9 @@ import routerYoutubeUser from './router/routerYoutubeUserPlaylists.js';
 import routerError from './router/routerError.js';
 import routerUtils from './router/routerUtils.js';
 import routerAtividades from './router/routerAtividades.js';
-import routerInjectDepedency from './router/loginAccount.js';
+// import routerInjectDepedency from './router/loginAccount.js';
+import routerAuth from './admin/auth/routes.js';
+import { errorHandler } from './middleware/errorHandler.js';
 
 // import './node_cron/index.js'
 
@@ -29,7 +31,7 @@ app.use(express.static(path.join(__dirname, "/public")));
 
 app.use(routerHealth)
 app.use(routerAccount)
-app.use(routerInjectDepedency)
+app.use(routerAuth)
 app.use('/youtube/v1', routerYoutubeAlta)
 app.use('/youtube/v2', routerYoutubeSearch)
 app.use("/auth", routerGoogleAuth)
@@ -38,6 +40,7 @@ app.use('/', routerYoutubeUser)
 app.use('/', routerAtividades)
 app.use('/', routerError)
 
+app.use(errorHandler)
 
 app.listen(3001, () => {
   console.log('Servidor rodando em http://localhost:3001');
