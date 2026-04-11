@@ -34,14 +34,12 @@ CREATE TABLE google_oauth_tokens (
   updated_at TIMESTAMP DEFAULT NOW()
 );
 
-CREATE TYPE user_role AS ENUM ('user', 'admin');
-
 CREATE TABLE IF NOT EXISTS usuarios (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     name VARCHAR(100) NOT NULL,
     email VARCHAR(100) UNIQUE NOT NULL,
     password VARCHAR(150) NOT NULL,
-    role user_role DEFAULT 'user',
+    role TEXT DEFAULT 'user' CHECK (role IN ('user', 'admin')),
     criado_em TIMESTAMP DEFAULT NOW()
 );
 
