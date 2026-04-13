@@ -79,7 +79,7 @@ class AuthLoginService {
         const valida = await this.hashService.compare(password, user.password);
         if (!valida) throw new Error('Comparação de senhas invalidas.');
 
-        const jwtToken = this.tokenService.sign({sub: user.id, role: user.role})
+        const jwtToken = this.tokenService.sign({sub: user.id, name: user.name, role: user.role})
 
         return {
             jwtToken,
