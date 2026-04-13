@@ -24,11 +24,13 @@ async function adminController() {
 
   const hashPassword = await hashed(ADMIN_PASSWORD, 10)
 
-  await db.query(
-      `
-      INSERT INTO usuarios (name, email, password, role)
-        VALUES ($1, $2, $3, $4)
-      ON CONFLICT (email) DO UPDATE SET role = EXCLUDED.role`,
+  await db.query(`
+    INSERT INTO usuarios (name, email, password, role)
+      VALUES ($1, $2, $3, $4)
+      ON CONFLICT (email) DO UPDATE SET
+        name = EXCLUDED.name,
+        password = EXCLUDED.password,
+        role = EXCLUDED.role`,
       [ADMIN_NAME, ADMIN_EMAIL, hashPassword, ADMIN_ROLE] 
   );
 
