@@ -6,8 +6,8 @@ class GoogleOauthService {
         this.repository = repository
     }
 
-    googleService() {
-        const googleOauth2 = this.utils.googleOauth2()            
+    googleOauthService() {
+        const googleOauth2 = this.utils.googleOaut2()            
 
         if(!googleOauth2) {
             throw new AppError("Error", 401)
@@ -18,7 +18,7 @@ class GoogleOauthService {
 
     async googleCallbackService(code) {
        
-        const data = await this.utils.googleApisToken(code)
+        const { data } = await this.utils.googleApisToken(code)
 
         const {
             access_token,
@@ -28,7 +28,6 @@ class GoogleOauthService {
         } = data
         
         const googleUser = await this.utils.verifacandoIDToken(id_token)
-        console.log('googleUser: ', googleUser)
         
         const expiresAt = new Date(Date.now() + expires_in * 1000)
         await this.repository.googleOauthTokens({

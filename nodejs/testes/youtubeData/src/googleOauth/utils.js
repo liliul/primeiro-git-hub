@@ -1,6 +1,7 @@
 import qs from "qs"
 import { OAuth2Client } from "google-auth-library"
 import jwt from "jsonwebtoken"
+import axios from "axios"
 import { AppError } from "../errors/AppError.js"
 
 class Utils {
@@ -74,7 +75,7 @@ class Utils {
     }
 
     googleJwt(googleUser) {
-        return  jwt.sign(
+        return jwt.sign(
             {
                 email: googleUser.email,
                 name: googleUser.name,

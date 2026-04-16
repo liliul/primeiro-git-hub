@@ -3,7 +3,8 @@ import routerHealth from './router/health.js';
 import routerAccount from './router/routerAccount.js';
 import routerYoutubeAlta from './router/routerYoutubeAlta.js';
 import routerYoutubeSearch from './router/routerYoutubeSearch.js';
-import routerGoogleAuth from './router/routerGoogleAuth2.js';
+// import routerGoogleAuth from './router/routerGoogleAuth2.js';
+import routerGoogleOauth2 from './googleOauth/routes.js';
 import cors from 'cors'
 import path from 'node:path';
 import cookieParser from 'cookie-parser';
@@ -34,7 +35,7 @@ app.use(routerAccount)
 app.use(routerAuth)
 app.use('/youtube/v1', routerYoutubeAlta)
 app.use('/youtube/v2', routerYoutubeSearch)
-app.use("/auth", routerGoogleAuth)
+app.use("/auth", routerGoogleOauth2)
 app.use('/v3', routerUtils)
 app.use('/', routerYoutubeUser)
 app.use('/', routerAtividades)

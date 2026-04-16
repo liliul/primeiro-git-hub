@@ -7,7 +7,7 @@ class GoogleOauthController {
     }
 
     google(req, res) {
-        const googleAuthURL = this.googleService()
+        const googleAuthURL = this.googleService.googleOauthService()
         
         if(!googleAuthURL) {
             return res.status(401).json({ error: 'Erro no google auth.' })
