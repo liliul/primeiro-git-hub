@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken"
 import axios from "axios"
 import { AppError } from "../errors/AppError.js"
 
-class Utils {
+class UtilsAdapter {
     constructor({CLIENT_ID, CLIENT_SECRET, REDIRECT_URI}) {
         this.CLIENT_ID = CLIENT_ID
         this.CLIENT_SECRET = CLIENT_SECRET
@@ -92,4 +92,4 @@ class Utils {
     }
 }
 
-export default Utils
+export default UtilsAdapter
