@@ -9,7 +9,7 @@ import GoogleOauthController from "./googleOauthController.js"
 import GoogleOauthService from "./googleOauthService.js"
 import GoogleOauthRepository from "./googleOauthRepository.js"
 
-import UtilsAdapter from "./utilsAdapter.js"
+import GoogleOauthAdapter from "./googleOauthAdapter.js"
 
 const routerGoogleOauth2 = express.Router()
 
@@ -19,9 +19,9 @@ const CLIENT_ID = process.env.GOOGLE_CLIENT_ID
 const CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET
 const REDIRECT_URI = "http://localhost:3001/auth/google/callback"
 
-const utilsAdapter = new UtilsAdapter({CLIENT_ID, CLIENT_SECRET, REDIRECT_URI})
+const googleOauthAdapter = new GoogleOauthAdapter({CLIENT_ID, CLIENT_SECRET, REDIRECT_URI})
 const googleOauthRepository = new GoogleOauthRepository(db)
-const googleOauthService = new GoogleOauthService(utilsAdapter, googleOauthRepository)
+const googleOauthService = new GoogleOauthService(googleOauthAdapter, googleOauthRepository)
 const googleOauthController = new GoogleOauthController(googleOauthService)
 
 routerGoogleOauth2.get('/google', googleOauthController.google)

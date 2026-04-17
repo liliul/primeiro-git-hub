@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken"
 import axios from "axios"
 import { AppError } from "../errors/AppError.js"
 
-class UtilsAdapter {
+class GoogleOauthAdapter {
     constructor({CLIENT_ID, CLIENT_SECRET, REDIRECT_URI}) {
         this.CLIENT_ID = CLIENT_ID
         this.CLIENT_SECRET = CLIENT_SECRET
@@ -13,7 +13,7 @@ class UtilsAdapter {
         this.googleClient = new OAuth2Client(this.CLIENT_ID)
     }
 
-    googleOaut2() {
+    construindoUrlGoogleOaut2() {
         return (
             "https://accounts.google.com/o/oauth2/v2/auth?" +
                 new URLSearchParams({
@@ -32,7 +32,7 @@ class UtilsAdapter {
         )
     }
 
-    async googleApisToken(code) {
+    async chamandoGoogleApisToken(code) {
         const body = qs.stringify({
             code,
             client_id: this.CLIENT_ID,
@@ -74,7 +74,7 @@ class UtilsAdapter {
         }
     }
 
-    googleJwt(googleUser) {
+    gerarJwtSign(googleUser) {
         return jwt.sign(
             {
                 email: googleUser.email,
@@ -92,4 +92,4 @@ class UtilsAdapter {
     }
 }
 
-export default UtilsAdapter
+export default GoogleOauthAdapter

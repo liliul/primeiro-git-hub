@@ -1,13 +1,13 @@
 import { AppError } from "../errors/AppError.js"
 
 class GoogleOauthService {
-    constructor(utilsAdapter, repository) {
-        this.utilsAdapter = utilsAdapter
+    constructor(googleOauthAdapter, repository) {
+        this.googleOauthAdapter = googleOauthAdapter
         this.repository = repository
     }
 
     googleOauthService() {
-        const googleOauth2 = this.utilsAdapter.googleOaut2()            
+        const googleOauth2 = this.googleOauthAdapter.construindoUrlGoogleOaut2()            
 
         if(!googleOauth2) {
             throw new AppError("Error", 401)
@@ -18,7 +18,7 @@ class GoogleOauthService {
 
     async googleCallbackService(code) {
        
-        const { data } = await this.utilsAdapter.googleApisToken(code)
+        const { data } = await this.googleOauthAdapter.chamandoGoogleApisToken(code)
 
         const {
             access_token,
@@ -27,7 +27,7 @@ class GoogleOauthService {
             id_token
         } = data
         
-        const googleUser = await this.utilsAdapter.verifacandoIDToken(id_token)
+        const googleUser = await this.googleOauthAdapter.verifacandoIDToken(id_token)
         
         const expiresAt = new Date(Date.now() + expires_in * 1000)
         await this.repository.googleOauthTokens({
@@ -39,7 +39,7 @@ class GoogleOauthService {
         })
 
 
-        const token = this.utilsAdapter.googleJwt(googleUser)
+        const token = this.googleOauthAdapter.gerarJwtSign(googleUser)
 
         return token
     }
