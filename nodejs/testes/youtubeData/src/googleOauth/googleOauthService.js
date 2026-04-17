@@ -6,7 +6,7 @@ class GoogleOauthService {
         this.googleOauthRepository = googleOauthRepository
     }
 
-    googleOauthService() {
+    construaGoogleOauthService() {
         const googleOauth2 = this.googleOauthAdapter.construindoUrlGoogleOaut2()            
 
         if(!googleOauth2) {

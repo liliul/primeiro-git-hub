@@ -24,7 +24,7 @@ const googleOauthRepository = new GoogleOauthRepository(db)
 const googleOauthService = new GoogleOauthService(googleOauthAdapter, googleOauthRepository)
 const googleOauthController = new GoogleOauthController(googleOauthService)
 
-routerGoogleOauth2.get('/google', googleOauthController.google)
-routerGoogleOauth2.get('/google/callback', googleOauthController.googleCallback)
+routerGoogleOauth2.get('/google', googleOauthController.construindoGoogleOauth2)
+routerGoogleOauth2.get('/google/callback', googleOauthController.handleGoogleCallback)
 
 export default routerGoogleOauth2

@@ -1,13 +1,13 @@
 class GoogleOauthController {
-    constructor(googleService) {
-        this.googleService =  googleService
+    constructor(googleOauthService) {
+        this.googleOauthService =  googleOauthService
 
-        this.google = this.google.bind(this)
-        this.googleCallback = this.googleCallback.bind(this)
+        this.construindoGoogleOauth2 = this.construindoGoogleOauth2.bind(this)
+        this.handleGoogleCallback = this.handleGoogleCallback.bind(this)
     }
 
-    google(req, res) {
-        const googleAuthURL = this.googleService.googleOauthService()
+    construindoGoogleOauth2(req, res) {
+        const googleAuthURL = this.googleOauthService.construaGoogleOauthService()
         
         if(!googleAuthURL) {
             return res.status(401).json({ error: 'Erro no google auth.' })
@@ -16,11 +16,11 @@ class GoogleOauthController {
         return res.redirect(googleAuthURL)
     }
 
-    async googleCallback(req, res, next) {
+    async handleGoogleCallback(req, res, next) {
        try {
         const code = req.query.code
 
-        const token = await this.googleService.googleCallbackService(code)
+        const token = await this.googleOauthService.googleCallbackService(code)
 
         res.cookie("token", token, {
             httpOnly: true,
