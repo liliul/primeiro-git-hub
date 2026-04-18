@@ -24,11 +24,12 @@ class GoogleOauthController {
 
         res.cookie("token", token, {
             httpOnly: true,
-            secure: false,   
+            secure: false,
             sameSite: "lax",
-            path: "/"
+            path: "/",
+            maxAge: 1000 * 60 * 60 * 24 * 7
         })
-        
+            
         return res.redirect("/v3/home")
        } catch (error) {
         console.error("GOOGLE ERROR:", error.response?.data || error.message)

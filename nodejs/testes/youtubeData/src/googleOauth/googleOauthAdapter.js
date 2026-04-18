@@ -84,7 +84,7 @@ class GoogleOauthAdapter {
             },
             process.env.JWT_SECRET,
             { 
-                expiresIn: "1d",
+                expiresIn: process.env.JWT_EXPIRES,
                 issuer: "my-video-you",
                 audience: "my-video-you-web",
             }
