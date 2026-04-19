@@ -5,10 +5,12 @@ import axios from "axios"
 import { AppError } from "../errors/AppError.js"
 
 class GoogleOauthAdapter {
-    constructor({CLIENT_ID, CLIENT_SECRET, REDIRECT_URI}) {
+    constructor({CLIENT_ID, CLIENT_SECRET, REDIRECT_URI, JWT_SECRET, JWT_EXPIRES}) {
         this.CLIENT_ID = CLIENT_ID
         this.CLIENT_SECRET = CLIENT_SECRET
         this.REDIRECT_URI = REDIRECT_URI
+        this.JWT_SECRET = JWT_SECRET
+        this.JWT_EXPIRES = JWT_EXPIRES
 
         this.googleClient = new OAuth2Client(this.CLIENT_ID)
     }
@@ -82,9 +84,9 @@ class GoogleOauthAdapter {
                 picture: googleUser.picture,
                 sub: googleUser.sub,
             },
-            process.env.JWT_SECRET,
+            this.JWT_SECRET,
             { 
-                expiresIn: process.env.JWT_EXPIRES,
+                expiresIn: this.JWT_EXPIRES,
                 issuer: "my-video-you",
                 audience: "my-video-you-web",
             }

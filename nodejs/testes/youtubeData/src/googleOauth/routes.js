@@ -18,8 +18,10 @@ routerGoogleOauth2.use(cookieParser())
 const CLIENT_ID = process.env.GOOGLE_CLIENT_ID
 const CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET
 const REDIRECT_URI = "http://localhost:3001/auth/google/callback"
+const JWT_SECRET = process.env.JWT_SECRET
+const JWT_EXPIRES = process.env.JWT_EXPIRES
 
-const googleOauthAdapter = new GoogleOauthAdapter({CLIENT_ID, CLIENT_SECRET, REDIRECT_URI})
+const googleOauthAdapter = new GoogleOauthAdapter({CLIENT_ID, CLIENT_SECRET, REDIRECT_URI, JWT_SECRET, JWT_EXPIRES})
 const googleOauthRepository = new GoogleOauthRepository(db)
 const googleOauthService = new GoogleOauthService(googleOauthAdapter, googleOauthRepository)
 const googleOauthController = new GoogleOauthController(googleOauthService)
