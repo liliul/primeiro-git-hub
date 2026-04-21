@@ -7,7 +7,7 @@ export async function getMyPlayList(req, res) {
   try {
     const googleId = req.user.sub; 
     const accessToken = await getValidGoogleToken(googleId)
-
+    
     const response = await axios.get(
       "https://www.googleapis.com/youtube/v3/playlists",
       {
@@ -27,8 +27,14 @@ export async function getMyPlayList(req, res) {
     }
 
     const playListItems = await Promise.all(response.data.items.map(async (i) => {
-      console.log(i);
       const videos = await getPlaylistVideos(accessToken, i.id)
+
+      if (!videos?.items) return {
+        id: i.id,
+        title: i.snippet.title,
+        thumbnailList: i.snippet.thumbnails?.default?.url,
+        videos: []
+      }
 
       return {
         id: i.id,
@@ -77,6 +83,6 @@ async function getPlaylistVideos(accessToken, playlistId) {
     return response.data;
   } catch (error) {
     console.error('Erro em getPlayistVideos: ', error);
-    sanitizeAxiosError(error)
+    return sanitizeAxiosError(error)
   }
 }
