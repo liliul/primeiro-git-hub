@@ -26,6 +26,14 @@ class GoogleOauthRepository {
             ]
             );
     }
+
+    async encontrandoGoogleID(sub) {
+        await this.pool.query(
+            `
+            SELECT * FROM google_oauth_tokens WHERE google_id = 1$
+            `, [sub]
+        )
+    }
 }
 
 export default GoogleOauthRepository
