@@ -49,34 +49,32 @@ class GoogleOauthService {
 
     async pegandoTokenValidoAccessToken(googleId) {
         const tokenDB = await this.googleOauthRepository.encontrandoGoogleID(googleId)
-
-        const expired =
-        new Date(tokenDB.expires_at).getTime() <= Date.now() + 60000
+        
+        const expired = new Date(tokenDB.expires_at).getTime() <= Date.now() + 60000
 
         if (!expired) {
-        return tokenDB.access_token
+            return tokenDB.access_token
         }
 
-        // renovar
         const oauth2Client = new OAuth2Client(
-        process.env.GOOGLE_CLIENT_ID,
-        process.env.GOOGLE_CLIENT_SECRET
+            process.env.GOOGLE_CLIENT_ID,
+            process.env.GOOGLE_CLIENT_SECRET
         )
 
         oauth2Client.setCredentials({
-        refresh_token: tokenDB.refresh_token
+            refresh_token: tokenDB.refresh_token
         })
 
         const { token } = await oauth2Client.getAccessToken()
-        console.log(token)
+        console.log('googleOauthRepository: ', token)
+        const expiresAt = new Date(Date.now() + 3600 * 1000)
+        await this.googleOauthRepository.atualizandoToken({
+            token,
+            expiresAt,
+            googleId,
+        })
 
-        // await this.googleOauthRepository.updateAccessToken(
-        // googleId,
-        // token,
-        // new Date(Date.now() + 3600 * 1000)
-        // )
-
-        // return token
+        return token
   }
 }
 

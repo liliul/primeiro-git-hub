@@ -29,6 +29,7 @@ class GoogleOauthAdapter {
                     "https://www.googleapis.com/auth/youtube.readonly"
                 ].join(" "),
                 access_type: "offline",
+                include_granted_scopes: "true",
                 prompt: "consent"
             })
         )

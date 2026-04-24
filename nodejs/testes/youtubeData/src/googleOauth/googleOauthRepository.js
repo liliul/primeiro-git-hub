@@ -28,11 +28,26 @@ class GoogleOauthRepository {
     }
 
     async encontrandoGoogleID(sub) {
-        await this.pool.query(
+        const result = await this.pool.query(
             `
-            SELECT * FROM google_oauth_tokens WHERE google_id = 1$
+            SELECT * FROM google_oauth_tokens WHERE google_id = $1
             `, [sub]
         )
+
+        return result.rows[0] || null;
+    }
+
+    async atualizandoToken({newAccessToken, expiresAt, googleId}) {
+        await this.pool.query(
+            `
+            UPDATE google_oauth_tokens
+            SET access_token = $1,
+                expires_at = $2,
+                updated_at = NOW()
+            WHERE google_id = $3
+            `,
+            [newAccessToken, expiresAt, googleId]
+        );
     }
 }
 
