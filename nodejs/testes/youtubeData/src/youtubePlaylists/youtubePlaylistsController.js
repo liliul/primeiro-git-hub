@@ -1,12 +1,15 @@
 import axios from "axios";
-import { getValidGoogleToken } from "../utils/getValidGoogleToken.js";
 import { playlistLogger } from "./playlistLogger.js";
 import { sanitizeAxiosError } from "../utils/sanitizeAxiosError.js";
+import RenovandoTokenGoogleOauthService from "../googleOauth/renovandoTokenGoogleOauthService.js";
+
+const renovandoTokenGoogleOauthService = new RenovandoTokenGoogleOauthService();
 
 export async function getMyPlayList(req, res) {
   try {
     const googleId = req.user.sub; 
-    const accessToken = await getValidGoogleToken(googleId)
+    const accessToken = await renovandoTokenGoogleOauthService.pegandoTokenValidoAccessToken(googleId);
+    console.log('playlist token: ', accessToken);
     
     const response = await axios.get(
       "https://www.googleapis.com/youtube/v3/playlists",
