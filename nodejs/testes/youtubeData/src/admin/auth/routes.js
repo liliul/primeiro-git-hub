@@ -5,6 +5,7 @@ import AuthRepository from './authRepository.js'
 import AuthService from './authService.js'
 import AuthController from './authController.js'
 import { authMiddleware, requireRole } from '../middleware/authMiddleware.js'
+import { loginLimiter, ipLimiter } from '../middleware/rateLimit.js'
 import dotenv from 'dotenv'
 dotenv.config()
 
@@ -19,7 +20,7 @@ const authenticate = authMiddleware(tokenService)
 
 const routerAuth = express.Router()
 
-routerAuth.post('/login', authController.login)
+routerAuth.post('/login', ipLimiter, loginLimiter, authController.login)
 
 routerAuth.get('/me', authenticate, (req, res) => {
   res.json({ user: req.user })
