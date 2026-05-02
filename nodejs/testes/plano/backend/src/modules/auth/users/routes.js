@@ -16,19 +16,19 @@ const JWT = new AuthRoutesJwt();
 userRoutes.post(
 	"/create",
 	publicRateLimit(constsRateLimit.USER_CREATE_RATELIMIT),
-	userController.create.bind(userController),
+	userController.create,
 );
 userRoutes.post(
 	"/login",
 	publicRateLimit(constsRateLimit.USER_LOGIN_RATELIMIT),
-	userController.login.bind(userController),
+	userController.login,
 );
 
 userRoutes.get(
 	"/me",
 	JWT.auth,
 	authRateLimit(constsRateLimit.USER_ME_RATELIMIT),
-	userController.me.bind(userController),
+	userController.me,
 );
 userRoutes.put(
 	"/update/name",

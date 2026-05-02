@@ -1,3 +1,4 @@
+import { th } from "zod/v4/locales";
 import AuditoriaService from "../../auditoria/auditoriaService.js";
 import { AuditoriaAction } from "../../auditoria/domain/auditoriaActive.js";
 import {
@@ -14,6 +15,10 @@ class UserController {
 
 		this.userService = new UserService(this.pool);
 		this.auditoriaService = new AuditoriaService(this.pool);
+
+		this.create = this.create.bind(this);
+		this.login = this.login.bind(this);
+		this.me = this.me.bind(this);
 	}
 
 	async create(req, res) {
