@@ -1,4 +1,5 @@
 import cookieParser from "cookie-parser";
+import path from "node:path";
 import express from "express";
 import { corsMiddleware } from "./configs/cors.js";
 import { helmetConfig } from "./configs/helmet.js";
@@ -20,6 +21,9 @@ cronAgendamentos.limpandoTokensExpiradosEsqueceuSenha();
 const app = express();
 
 const errorGlobal = new ErrorGlobal();
+
+const __dirname = path.resolve();
+app.use(express.static(path.join(__dirname, "/public")));
 
 app.set("trust proxy", 1);
 app.use(corsMiddleware);
