@@ -14,13 +14,13 @@ authRefresToken.post(
 	"/refresh",
 	JWT.authRefreshToken,
 	refreshRateLimit(constsRateLimit.REFRESH_RATELIMIT),
-	authRefreshTokenController.refresh.bind(authRefreshTokenController),
+	authRefreshTokenController.refresh,
 );
 authRefresToken.post(
 	"/logout",
 	JWT.authRefreshToken,
 	refreshRateLimit(constsRateLimit.REFRESH_LOGOUT_RATELIMIT),
-	authRefreshTokenController.logout.bind(authRefreshTokenController),
+	authRefreshTokenController.logout,
 );
 
 export default authRefresToken;

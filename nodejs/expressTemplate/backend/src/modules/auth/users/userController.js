@@ -14,6 +14,12 @@ class UserController {
 
 		this.userService = new UserService(this.pool);
 		this.auditoriaService = new AuditoriaService(this.pool);
+		
+		this.create = this.create.bind(this)
+		this.login = this.login.bind(this)
+		this.me = this.me.bind(this)
+		this.updateName = this.updateName.bind(this)
+		this.updatePassword = this.updatePassword.bind(this)
 	}
 
 	async create(req, res) {

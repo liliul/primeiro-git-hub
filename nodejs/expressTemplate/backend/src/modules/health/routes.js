@@ -5,6 +5,6 @@ import HealthController from "./healthController.js";
 const healthRoutes = Router();
 
 const healthController = new HealthController(pool);
-healthRoutes.get("/", healthController.healthCheck.bind(healthController));
+healthRoutes.get("/", healthController.healthCheck);
 
 export default healthRoutes;

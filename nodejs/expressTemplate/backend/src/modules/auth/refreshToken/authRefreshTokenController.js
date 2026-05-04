@@ -11,6 +11,9 @@ class AuthRefreshTokenController {
 		this.authRefreshTokenService = new AuthRefreshTokenService(this.pool);
 		this.auditoriaService = new AuditoriaService(this.pool);
 		this.authRefreshTokenRepository = new AuthRefreshTokenRepository(this.pool);
+
+		this.refresh = this.refresh.bind(this)
+		this.logout = this.logout.bind(this)
 	}
 
 	async refresh(req, res) {

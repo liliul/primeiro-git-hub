@@ -15,13 +15,13 @@ const restaurarSenha = new RestaurarSenhaController(pool);
 resetPassword.post(
 	"/esqueci-senha",
 	publicRateLimit("Esqueci senha"),
-	esqueciSenha.forgotPassword.bind(esqueciSenha),
+	esqueciSenha.forgotPassword,
 );
 
 resetPassword.post(
 	"/restaurar-senha",
 	resetPasswordRateLimit("Restaurar senha"),
-	restaurarSenha.resetPassword.bind(restaurarSenha),
+	restaurarSenha.resetPassword,
 );
 
 resetPassword.get(

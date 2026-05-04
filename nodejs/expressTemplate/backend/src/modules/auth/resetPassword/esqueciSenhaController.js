@@ -6,6 +6,8 @@ class EsqueciSenhaController {
 		this.pool = pool;
 
 		this.esqueciSenhaService = new EsqueciSenhaService(this.pool);
+
+		this.forgotPassword = this.forgotPassword.bind(this)
 	}
 
 	async forgotPassword(req, res) {

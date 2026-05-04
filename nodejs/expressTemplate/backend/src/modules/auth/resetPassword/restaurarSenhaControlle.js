@@ -7,6 +7,8 @@ class RestaurarSenhaController {
 		this.pool = pool;
 
 		this.restaurarSenhaService = new RestaurarSenhaService(this.pool);
+
+		this.resetPassword = this.resetPassword.bind(this)
 	}
 
 	async resetPassword(req, res) {

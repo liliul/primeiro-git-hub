@@ -19,6 +19,6 @@ superAdminRoutes.get(
 	JWT.garantirRole(constsRole.ROLES_SUPERADMIN),
 	JWT.validarPermissao(constsRole.PERMISSIONS_SUPER_ADMIN),
 	JWT.garantirPolitica(policies.alterarRole),
-	superAdminController.alterarRole.bind(superAdminController),
+	superAdminController.alterarRole,
 );
 export default superAdminRoutes;
