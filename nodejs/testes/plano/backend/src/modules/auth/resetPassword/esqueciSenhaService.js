@@ -33,12 +33,9 @@ class EsqueciSenhaService {
 			.update(rawToken)
 			.digest("hex");
 
-		const expiresAt = new Date(Date.now() + 15 * 60 * 1000);
-
 		await this.restaurarSenhaRepository.create({
 			userId: user.id,
 			tokenHash,
-			expiresAt,
 		});
 
 		logger.info({

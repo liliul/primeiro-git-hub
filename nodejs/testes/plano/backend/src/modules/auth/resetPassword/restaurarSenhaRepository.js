@@ -3,7 +3,7 @@ class RestaurarSenhaRepository {
 		this.pool = pool;
 	}
 
-	async create({ userId, tokenHash, expiresAt }) {
+	async create({ userId, tokenHash }) {
 		const query = `
       INSERT INTO password_resets (user_id, token_hash, expires_at)
       VALUES ($1, $2, NOW() + INTERVAL '15 minutes')
