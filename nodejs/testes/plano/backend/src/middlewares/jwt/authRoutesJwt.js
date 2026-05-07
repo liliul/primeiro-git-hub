@@ -3,6 +3,14 @@ import { constsRole } from "../../consts/index.js";
 import { AppError } from "../../errors/appErrors/index.js";
 
 class AuthRoutesJwt {
+	constructor() {
+		this.planoHierarquia = {
+			start: 1,
+			pro: 2,
+			master: 3,
+		}
+	}
+
 	auth(req, res, next) {
 		// const authHeader = req.headers.authorization;
 		const authHeader = req.cookies.accessToken || req.headers.authorization;
@@ -89,6 +97,18 @@ class AuthRoutesJwt {
 			}
 
 			return next();
+		};
+	}
+
+	garantirPlano(minPlano) {
+		return (req, res, next) => {
+			const userPlano = req.user.plan || "start";
+
+			if (this.planoHierarquia[userPlano] < this.planoHierarquia[minPlano]) {
+				return res.status(403).json({ message: "Plano insuficiente" });
+			}
+
+			next();
 		};
 	}
 }
