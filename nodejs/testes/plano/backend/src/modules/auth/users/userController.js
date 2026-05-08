@@ -99,7 +99,7 @@ class UserController {
 
   async me(req, res) {
     const userId = req.user.id;
-    const permissions = req.user.permissions;
+    const { permissions, plano } = req.user;
 
     if (!userId) {
       return res.status(401).json({ message: "User id da rota me invalido" });
@@ -110,6 +110,7 @@ class UserController {
     const data = {
       response,
       permissions,
+      plano
     };
 
     req.logger.info({
