@@ -6,6 +6,7 @@ import logger from "../../../logger/pino.js";
 import { resolvePermissionsJwt } from "../../../utils/resolvePermissions.js";
 import AuthRefreshTokenRepository from "../refreshToken/authRefreshTokenRepository.js";
 import UserRepository from "./userRepository.js";
+import AssinaturaRepository from "../../planos/repository/assinaturasRepository.js";
 
 class UserService {
 	constructor(pool) {
@@ -13,6 +14,7 @@ class UserService {
 
 		this.userRepository = new UserRepository(this.pool);
 		this.authRefreshTokenRepository = new AuthRefreshTokenRepository(pool);
+		this.assinaturaRepository = new AssinaturaRepository(this.pool);
 
 		this.IsPasswordArgon2 = new IsPasswordArgon2();
 	}
@@ -71,10 +73,17 @@ class UserService {
 
 		const permissions = resolvePermissionsJwt(user.roles);
 
+		const assinatura = await this.assinaturaRepository.buscaActiveByUser(
+			user.id,
+		);
+
+		const plano = assinatura?.plan_name || "start";
+
 		const newAccessToken = jwt.sign(
 			{
 				roles: user.roles,
 				permissions,
+				plano,
 			},
 			process.env.JWT_SECRET,
 			{
@@ -104,6 +113,7 @@ class UserService {
 				name: user.name,
 				email: user.email,
 				roles: user.roles,
+				plano,
 			},
 		};
 	}

@@ -4,12 +4,14 @@ import { AppError } from "../../../errors/appErrors/index.js";
 import { resolvePermissionsJwt } from "../../../utils/resolvePermissions.js";
 import UserRepository from "../users/userRepository.js";
 import AuthRefreshTokenRepository from "./authRefreshTokenRepository.js";
+import AssinaturaRepository from "../../planos/repository/assinaturasRepository.js";
 
 class AuthRefreshTokenService {
 	constructor(pool) {
 		this.pool = pool;
 		this.authRefreshTokenRepository = new AuthRefreshTokenRepository(this.pool);
 		this.userRepository = new UserRepository(this.pool);
+		this.assinaturaRepository = new AssinaturaRepository(this.pool);
 	}
 	async refreshService(refreshToken) {
 		const token =
@@ -37,8 +39,14 @@ class AuthRefreshTokenService {
 
 		const permissions = resolvePermissionsJwt(userId.roles);
 
+		const assinatura = await this.assinaturaRepository.buscaActiveByUser(
+			userId.id,
+		);
+
+		const plano = assinatura?.plan_name || "start";
+
 		const newAccessToken = jwt.sign(
-			{ roles: userId.roles, permissions },
+			{ roles: userId.roles, permissions, plano },
 			process.env.JWT_SECRET,
 			{
 				subject: userId.id,

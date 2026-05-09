@@ -8,7 +8,7 @@ class AuthRoutesJwt {
 			start: 1,
 			pro: 2,
 			master: 3,
-		}
+		};
 	}
 
 	auth(req, res, next) {
@@ -23,11 +23,13 @@ class AuthRoutesJwt {
 
 		try {
 			const decoded = jwt.verify(token, process.env.JWT_SECRET);
+			console.log("decoded ", decoded);
 
 			req.user = {
 				id: decoded.sub,
 				roles: Array.isArray(decoded.roles) ? decoded.roles : [decoded.roles],
 				permissions: decoded.permissions || [],
+				plano: decoded.plano,
 			};
 
 			return next();
