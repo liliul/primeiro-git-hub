@@ -61,7 +61,7 @@ planoRouter.post("/create", JWT.auth, async (req, res) => {
 		throw new AppError("Assinatura ativa não encontrada", 404);
 	}
 
-	return res.status(201).json({ assinatura: assinatura.rows[0] });
+	return res.status(201).json({ assinatura: assinatura.rows[0], planName });
 });
 
 export default planoRouter;

@@ -33,3 +33,12 @@ WHERE s.user_id = '5bc5713d-9a47-4652-98b4-578afa96b36f'
   )
 ORDER BY s.created_at DESC
 LIMIT 1;
+
+UPDATE subscriptions
+SET
+    plan_id = $1,
+    expires_at = $2,
+    status = 'active'
+WHERE user_id = $3
+AND status = 'active'
+RETURNING *
