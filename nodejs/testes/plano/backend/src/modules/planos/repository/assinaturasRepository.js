@@ -1,4 +1,4 @@
-class AssinaturaRepository {
+class AssinaturasRepository {
 	constructor(pool) {
 		this.pool = pool;
 	}
@@ -19,6 +19,36 @@ class AssinaturaRepository {
 
 		return result.rows[0];
 	}
+
+	async desativarStatus(id) {
+		await this.pool.query(
+			`
+			UPDATE subscriptions
+			SET status = 'inactive'
+			WHERE user_id = $1
+			AND status = 'active'
+			`,
+			[id],
+		);
+	}
+
+	async criandoAssinaturas(id, planoId, expiresAt) {
+		const result = await this.pool.query(
+			`
+			INSERT INTO subscriptions (
+				user_id,
+				plan_id,
+				status,
+				expires_at
+			)
+			VALUES ($1, $2, $3, $4)
+			RETURNING *
+			`,
+			[id, planoId, "active", expiresAt],
+		);
+
+		return result.rows[0];
+	}
 }
 
-export default AssinaturaRepository;
+export default AssinaturasRepository;
