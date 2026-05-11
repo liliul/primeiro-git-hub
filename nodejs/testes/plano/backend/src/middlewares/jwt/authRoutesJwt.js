@@ -104,8 +104,8 @@ class AuthRoutesJwt {
 
 	garantirPlano(minPlano) {
 		return (req, res, next) => {
-			const userPlano = req.user.plan || "start";
-
+			const userPlano = req.user.plano || "start";
+			
 			if (this.planoHierarquia[userPlano] < this.planoHierarquia[minPlano]) {
 				return res.status(403).json({ message: "Plano insuficiente" });
 			}
