@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "node --watch src/index.js",
-    "init:db": "node src/db/migrations/seeds/init.js"
+    "init:db": "node src/db/migrations/seeds/createTable.js"
   },
   "keywords": [],
   "author": "",
