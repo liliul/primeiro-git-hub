@@ -15,11 +15,11 @@ class UsersController {
 
             const passwordHash = await bcrypt.hash(password, 10)
             
-            const users = await this.db.query(`INSERT INTO users (name, email, password, role) VALUES ($1, $2, $3, $4);`,
+            await this.db.query(`INSERT INTO users (name, email, password, role) VALUES ($1, $2, $3, $4);`,
                 [name, email, passwordHash, role]
             )
 
-            res.status(200).json({ message: 'ok', data: users.result})
+            res.status(200).json({ message: 'ok' })
         } catch (error) {
             if (error instanceof ZodError) {
                 const validationErrors = error.issues.map(issue => ({
@@ -62,7 +62,7 @@ class UsersController {
                 role: user.role
             };
             const jwtToken = jwt.sign(payload, process.env.JWT_SECRET, {
-                expiresIn: parseInt(process.env.JWT_EXPIRES)
+                expiresIn: process.env.JWT_EXPIRES
             })
             
             res.status(200).json({ token: jwtToken, users: payload })
@@ -121,11 +121,31 @@ class UsersController {
 
     async listUsers(req, res) {
         const listUsers = await this.db.query(`
-            select * from users;
+            select id, name, email, created_at from users;
         `)
 
         res.status(200).json({ message: 'ok', data: listUsers.rows })
     }
+
+    // async listUsers(req, res) {
+    //     const page = parseInt(req.query.page) || 1
+    //     const limit = parseInt(req.query.limit) || 10
+    //     const offset = (page - 1) * limit
+
+    //     const result = await this.db.query(`
+    //         SELECT id, name, email, created_at
+    //         FROM users
+    //         ORDER BY created_at DESC
+    //         LIMIT $1 OFFSET $2
+    //     `, [limit, offset])
+
+    //     res.status(200).json({
+    //         message: 'ok',
+    //         page,
+    //         limit,
+    //         data: result.rows
+    //     })
+    // }
 }
 
 export default UsersController
