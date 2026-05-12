@@ -1,10 +1,10 @@
-import db from './indexDB.js'
+import db from '../../indexDB.js'
 
 async function criarTabelas() {
     await db.query(`
       CREATE EXTENSION IF NOT EXISTS "pgcrypto";
 
-      CREATE TABLE users (
+      CREATE TABLE IF NOT EXISTS users (
         id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
         name TEXT,
         email TEXT UNIQUE NOT NULL,
@@ -13,20 +13,20 @@ async function criarTabelas() {
         created_at TIMESTAMP DEFAULT NOW()
       );
 
-       CREATE TABLE products (
+       CREATE TABLE IF NOT EXISTS products (
         id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
         name TEXT NOT NULL,
         price NUMERIC(10,2) NOT NULL,
         stock INT NOT NULL
       );
 
-        CREATE TABLE carts (
+        CREATE TABLE IF NOT EXISTS carts (
         id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
         user_id UUID REFERENCES users(id),
         created_at TIMESTAMP DEFAULT NOW()
       );
 
-      CREATE TABLE orders (
+      CREATE TABLE IF NOT EXISTS orders (
         id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
         user_id UUID REFERENCES users(id),
         total NUMERIC(10,2) NOT NULL,
@@ -34,7 +34,7 @@ async function criarTabelas() {
         created_at TIMESTAMP DEFAULT NOW()
       );
 
-      CREATE TABLE cart_items (
+      CREATE TABLE IF NOT EXISTS cart_items (
         id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
         cart_id UUID REFERENCES carts(id),
         product_id UUID REFERENCES products(id),
@@ -42,7 +42,7 @@ async function criarTabelas() {
         UNIQUE(cart_id, product_id)
       );
 
-      CREATE TABLE order_items (
+      CREATE TABLE IF NOT EXISTS order_items (
         id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
         order_id UUID REFERENCES orders(id),
         product_id UUID REFERENCES products(id),
