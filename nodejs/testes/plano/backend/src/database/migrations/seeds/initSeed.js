@@ -1,7 +1,7 @@
 import { pool } from "../../postgres.js";
 
 export async function initSeed() {
-    await pool.query(`
+	await pool.query(`
         CREATE EXTENSION IF NOT EXISTS "pgcrypto";
 
         CREATE TABLE IF NOT EXISTS users (
@@ -56,16 +56,15 @@ export async function initSeed() {
             expires_at TIMESTAMP,
             created_at TIMESTAMP DEFAULT NOW()
         );
-    `)
+    `);
 
-    console.log('Tabelas criadas com sucesso.');
-    
-    await pool.end()
-    process.exit()
+	console.log("Tabelas criadas com sucesso.");
+
+	await pool.end();
+	process.exit();
 }
 
-initSeed()
-.catch((err) => {
-    console.error('Erro na hora de criar as tabelas');
-    process.exit(1)
-})
+initSeed().catch((err) => {
+	console.error("Erro na hora de criar as tabelas");
+	process.exit(1);
+});
