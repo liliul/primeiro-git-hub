@@ -1,14 +1,11 @@
 import jwt from "jsonwebtoken";
 import { constsRole } from "../../consts/index.js";
 import { AppError } from "../../errors/appErrors/index.js";
+import { planoHierarquiaConfig } from "../../configs/plans.js";
 
 class AuthRoutesJwt {
 	constructor() {
-		this.planoHierarquia = {
-			start: 1,
-			pro: 2,
-			master: 3,
-		};
+		this.planoHierarquia = planoHierarquiaConfig;
 	}
 
 	auth(req, res, next) {
@@ -105,7 +102,7 @@ class AuthRoutesJwt {
 	garantirPlano(minPlano) {
 		return (req, res, next) => {
 			const userPlano = req.user.plano || "start";
-			
+
 			if (this.planoHierarquia[userPlano] < this.planoHierarquia[minPlano]) {
 				return res.status(403).json({ message: "Plano insuficiente" });
 			}

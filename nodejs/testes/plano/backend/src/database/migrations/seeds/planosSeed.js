@@ -1,23 +1,8 @@
 import { pool } from "../../postgres.js";
+import { planosConfig } from "../../../configs/plans.js";
 
 export async function planosSeed() {
-	const plans = [
-		{
-			name: "start",
-			price: 0,
-			duration_days: null,
-		},
-		{
-			name: "pro",
-			price: 29.9,
-			duration_days: 30,
-		},
-		{
-			name: "master",
-			price: 99.9,
-			duration_days: 365,
-		},
-	];
+	const plans = planosConfig;
 
 	for (const plan of plans) {
 		await pool.query(
