@@ -1,6 +1,7 @@
 import { AppError } from "../../../errors/appErrors/index.js";
 import AssinaturasRepository from "../repository/assinaturasRepository.js";
 import PlanosRepository from "../repository/planosRepository.js";
+import GerandoJwtToken from "../../../utils/gerandoJwtToken.js";
 
 class AssinaturaService {
 	constructor(pool) {
@@ -8,37 +9,64 @@ class AssinaturaService {
 
 		this.planosRepository = new PlanosRepository(this.pool);
 		this.assinaturasRepository = new AssinaturasRepository(this.pool);
+		this.gerandoJwtToken = new GerandoJwtToken();
 	}
 
-	async criandoAssinatura(planName, id) {
-		const planos = await this.planosRepository.buscaPlanosByName(planName);
+	async criandoAssinatura(planName, id, roles) {
+		const client = await this.pool.connect();
 
-		if (!planos) {
-			throw new AppError("Plano não encontrado.", 404);
-		}
+		try {
+			await client.query("BEGIN");
 
-		let expiresAt = null;
-
-		if (planos.duration_days) {
-			expiresAt = new Date(
-				Date.now() + planos.duration_days * 24 * 60 * 60 * 1000,
+			const plano = await this.planosRepository.buscaPlanosByName(
+				planName,
+				client,
 			);
-		}
 
-		await this.assinaturasRepository.desativarStatus(id);
+			if (!plano) {
+				throw new AppError("Plano não encontrado.", 404);
+			}
 
-		const criandoAssinatura =
-			await this.assinaturasRepository.criandoAssinaturas(
+			let expiresAt = null;
+
+			if (plano.duration_days) {
+				expiresAt = new Date(
+					Date.now() + plano.duration_days * 24 * 60 * 60 * 1000,
+				);
+			}
+
+			await this.assinaturasRepository.desativarStatus(id, client);
+
+			const criandoAssinatura =
+				await this.assinaturasRepository.criandoAssinaturas(
+					id,
+					plano.id,
+					expiresAt,
+					client,
+				);
+
+			if (!criandoAssinatura) {
+				throw new AppError("Assinatura ativa não encontrada.", 404);
+			}
+
+			const newAccessToken = this.gerandoJwtToken.gerarAccessToken({
 				id,
-				planos.id,
-				expiresAt,
-			);
+				roles,
+				plano: plano.name,
+			});
 
-		if (!criandoAssinatura) {
-			throw new AppError("Assinatura ativa não encontrada.", 404);
+			await client.query("COMMIT");
+
+			return {
+				criandoAssinatura,
+				newAccessToken,
+			};
+		} catch (error) {
+			await client.query("ROLLBACK");
+			throw error;
+		} finally {
+			client.release();
 		}
-
-		return criandoAssinatura;
 	}
 }
 

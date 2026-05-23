@@ -3,8 +3,8 @@ class AssinaturasRepository {
 		this.pool = pool;
 	}
 
-	async buscaActiveByUser(userId) {
-		const result = await this.pool.query(
+	async buscaActiveByUser(userId, client = this.pool) {
+		const result = await client.query(
 			`
             SELECT s.*, p.name as plan_name
             FROM subscriptions s
@@ -20,8 +20,8 @@ class AssinaturasRepository {
 		return result.rows[0];
 	}
 
-	async desativarStatus(id) {
-		await this.pool.query(
+	async desativarStatus(id, client = this.pool) {
+		await client.query(
 			`
 			UPDATE subscriptions
 			SET status = 'inactive'
@@ -32,8 +32,8 @@ class AssinaturasRepository {
 		);
 	}
 
-	async criandoAssinaturas(id, planoId, expiresAt) {
-		const result = await this.pool.query(
+	async criandoAssinaturas(id, planoId, expiresAt, client = this.pool) {
+		const result = await client.query(
 			`
 			INSERT INTO subscriptions (
 				user_id,
