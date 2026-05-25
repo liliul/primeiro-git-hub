@@ -2,8 +2,8 @@ import { AppError } from "../../../errors/appErrors/index.js";
 import AssinaturasRepository from "../repository/assinaturasRepository.js";
 import PlanosRepository from "../repository/planosRepository.js";
 import GerandoJwtToken from "../../../utils/gerandoJwtToken.js";
-import AuditoriaService from "../../auditoria/auditoriaService.js";
 import AuditoriaController from "../../auditoria/auditoriaController.js";
+import { AuditoriaAction } from "../../auditoria/domain/auditoriaActive.js";
 
 class AssinaturaService {
 	constructor(pool) {
@@ -61,7 +61,7 @@ class AssinaturaService {
 
 			await this.auditoriaController.auditoriaSegura({
 				userId: id,
-				action: "PLAN_UPDATED",
+				action: AuditoriaAction.PLAN_UPDATED,
 				ip: metadata.ip,
 				userAgent: metadata.userAgent,
 			});
@@ -75,7 +75,7 @@ class AssinaturaService {
 
 			await this.auditoriaController.auditoriaSegura({
 				userId: id,
-				action: "PLAN_UPDATE_ERROR",
+				action: AuditoriaAction.PLAN_UPDATE_ERROR,
 				ip: metadata.ip,
 				userAgent: metadata.userAgent,
 			});
