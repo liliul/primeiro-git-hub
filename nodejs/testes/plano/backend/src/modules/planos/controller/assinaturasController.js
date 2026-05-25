@@ -29,6 +29,13 @@ class AssinaturasController {
 			plano: planName,
 		};
 
+		req.logger.info({
+			event: "SUBSCRIPTION_CREATED",
+			userId: id,
+			plan: planName,
+			roles: roles
+		})
+		
 		return res.status(201).json(data);
 	}
 }
