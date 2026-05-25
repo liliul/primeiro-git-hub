@@ -2,6 +2,8 @@ import { AppError } from "../../../errors/appErrors/index.js";
 import AssinaturasRepository from "../repository/assinaturasRepository.js";
 import PlanosRepository from "../repository/planosRepository.js";
 import GerandoJwtToken from "../../../utils/gerandoJwtToken.js";
+import AuditoriaService from "../../auditoria/auditoriaService.js";
+import AuditoriaController from "../../auditoria/auditoriaController.js";
 
 class AssinaturaService {
 	constructor(pool) {
@@ -10,9 +12,10 @@ class AssinaturaService {
 		this.planosRepository = new PlanosRepository(this.pool);
 		this.assinaturasRepository = new AssinaturasRepository(this.pool);
 		this.gerandoJwtToken = new GerandoJwtToken();
+		this.auditoriaController = new AuditoriaController(this.pool);
 	}
 
-	async criandoAssinatura(planName, id, roles) {
+	async criandoAssinatura(planName, id, roles, metadata) {
 		const client = await this.pool.connect();
 
 		try {
@@ -37,15 +40,14 @@ class AssinaturaService {
 
 			await this.assinaturasRepository.desativarStatus(id, client);
 
-			const criandoAssinatura =
-				await this.assinaturasRepository.criandoAssinaturas(
-					id,
-					plano.id,
-					expiresAt,
-					client,
-				);
+			const assinatura = await this.assinaturasRepository.criandoAssinaturas(
+				id,
+				plano.id,
+				expiresAt,
+				client,
+			);
 
-			if (!criandoAssinatura) {
+			if (!assinatura) {
 				throw new AppError("Assinatura ativa não encontrada.", 404);
 			}
 
@@ -57,12 +59,27 @@ class AssinaturaService {
 
 			await client.query("COMMIT");
 
+			await this.auditoriaController.auditoriaSegura({
+				userId: id,
+				action: "PLAN_UPDATED",
+				ip: metadata.ip,
+				userAgent: metadata.userAgent,
+			});
+
 			return {
-				criandoAssinatura,
+				assinatura,
 				newAccessToken,
 			};
 		} catch (error) {
 			await client.query("ROLLBACK");
+
+			await this.auditoriaController.auditoriaSegura({
+				userId: id,
+				action: "PLAN_UPDATE_ERROR",
+				ip: metadata.ip,
+				userAgent: metadata.userAgent,
+			});
+
 			throw error;
 		} finally {
 			client.release();

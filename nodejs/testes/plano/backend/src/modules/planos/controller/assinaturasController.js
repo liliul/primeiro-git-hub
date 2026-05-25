@@ -12,11 +12,16 @@ class AssinaturasController {
 	async criandoAssinatura(req, res) {
 		const { planName } = req.body;
 		const { id, roles } = req.user;
+		const metadata = {
+			ip: req.ip,
+			userAgent: req.headers["user-agent"],
+		};
 
 		const criandoAssinatura = await this.assinaturaService.criandoAssinatura(
 			planName,
 			id,
 			roles,
+			metadata,
 		);
 
 		const data = {
