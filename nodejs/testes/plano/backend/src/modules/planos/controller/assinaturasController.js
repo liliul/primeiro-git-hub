@@ -17,26 +17,37 @@ class AssinaturasController {
 			userAgent: req.headers["user-agent"],
 		};
 
-		const criandoAssinatura = await this.assinaturaService.criandoAssinatura(
-			planName,
-			id,
-			roles,
-			metadata,
-		);
+		try {
+			const criandoAssinatura = await this.assinaturaService.criandoAssinatura(
+				planName,
+				id,
+				roles,
+				metadata,
+			);
 
-		const data = {
-			assinatura: criandoAssinatura,
-			plano: planName,
-		};
+			const data = {
+				assinatura: criandoAssinatura,
+				plano: planName,
+			};
 
-		req.logger.info({
-			event: "SUBSCRIPTION_CREATED",
-			userId: id,
-			plan: planName,
-			roles: roles
-		})
-		
-		return res.status(201).json(data);
+			req.logger.info({
+				event: "SUBSCRIPTION_CREATED",
+				userId: id,
+				plan: planName,
+				roles: roles,
+			});
+
+			return res.status(201).json(data);
+		} catch (error) {
+			console.error("Erro na criação da assinatura.", error);
+
+			req.logger.info({
+				event: "SUBSCRIPTION_CREATED_ERROR",
+				userId: id,
+				plan: planName,
+				roles: roles,
+			});
+		}
 	}
 }
 

@@ -67,7 +67,7 @@ class AssinaturaService {
 			});
 
 			return {
-				assinatura,
+				status: assinatura,
 				newAccessToken,
 			};
 		} catch (error) {
