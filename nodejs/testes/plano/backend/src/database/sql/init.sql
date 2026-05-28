@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS auth_audit_logs (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     user_id UUID NULL,
     email TEXT,
-    action VARCHAR(20) NOT NULL,
+    action TEXT NOT NULL,
     ip TEXT,
     user_agent TEXT,
     metadata JSONB,

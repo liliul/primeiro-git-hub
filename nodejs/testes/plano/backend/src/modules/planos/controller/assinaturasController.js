@@ -41,11 +41,16 @@ class AssinaturasController {
 		} catch (error) {
 			console.error("Erro na criação da assinatura.", error);
 
-			req.logger.info({
+			req.logger.error({
 				event: "SUBSCRIPTION_CREATED_ERROR",
 				userId: id,
 				plan: planName,
 				roles: roles,
+				message: error.message
+			});
+
+			return res.status(error.statusCode || 500).json({
+				message: error.message
 			});
 		}
 	}
