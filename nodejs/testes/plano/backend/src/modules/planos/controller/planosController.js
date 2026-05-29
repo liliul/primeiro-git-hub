@@ -8,6 +8,7 @@ class PlanoController {
 		this.planosService = new PlanosService(this.pool);
 
 		this.criandoNovoPlano = this.criandoNovoPlano.bind(this);
+		this.buscandoTodosPlanos = this.buscandoTodosPlanos.bind(this);
 	}
 
 	async criandoNovoPlano(req, res) {
@@ -50,6 +51,45 @@ class PlanoController {
 			return res.status(error.statusCode || 500).json({
 				message: error.message,
 			});
+		}
+	}
+
+	async buscandoTodosPlanos(req, res) {
+		const metadata = {
+			id: req.user.id,
+			ip: req.ip,
+			userAgent: req.headers["user-agent"],
+			roles: req.user.roles,
+		};
+
+		try {
+			const todosPlanos = await this.planosService.buscandoTodosPlanos();
+
+			req.logger.info({
+				event: "SEARCH_PLANS",
+				userId: metadata.id,
+				ip: metadata.ip,
+				userAgent: metadata.userAgent,
+				roles: metadata.roles,
+			});
+
+			return res.status(201).json({
+				message: "Busca por todos os planos com sucesso.",
+				data: todosPlanos,
+			});
+		} catch (error) {
+			req.logger.error({
+				event: "ERROR_SEARCH_PLANS",
+				userId: metadata.id,
+				ip: metadata.ip,
+				userAgent: metadata.userAgent,
+				roles: metadata.roles,
+				message: error.message,
+			});
+
+			return res
+				.status(error.statusCode || 500)
+				.json({ message: error.message });
 		}
 	}
 }

@@ -26,6 +26,16 @@ class PlanosRepository {
 
 		return result.rows[0];
 	}
+
+	async buscandoTodosPlanos() {
+		const result = await this.pool.query(
+			`
+				SELECT id, name, price, duration_days FROM plans;
+			`,
+		);
+
+		return result.rows;
+	}
 }
 
 export default PlanosRepository;

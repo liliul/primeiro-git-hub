@@ -48,6 +48,16 @@ class PlanosService {
 			throw error;
 		}
 	}
+
+	async buscandoTodosPlanos() {
+		const buscandoPlanos = await this.planosRepository.buscandoTodosPlanos();
+
+		if (!buscandoPlanos || buscandoPlanos === 0) {
+			throw new AppError("Busca pelos planos falhou ou vazia.", 500);
+		}
+
+		return buscandoPlanos;
+	}
 }
 
 export default PlanosService;
