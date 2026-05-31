@@ -109,17 +109,39 @@ class PlanoController {
 			roles: req.user.roles,
 		};
 
-		const planoAtualizado = await this.planosService.atualizarPlano(
-			name,
-			price,
-			duration_days,
-			id,
-		);
+		try {
+			const planoAtualizado = await this.planosService.atualizarPlano(
+				name,
+				price,
+				duration_days,
+				id,
+				metadata,
+			);
 
-		return res.status(201).json({
-			message: "Atualização do plano sucesso.",
-			data: planoAtualizado,
-		});
+			req.logger.info({
+				event: "UPDATE_PLAN_SUCCESS",
+				userId: metadata.id,
+				ip: metadata.ip,
+				userAgent: metadata.userAgent,
+				roles: metadata.roles,
+			});
+
+			return res.status(201).json({
+				message: "Atualização do plano sucesso.",
+				data: planoAtualizado,
+			});
+		} catch (error) {
+			req.logger.error({
+				event: "ERROR_UPDATE_PLAN",
+				userId: metadata.id,
+				ip: metadata.ip,
+				userAgent: metadata.userAgent,
+				roles: metadata.roles,
+				message: error.message,
+			});
+
+			res.status(error.statusCode || 500).json({ message: error.message });
+		}
 	}
 }
 
