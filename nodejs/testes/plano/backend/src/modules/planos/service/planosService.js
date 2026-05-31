@@ -1,6 +1,7 @@
 import { AppError } from "../../../errors/appErrors/index.js";
 import PlanosRepository from "../repository/planosRepository.js";
 import AuditoriaController from "../../auditoria/auditoriaController.js";
+import { AuditoriaAction } from "../../auditoria/domain/auditoriaActive.js";
 
 class PlanosService {
 	constructor(pool) {
@@ -31,7 +32,7 @@ class PlanosService {
 
 			await this.auditoriaController.auditoriaSegura({
 				userId: metadata.id,
-				action: "CREATED_NEW_PLAN",
+				action: AuditoriaAction.CREATED_NEW_PLAN,
 				ip: metadata.ip,
 				userAgent: metadata.userAgent,
 			});
@@ -40,7 +41,7 @@ class PlanosService {
 		} catch (error) {
 			await this.auditoriaController.auditoriaSegura({
 				userId: metadata.id,
-				action: "ERROR_CREATED_NEW_PLAN",
+				action: AuditoriaAction.ERROR_CREATED_NEW_PLAN,
 				ip: metadata.ip,
 				userAgent: metadata.userAgent,
 			});
