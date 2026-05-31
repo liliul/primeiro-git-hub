@@ -1,5 +1,8 @@
 import PlanosService from "../service/planosService.js";
-import { criandoPlanoSchema } from "../schemas/planosSchemas.js";
+import {
+	atualizandoPlanoSchema,
+	criandoPlanoSchema,
+} from "../schemas/planosSchemas.js";
 
 class PlanoController {
 	constructor(pool) {
@@ -9,6 +12,7 @@ class PlanoController {
 
 		this.criandoNovoPlano = this.criandoNovoPlano.bind(this);
 		this.buscandoTodosPlanos = this.buscandoTodosPlanos.bind(this);
+		this.atualizarPlano = this.atualizarPlano.bind(this);
 	}
 
 	async criandoNovoPlano(req, res) {
@@ -91,6 +95,31 @@ class PlanoController {
 				.status(error.statusCode || 500)
 				.json({ message: error.message });
 		}
+	}
+
+	async atualizarPlano(req, res) {
+		const { name, price, duration_days } = atualizandoPlanoSchema.parse(
+			req.body,
+		);
+		const { id } = req.params;
+		const metadata = {
+			id: req.user.id,
+			ip: req.ip,
+			userAgent: req.headers["user-agent"],
+			roles: req.user.roles,
+		};
+
+		const planoAtualizado = await this.planosService.atualizarPlano(
+			name,
+			price,
+			duration_days,
+			id,
+		);
+
+		return res.status(201).json({
+			message: "Atualização do plano sucesso.",
+			data: planoAtualizado,
+		});
 	}
 }
 

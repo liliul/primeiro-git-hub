@@ -15,6 +15,7 @@ planoRouter.post("/create", JWT.auth, assinaturas.criandoAssinatura);
 
 planoRouter.post("/create/plan", JWT.auth, plano.criandoNovoPlano);
 planoRouter.get("/search/plan", JWT.auth, plano.buscandoTodosPlanos);
+planoRouter.patch("/update/plan/:id", JWT.auth, plano.atualizarPlano);
 
 planoRouter.get("/info", JWT.auth, JWT.garantirPlano("pro"), (req, res) => {
 	const { roles, plano, permissions } = req.user;

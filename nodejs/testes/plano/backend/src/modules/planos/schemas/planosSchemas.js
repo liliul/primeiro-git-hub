@@ -8,3 +8,10 @@ export const criandoPlanoSchema = z.object({
 	price: z.number().nonnegative(),
 	duration_days: z.number().int().positive().nullable(),
 });
+
+export const atualizandoPlanoSchema = criandoPlanoSchema
+	.partial()
+	.refine(
+		(data) => Object.keys(data).length > 0,
+		"Informe ao menos um campo para atualizar",
+	);

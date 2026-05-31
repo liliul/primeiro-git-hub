@@ -36,6 +36,31 @@ class PlanosRepository {
 
 		return result.rows;
 	}
+
+	async atualizarPlanoById(id, dados) {
+		const campos = [];
+		const valores = [];
+		let index = 1;
+
+		for (const [chave, valor] of Object.entries(dados)) {
+			campos.push(`${chave} = $${index}`);
+			valores.push(valor);
+			index++;
+		}
+
+		valores.push(id);
+
+		const query = `
+		UPDATE plans
+		SET ${campos.join(", ")}
+		WHERE id = $${index}
+		RETURNING *;
+		`;
+
+		const result = await this.pool.query(query, valores);
+
+		return result.rows[0];
+	}
 }
 
 export default PlanosRepository;

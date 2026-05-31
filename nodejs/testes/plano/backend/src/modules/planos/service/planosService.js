@@ -59,6 +59,36 @@ class PlanosService {
 
 		return buscandoPlanos;
 	}
+
+	async atualizarPlano(name, price, duration_days, planoId) {
+		if (name !== undefined) {
+			const verificaNomePlano =
+				await this.planosRepository.buscaPlanosByName(name);
+
+			if (verificaNomePlano && verificaNomePlano.id !== planoId) {
+				throw new AppError("Nome do plano já existe.", 409);
+			}
+		}
+
+		const data = Object.fromEntries(
+			Object.entries({
+				name,
+				price,
+				duration_days,
+			}).filter(([, value]) => value !== undefined),
+		);
+
+		const atualizarPlano = await this.planosRepository.atualizarPlanoById(
+			planoId,
+			data,
+		);
+
+		if (!atualizarPlano || atualizarPlano === 0) {
+			throw new AppError("Falha ao atualizar plano.", 500);
+		}
+
+		return atualizarPlano;
+	}
 }
 
 export default PlanosService;
