@@ -16,6 +16,19 @@ class PlanosRepository {
 		return result.rows[0];
 	}
 
+	async buscaPlanosById(id) {
+		const result = await this.pool.query(
+			`
+			SELECT * FROM plans
+			WHERE id = $1
+			LIMIT 1
+			`,
+			[id],
+		);
+
+		return result.rows[0];
+	}
+
 	async criandoNovoPlano({ name, price, duration_days }) {
 		const result = await this.pool.query(
 			`
@@ -58,6 +71,17 @@ class PlanosRepository {
 		`;
 
 		const result = await this.pool.query(query, valores);
+
+		return result.rows[0];
+	}
+
+	async deletarPlanoById(id) {
+		const result = await this.pool.query(
+			`
+			DELETE FROM plans WHERE id = $1 RETURNING *
+			`,
+			[id],
+		);
 
 		return result.rows[0];
 	}

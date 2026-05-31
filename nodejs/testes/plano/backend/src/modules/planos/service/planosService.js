@@ -90,7 +90,7 @@ class PlanosService {
 
 			await this.auditoriaController.auditoriaSegura({
 				userId: metadata.id,
-				action: "UPDATE_PLAN_SUCCESS",
+				action: AuditoriaAction.UPDATE_PLAN_SUCCESS,
 				ip: metadata.ip,
 				userAgent: metadata.userAgent,
 			});
@@ -98,7 +98,42 @@ class PlanosService {
 		} catch (error) {
 			await this.auditoriaController.auditoriaSegura({
 				userId: metadata.id,
-				action: "ERROR_UPDATE_PLAN",
+				action: AuditoriaAction.ERROR_UPDATE_PLAN,
+				ip: metadata.ip,
+				userAgent: metadata.userAgent,
+			});
+
+			throw error;
+		}
+	}
+
+	async deletarPlano(id, metadata) {
+		try {
+			const verificarPlanoExiste =
+				await this.planosRepository.buscaPlanosById(id);
+
+			if (!verificarPlanoExiste) {
+				throw new AppError("Plano não encontrado.", 404);
+			}
+
+			const deletarPlano = await this.planosRepository.deletarPlanoById(id);
+
+			if (!deletarPlano) {
+				throw new AppError("Erro ao deletar plano", 404);
+			}
+
+			await this.auditoriaController.auditoriaSegura({
+				userId: metadata.id,
+				action: AuditoriaAction.DELETE_PLAN_SUCCESS,
+				ip: metadata.ip,
+				userAgent: metadata.userAgent,
+			});
+
+			return deletarPlano;
+		} catch (error) {
+			await this.auditoriaController.auditoriaSegura({
+				userId: metadata.id,
+				action: AuditoriaAction.ERROR_DELETE_PLAN,
 				ip: metadata.ip,
 				userAgent: metadata.userAgent,
 			});
