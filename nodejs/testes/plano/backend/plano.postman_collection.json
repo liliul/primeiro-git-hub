@@ -46,7 +46,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"refreshToken\": \"ef0145a4-cbf7-4a28-ba0e-b81edab20fa9\"\n}",
+              "raw": "{\n    \"refreshToken\": \"efc1dcfa-968e-4975-8f15-4831ff377adc\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -137,7 +137,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"refreshToken\": \"2ac2f15c-aa77-46da-a7f0-156853ad6b88\"\n}",
+              "raw": "{\n    \"refreshToken\": \"11bb21ac-0f3f-4281-9bff-7340b82ca774\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -221,7 +221,7 @@
       "name": "plans",
       "item": [
         {
-          "name": "create",
+          "name": "createAssinatura",
           "request": {
             "auth": {
               "type": "noauth"
@@ -251,6 +251,154 @@
               "path": [
                 "plans",
                 "create"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "createPlan",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"primium\",\n    \"price\": 89.90,\n    \"duration_days\": 31\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/plans/create/plan",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "plans",
+                "create",
+                "plan"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "updatePlanId",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"enterpress\",\n    \"price\": 299,\n    \"duration_days\": 35\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/plans/update/plan/86ae58be-ca37-4dba-9faa-41ccbec33564",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "plans",
+                "update",
+                "plan",
+                "86ae58be-ca37-4dba-9faa-41ccbec33564"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "deletePlanId",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/plans/delete/plan/716014ff-a729-456a-b4c0-fc53ff727cf9",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "plans",
+                "delete",
+                "plan",
+                "716014ff-a729-456a-b4c0-fc53ff727cf9"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "getPlan",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"planName\": \"master\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/plans/search/plan",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "plans",
+                "search",
+                "plan"
               ]
             }
           },
