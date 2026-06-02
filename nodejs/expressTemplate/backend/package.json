@@ -12,7 +12,8 @@
     "start": "node src/server.js",
     "lint": "biome lint src",
     "format": "biome format src --write",
-    "check": "biome check src --write"
+    "check": "biome check src --write",
+    "init:seed": "node src/database/migrations/seeds/initSeed.js"
   },
   "keywords": [],
   "author": "",
