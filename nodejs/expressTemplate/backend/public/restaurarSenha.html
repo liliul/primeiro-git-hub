@@ -1,0 +1,12 @@
+<form method="POST" action="/auth/restaurar-senha">
+  <input type="hidden" name="token" id="tokenInput" />
+  <input type="password" name="newPassword" placeholder="Nova senha" />
+  <button type="submit">Redefinir</button>
+</form>
+
+<script>
+  const params = new URLSearchParams(window.location.search);
+  const token = params.get("token");
+
+  document.getElementById("tokenInput").value = token;
+</script>

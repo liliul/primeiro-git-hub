@@ -6,6 +6,9 @@ import {
 } from "../../../middlewares/rateLimit/rateLimit.js";
 import EsqueciSenhaController from "./esqueciSenhaController.js";
 import RestaurarSenhaController from "./restaurarSenhaControlle.js";
+import path from "node:path";
+
+const __dirname = path.resolve();
 
 const resetPassword = express.Router();
 
@@ -28,15 +31,7 @@ resetPassword.get(
 	"/restaurar-senha",
 	resetPasswordRateLimit("Alterando senha"),
 	(req, res) => {
-		const { token } = req.query;
-
-		res.send(`
-    <form method="POST" action="/auth/restaurar-senha">
-      <input type="hidden" name="token" value="${token}" />
-      <input type="password" name="newPassword" placeholder="Nova senha" />
-      <button type="submit">Redefinir</button>
-    </form>
-  `);
+		res.sendFile(path.join(__dirname, "public/restaurarSenha.html"));
 	},
 );
 
