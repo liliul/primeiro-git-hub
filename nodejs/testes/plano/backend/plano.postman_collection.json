@@ -40,6 +40,99 @@
           "response": []
         },
         {
+          "name": "resetPassword",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"password\": \"{{password}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/restaurar-senha",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth",
+                "restaurar-senha"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "restPasswordGet",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/restaurar-senha",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth",
+                "restaurar-senha"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "forgotPassword",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"{{email}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/esqueci-senha",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth",
+                "esqueci-senha"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
           "name": "refresh",
           "request": {
             "method": "POST",
