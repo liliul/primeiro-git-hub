@@ -5,7 +5,7 @@ class SuperAdminController {
 		this.pool = pool;
 		this.superAdminService = new SuperAdminService(this.pool);
 
-		this.alterarRole = this.alterarRole.bind(this)
+		this.alterarRole = this.alterarRole.bind(this);
 	}
 
 	async alterarRole(req, res) {

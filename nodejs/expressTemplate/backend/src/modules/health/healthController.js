@@ -5,7 +5,7 @@ class HealthController {
 		this.pool = pool;
 		this.healthRepository = new HealthRepository(this.pool);
 
-		this.healthCheck = this.healthCheck.bind(this)
+		this.healthCheck = this.healthCheck.bind(this);
 	}
 
 	async healthCheck(req, res) {
