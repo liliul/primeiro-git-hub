@@ -7,6 +7,7 @@ class GoogleOauthController {
     }
 
     construindoGoogleOauth2(req, res) {
+      try {
         const googleAuthURL = this.googleOauthService.construaGoogleOauthService()
         
         if(!googleAuthURL) {
@@ -14,6 +15,10 @@ class GoogleOauthController {
         }
         
         return res.redirect(googleAuthURL)
+      } catch (error) {
+        console.error("GOOGLE ERROR: Construindo url auth.", error.response?.data || error.message)
+        next(error)
+      }
     }
 
     async handleGoogleCallback(req, res, next) {
