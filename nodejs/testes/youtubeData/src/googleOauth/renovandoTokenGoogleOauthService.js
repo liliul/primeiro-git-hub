@@ -12,6 +12,13 @@ class RenovandoTokenGoogleOauthService {
 
     async pegandoTokenValidoAccessToken(googleId) {
         const tokenDB = await this.googleOauthRepository.encontrandoGoogleID(googleId)
+
+        if (!tokenDB) {
+            throw new AppError(
+                "Conta Google não encontrada",
+                404
+            )
+        }
         
         const expired = new Date(tokenDB.expires_at).getTime() <= Date.now() + 60000
 
@@ -24,20 +31,30 @@ class RenovandoTokenGoogleOauthService {
             process.env.GOOGLE_CLIENT_SECRET
         )
 
+        if (!tokenDB.refresh_token) {
+            throw new AppError(
+                "Refresh token não encontrado",
+                401
+            )
+        }
+
         oauth2Client.setCredentials({
             refresh_token: tokenDB.refresh_token
         })
 
-        const { token } = await oauth2Client.getAccessToken()
-        console.log('googleOauthRepository: ', token)
-        const expiresAt = new Date(Date.now() + 3600 * 1000)
+        const { credentials } = await oauth2Client.refreshAccessToken()
+        const accessToken = credentials.access_token
+        const expiresAt = new Date(credentials.expiry_date)
+        
+        console.log('googleOauthRepository: ', accessToken)
+
         await this.googleOauthRepository.atualizandoToken({
-            newAccessToken: token,
+            newAccessToken: accessToken,
             expiresAt: expiresAt,
             sub: googleId,
         })
 
-        return token
+        return accessToken
     }
 }
 
