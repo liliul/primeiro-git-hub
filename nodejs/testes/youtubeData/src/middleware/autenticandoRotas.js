@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 dotenv.config();
 
 function authRequirida(req, res, next) {
-  const token = req.cookies.token;
+  const token = req.cookies.accessToken;
 
   if (!token){
     return res.redirect("/");
