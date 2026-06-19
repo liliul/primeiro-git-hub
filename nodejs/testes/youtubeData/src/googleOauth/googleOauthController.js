@@ -26,13 +26,21 @@ class GoogleOauthController {
         const code = req.query.code
 
         const token = await this.googleOauthService.googleCallbackService(code)
-
-        res.cookie("token", token, {
+        
+        res.cookie("accessToken", token.accessToken, {
             httpOnly: true,
             secure: false,
             sameSite: "lax",
             path: "/",
-            maxAge: 1000 * 60 * 60 * 24 * 7
+            maxAge: 15 * 60 * 1000
+        })
+
+        res.cookie("refreshToken", token.refreshToken, {
+            httpOnly: true,
+            secure: false,
+            sameSite: "lax",
+            path: "/",
+            maxAge: 7 * 24 * 60 * 60 * 1000
         })
             
         return res.redirect("/v3/home")

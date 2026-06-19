@@ -43,6 +43,14 @@ CREATE TABLE IF NOT EXISTS usuarios (
     criado_em TIMESTAMP DEFAULT NOW()
 );
 
+ CREATE TABLE IF NOT EXISTS refresh_tokens (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    google_id VARCHAR(255) UNIQUE NOT NULL,
+    token TEXT NOT NULL,
+    expires_at TIMESTAMP NOT NULL,
+    created_at TIMESTAMP DEFAULT NOW()
+);
+
 CREATE TABLE IF NOT EXISTS youtube_videos (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     video_id VARCHAR(30) UNIQUE NOT NULL,

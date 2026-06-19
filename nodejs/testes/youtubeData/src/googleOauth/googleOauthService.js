@@ -28,6 +28,22 @@ class GoogleOauthService {
         } = data
         
         const googleUser = await this.googleOauthAdapter.verifacandoIDToken(id_token)
+       
+        await this.googleOauthRepository.criarGoogleUsers({
+            sub: googleUser.sub, 
+            email: googleUser.email, 
+            email_verified: googleUser.email_verified, 
+            name: googleUser.name, 
+            given_name: googleUser.given_name, 
+            family_name: googleUser.family_name, 
+            picture: googleUser.picture, 
+            iss: googleUser.iss, 
+            azp: googleUser.azp, 
+            aud: googleUser.aud, 
+            at_hash: googleUser.at_hash, 
+            iat: googleUser.iat, 
+            exp: googleUser.exp
+        })
         
         const expiresAt = new Date(Date.now() + expires_in * 1000)
         await this.googleOauthRepository.googleOauthTokens({
@@ -38,9 +54,14 @@ class GoogleOauthService {
             expiresAt
         })
 
-
-        const token = this.googleOauthAdapter.gerarJwtSign(googleUser)
-
+        const token = this.googleOauthAdapter.gerarJwtTokens(googleUser)
+        
+        await this.googleOauthRepository.atualizandoRefreshToken({
+            refreshToken: token.refreshToken,
+            expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+            googleId: googleUser.sub
+        })
+        
         return token
     }
 }

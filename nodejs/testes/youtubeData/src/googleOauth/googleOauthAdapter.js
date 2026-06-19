@@ -3,6 +3,7 @@ import { OAuth2Client } from "google-auth-library"
 import jwt from "jsonwebtoken"
 import axios from "axios"
 import { AppError } from "../errors/AppError.js"
+import GenerateJwt from "../utils/generateJwt.js"
 
 class GoogleOauthAdapter {
     constructor({CLIENT_ID, CLIENT_SECRET, REDIRECT_URI, JWT_SECRET, JWT_EXPIRES}) {
@@ -13,6 +14,7 @@ class GoogleOauthAdapter {
         this.JWT_EXPIRES = JWT_EXPIRES
 
         this.googleClient = new OAuth2Client(this.CLIENT_ID)
+        this.generateJwt = new GenerateJwt()
     }
 
     construindoUrlGoogleOaut2() {
@@ -69,12 +71,7 @@ class GoogleOauthAdapter {
             throw new AppError("Email não verificado", 403)
         }
 
-        return {
-            sub: payload.sub,
-            email: payload.email,
-            name: payload.name,
-            picture: payload.picture,
-        }
+        return payload
     }
 
     gerarJwtSign(googleUser) {
@@ -92,6 +89,24 @@ class GoogleOauthAdapter {
                 audience: "my-video-you-web",
             }
         );
+    }
+
+    gerarJwtTokens(googleUser) {
+        const accessToken = this.generateJwt.signAccessToken(googleUser)
+        if (!accessToken) {
+            throw new AppError('Error: Na geração do access token jwt', 500)
+        }
+
+        const refreshToken = this.generateJwt.signRefreshToken(googleUser)
+        if (!refreshToken) {
+            throw new AppError('Error: Na geração do refresh token jwt', 500)
+        }
+        
+        return {
+            accessToken,
+            refreshToken
+        }
+        
     }
 }
 
