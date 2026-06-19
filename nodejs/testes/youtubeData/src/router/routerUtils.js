@@ -5,13 +5,14 @@ import authRequirida from "../middleware/autenticandoRotas.js";
 const routerUtils = express.Router();
 const __dirname = path.resolve();
 
-routerUtils.get("/home", authRequirida, (req, res) => {
+routerUtils.get("/home", (req, res) => {
   console.log('user: ', req.user)
   res.sendFile(path.join(__dirname, "public/views/home.html"));
 });
 
 routerUtils.get("/logout", (req, res) => {
-  res.clearCookie("token");
+  res.clearCookie("accessToken");
+  res.clearCookie("refreshToken");
   res.redirect("/");
 });
 
