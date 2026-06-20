@@ -7,7 +7,9 @@ function authRequirida(req, res, next) {
   const token = req.cookies.accessToken;
 
   if (!token){
-    return res.redirect("/");
+    return res.status(401).json({
+      error: "Token ausente"
+    })
   }
 
   try {

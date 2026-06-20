@@ -12,8 +12,7 @@ class RefreshTokenService {
 
     async refresh(req, res, next) {
         try {
-            const refreshToken = req.cookie.refreshToken
-            // const refreshToken = req.body.refreshToken
+            const refreshToken = req.cookies.refreshToken 
             
             if (!refreshToken) {
                 throw new AppError(
@@ -24,13 +23,16 @@ class RefreshTokenService {
 
             const payload = jwt.verify(
                 refreshToken,
-                process.env.JWT_REFRESH_SECRET
+                process.env.JWT_REFRESH_SECRET,
+                {
+                    issuer: "my-video-you",
+                    audience: "my-video-you-web",
+                }
             )
 
             const buscaGoogleSub = await this.googleOauthRepository.bucarGoogleIdBySub(payload.sub)
-            console.log('bb', buscaGoogleSub);
 
-            const tokenDB = await this.googleOauthRepository.buscandoRefreshTokenByToken(refreshToken);
+            const tokenDB = await this.googleOauthRepository.buscandoRefreshTokenByToken(refreshToken)
 
             if (!tokenDB) {
                 throw new AppError(
@@ -50,7 +52,6 @@ class RefreshTokenService {
 
             const newAccessToken = this.generateJwt.signAccessToken(buscaGoogleSub)
             const newRefreshToken = this.generateJwt.signRefreshToken(buscaGoogleSub)
-            console.log(newAccessToken, ':', newRefreshToken);
             
             await this.googleOauthRepository.atualizandoRefreshToken({
                 refreshToken: newRefreshToken,
