@@ -6,7 +6,6 @@ const routerUtils = express.Router();
 const __dirname = path.resolve();
 
 routerUtils.get("/home", (req, res) => {
-  console.log('user: ', req.user)
   res.sendFile(path.join(__dirname, "public/views/home.html"));
 });
 
