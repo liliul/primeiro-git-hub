@@ -10,6 +10,7 @@ import GoogleOauthService from "./googleOauthService.js"
 import GoogleOauthRepository from "./googleOauthRepository.js"
 import RefreshTokenService from "./refreshTokenService.js"
 import LogoutService from "./logoutService.js"
+import MeService from "./meService.js"
 
 import GoogleOauthAdapter from "./googleOauthAdapter.js"
 
@@ -29,10 +30,12 @@ const googleOauthService = new GoogleOauthService(googleOauthAdapter, googleOaut
 const googleOauthController = new GoogleOauthController(googleOauthService)
 const refreshTokenService = new RefreshTokenService(googleOauthRepository)
 const logoutService = new LogoutService(googleOauthRepository)
+const meService = new MeService(googleOauthRepository)
 
 routerGoogleOauth2.get('/google', googleOauthController.construindoGoogleOauth2)
 routerGoogleOauth2.get('/google/callback', googleOauthController.handleGoogleCallback)
 routerGoogleOauth2.post('/refresh', refreshTokenService.refresh)
 routerGoogleOauth2.get('/gglogout', logoutService.logout)
+routerGoogleOauth2.get('/ggme', meService.me)
 
 export default routerGoogleOauth2
