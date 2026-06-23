@@ -100,7 +100,8 @@
 
     <div id="content"></div>
     
-    <script>
+    <script type="module">
+        import {authFetch} from '../scripts/me.js'
         let nextPageToken = null
         let prevPageToken = null
         const pagesCache = new Map()
@@ -122,9 +123,11 @@
             const url = cacheKey === 'FIRST_PAGE'
                 ? 'http://localhost:3001/atividades'
                 : `http://localhost:3001/atividades?pageToken=${cacheKey}`
-            const req = await fetch(url)
-            const res = await req.json()
-            
+            // const req = await fetch(url)
+            // const res = await req.json()
+            const response = await authFetch(url)
+            if (!response) return null
+            const res = await response.json()
             pagesCache.set(cacheKey, res)
             
             return res

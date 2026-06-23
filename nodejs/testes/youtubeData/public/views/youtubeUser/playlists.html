@@ -73,25 +73,40 @@
             margin: 10px 40px;
             cursor: pointer;
         }
+
+        .c-auth section {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .c-auth section img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+        }
+        .c-auth section div strong,p {
+            font-size: 11px;
+        }
     </style>
 </head>
 <body>
     <h1>Listando Playlist do Youtube</h1>
     <button class="voltar" onclick="window.history.back()"><</button>
 
-    <div class="c-auth">
-        <button>
-            <a href="/v3/logout">LOGUOT</a>
-        </button>
+    <div class="c-auth" id="auth">
+        <a href="/auth/gglogout">
+            <button>LOGUOT</button>
+        </a>
     </div>
 
     <div id="content">
         <div id="videos"></div>
     </div>
 
+    <script type="module" src="../../scripts/me.js"></script>
     <script type="module">
-
-        function ContainerPlaylistsFunction() {
+    import {authFetch} from '../../scripts/me.js'
+            function ContainerPlaylistsFunction() {
             let playlistsCache = null;
             let currentView = "playlists";
 
@@ -100,9 +115,13 @@
                 return playlistsCache;
                 }
 
-                const res = await fetch("http://localhost:3001/ytlist");
-                const data = await res.json();
+                // const res = await fetch("http://localhost:3001/ytlist");
+                // const data = await res.json();
 
+                const response = await authFetch("http://localhost:3001/ytlist")
+                if (!response) return null
+                const data = await response.json()
+                
                 playlistsCache = data;
                 return data;
             }
