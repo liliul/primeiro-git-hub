@@ -6,11 +6,32 @@ const routerUtils = express.Router();
 const __dirname = path.resolve();
 
 routerUtils.get("/", (req, res) => {
-  res.render('index.html');
+  res.render('index');
 })
 routerUtils.get("/home", (req, res) => {
-  res.sendFile(path.join(__dirname, "views" , "home.html"));
-});
+  res.render("layouts/home")
+})
+routerUtils.get("/salvando-videos-alta", (req, res) => {
+  res.render("pages/salvando-videos-alta")
+})
+routerUtils.get("/playlists", (req, res) => {
+  res.render("pages/playlists")
+})
+routerUtils.get("/listar-videos-alta", (req, res) => {
+  res.render("pages/listar-videos-alta")
+})
+routerUtils.get("/atividades-youtube", (req, res) => {
+  res.render("pages/atividades-youtube")
+})
+routerUtils.get("/buscar-videos-alta-uf", (req, res) => {
+  res.render("pages/buscar-videos-alta-uf")
+})
+routerUtils.get("/info-channel", (req, res) => {
+  res.render("pages/info-channel")
+})
+routerUtils.get("/pesquisa-videos-youtube", (req, res) => {
+  res.render("pages/pesquisa-videos-youtube")
+})
 
 routerUtils.get("/logout", (req, res) => {
   res.clearCookie("accessToken");

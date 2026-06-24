@@ -30,6 +30,8 @@ app.use(cors({
 app.set('trust proxy', 1);
 
 app.use(cookieParser());
+app.set("view engine", "ejs");
+app.set("views", path.join(process.cwd(), "views"));
 app.use(express.static(path.join(__dirname, "/public")));
 
 app.use(routerHealth)
@@ -38,7 +40,7 @@ app.use(routerAuth)
 app.use('/youtube/v1', routerYoutubeAlta)
 app.use('/youtube/v2', routerYoutubeSearch)
 app.use("/auth", routerGoogleOauth2)
-app.use('/v3', routerUtils)
+app.use('/', routerUtils)
 app.use('/', routerYoutubeUser)
 app.use('/', routerAtividades)
 app.use('/', routerError)

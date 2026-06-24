@@ -67,41 +67,12 @@
 <body>
     <h1>Home</h1>
 
-    <div class="c-auth" id="auth">
-        <a href="/auth/gglogout">
-            <button>LOGUOT</button>
-        </a>
-    </div>
+   <%- include('../partials/googleOauthLogout') %>
 
     <section id="c-home">
-        <nav>
-            <h2>Menu</h2>
-            <ul>
-                <li>
-                    <a href="/views/salvando-videos-alta.html">Salvando videos youtube Alta</a>
-                </li>
-                <li>
-                    <a href="/views/listar-videos-alta.html">Listando videos youtube</a>
-                </li>
-                <li>
-                    <a href="/views/buscar-videos-alta-uf.html">buscando videos youtube UF</a>
-                </li>
-                <li>
-                    <a href="/views/pesquisa-videos-youtube.html">Pesquisando youtube</a>
-                </li>
-                <li>
-                    <a href="/views/youtubeUser/playlists.html">Listando playlists</a>
-                </li>
-                <li>
-                    <a href="/views/info-channel.html">Informações do canal</a>
-                </li>
-                <li>
-                    <a href="/views/atividades-youtube.html">Atividades</a>
-                </li>
-            </ul>
-        </nav>
+        <%- include('../partials/menu') %>    
     </section>
 
-    <script type="module" src="../scripts/me.js"></script>
+    <script type="module" src="/scripts/me.js"></script>
 </body>
 </html>
