@@ -43,7 +43,7 @@ class GoogleOauthController {
             maxAge: 7 * 24 * 60 * 60 * 1000
         })
             
-        return res.redirect("/v3/home")
+        return res.redirect("/home")
        } catch (error) {
         console.error("GOOGLE ERROR:", error.response?.data || error.message)
         next(error)

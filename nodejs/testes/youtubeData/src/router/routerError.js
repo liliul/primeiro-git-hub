@@ -2,19 +2,14 @@ import express from 'express'
 import path from "path"
 
 const routerError = express.Router()
-const __dirname = path.resolve()
 
 routerError.use((err, req, res, next) => {
   console.error(err.stack)
-  res.status(500).sendFile(
-    path.join(__dirname, "public/views/errors/500.html")
-  )
+  res.status(500).render('errors/500')
 })
 
 routerError.use((req, res) => {
-  res.status(404).sendFile(
-    path.join(__dirname, "public/views/errors/404.html")
-  )
+  res.status(404).render('errors/404')
 })
 
 export default routerError
