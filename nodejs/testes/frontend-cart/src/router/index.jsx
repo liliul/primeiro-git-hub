@@ -2,7 +2,7 @@ import { Routes, Route } from 'react-router-dom'
 import Register from '../components/auth/register'
 import Login from '../components/auth/login'
 
-import { TestandoContext } from '../components/testandoContext'
+// import { TestandoContext } from '../components/testandoContext'
 // import { TestandoDashboard } from './components/testandoContext/testandoDashboard'
 import { AuthRolesRoute } from './authRoles'
 import Layout from '../layout'
@@ -14,17 +14,19 @@ import { DashboardSuperAdmin } from '../pages/dashboard/Administrations/superAdm
 import { AddRoles } from '../components/superAdmin/add-roles'
 import { AppProviders } from '../context/providers'
 import { OrdersPaginando } from '../components/cart/orders/cursor'
-import { ListandoProdutos } from '../pages/home/listandoProductsUsers'
+import ShopContextReducerApp from '../components/utils/shop-context-reducer'
+// import { ListandoProdutos } from '../pages/home/listandoProductsUsers'
 
 export function AppRoutes() {
     return (
         <AppProviders>
             <Routes>
             <Route path="/" element={<Layout />} >
-              <Route index element={<ListandoProdutos />} />
+              {/* <Route index element={<ListandoProdutos />} /> */}
               <Route path='/register' element={<Register />} />
               <Route path='/login' element={<Login /> } /> 
-              <Route path='/teste' element={<TestandoContext /> } />
+              <Route path='/shop-context-reducer' element={<ShopContextReducerApp /> } /> 
+              {/* <Route path='/teste' element={<TestandoContext /> } /> */}
 
               <Route path='/products' element={
                 <AuthRolesRoute>

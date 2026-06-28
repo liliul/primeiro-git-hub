@@ -47,7 +47,11 @@ export function Header() {
                         )}
                     </div>
                 )}
-
+                <div>
+                   <Link to="/shop-context-reducer">
+                    <b className="text-black">Shop</b>
+                   </Link>
+                </div>
                 <div className="flex flex-col">
                     { user ? (
                         <div>
