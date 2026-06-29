@@ -1,4 +1,4 @@
-import {authFetch} from '../me.js'
+import { authFetch } from '../core/authFetch.js'
 
 let nextPageToken = null
 let prevPageToken = null
@@ -21,8 +21,7 @@ async function getAtividades(pageToken) {
     const url = cacheKey === 'FIRST_PAGE'
         ? 'http://localhost:3001/atividades'
         : `http://localhost:3001/atividades?pageToken=${cacheKey}`
-    // const req = await fetch(url)
-    // const res = await req.json()
+        
     const response = await authFetch(url)
     if (!response) return null
     const res = await response.json()

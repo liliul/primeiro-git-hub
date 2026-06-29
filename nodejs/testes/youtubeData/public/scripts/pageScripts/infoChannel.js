@@ -1,10 +1,7 @@
-import {authFetch} from '../me.js'
+import { authFetch } from '../core/authFetch.js'
 
 async function InformacoesCanalYoutubeApi() {
     try {
-        // const req = await fetch('http://localhost:3001/ytuser')
-        // const res = await req.json()
-
         const response = await authFetch('http://localhost:3001/ytuser')
         if (!response) return null
         const res = await response.json()
