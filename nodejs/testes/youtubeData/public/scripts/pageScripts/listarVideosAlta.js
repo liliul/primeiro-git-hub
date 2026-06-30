@@ -1,8 +1,10 @@
+import { authFetch } from "../core/authFetch.js"
+
 async function ytvideos() {
     document.getElementById('content').innerHTML = '<p style="text-align: center;">Carregando...</p>'
 
     try {
-        const req = await fetch('http://localhost:3001/youtube/v1/ytvideos')
+        const req = await authFetch('http://localhost:3001/youtube/v1/ytvideos')
         const res = await req.json()
 
         return res

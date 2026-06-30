@@ -1,3 +1,5 @@
+import { authFetch } from "../core/authFetch.js"
+
  document.addEventListener('DOMContentLoaded', () => {
     buscar()
 })
@@ -30,7 +32,7 @@ async function pesquisandoNoYoutube(query) {
             body: JSON.stringify({ query })
         }
 
-        const req = await fetch(url, options)
+        const req = await authFetch(url, options)
         const res = await req.json()
 
 
