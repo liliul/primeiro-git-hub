@@ -62,10 +62,26 @@
         .c-auth section div strong,p {
             font-size: 11px;
         }
+
+        .c-message {
+            width: 150px;
+            height: 89px;
+            position: absolute;
+            bottom: 10px;
+            right: 20px;
+            background-color: wheat;
+            border-radius: 10px;
+        }
+        .m-title {
+            color: #191919;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
     <h1>Home</h1>
+
+    <div id="notify"></div>
 
    <%- include('../partials/googleOauthLogout') %>
 
@@ -74,5 +90,28 @@
     </section>
 
     <script type="module" src="/scripts/me.js"></script>
+    <script>
+        const eventSource = new EventSource("/events");
+
+        eventSource.addEventListener('notification' , (event) => {
+            const data = JSON.parse(event.data)
+            console.log(data);
+            notify(data)
+        })
+
+        function notify(data) {
+            const notifyContainer = document.createElement('div')
+            notifyContainer.setAttribute('data-alta-id', data.id)
+            notifyContainer.classList.add('c-message')
+
+            const notifyTitle = document.createElement('h1')
+            notifyTitle.classList.add('m-title')
+            notifyTitle.textContent = data.quanty
+
+            notifyContainer.appendChild(notifyTitle)
+
+            document.getElementById('notify').appendChild(notifyContainer)
+        }
+    </script>
 </body>
 </html>

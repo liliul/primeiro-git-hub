@@ -15,6 +15,7 @@ import routerAtividades from './router/routerAtividades.js';
 // import routerInjectDepedency from './router/loginAccount.js';
 import routerAuth from './admin/auth/routes.js';
 import { errorHandler } from './middleware/errorHandler.js';
+import eventsRouter from './router/events.js';
 
 // import './node_cron/index.js'
 
@@ -36,6 +37,7 @@ app.use(express.static(path.join(__dirname, "/public")));
 
 app.use(routerHealth)
 app.use(routerAccount)
+app.use('/', eventsRouter)
 app.use(routerAuth)
 app.use('/youtube/v1', routerYoutubeAlta)
 app.use('/youtube/v2', routerYoutubeSearch)
