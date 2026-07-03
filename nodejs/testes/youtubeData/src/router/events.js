@@ -22,45 +22,44 @@ eventsRouter.get('/events', async (req, res) => {
     req.on('close', () => {
         clients.delete(res)
     })
-
-    cron.schedule("*/10 * * * * *", async () => {
-        try {
-            const uuid = crypto.randomUUID()
-
-            const videosYoutubeAlta = await redis.get(cacheKey)
-            
-            const videosTotal = Number(videosYoutubeAlta)
-
-            if (videosTotal === 0 || videosTotal === null) return 
-              
-            if (videosTotal === countVideosAlta) return
-         
-            countVideosAlta = videosTotal
-                
-            const youtubeAlta = {
-                id: uuid,
-                type: 'YOUTUBE_VIDEOS_ALTA',
-                quanty: videosTotal,
-                status: 'success',
-                createAt: new Date()
-            }
-            
-            const payload = `event: notification\n` + `data: ${JSON.stringify(youtubeAlta)}\n\n`
-            
-            for (const client of clients) {
-
-                client.write(payload);
-
-            }
-            
-        } catch (error) {
-            console.error(error.message);
-        }
-    })
 })
 
-function youtubeVideosAltaCron() {
-    
-}
+cron.schedule("*/10 * * * * *", async () => {
+    try {
+        const uuid = crypto.randomUUID()
+        
+        if (clients.size === 0) return
+
+        const videosYoutubeAlta = await redis.get(cacheKey)
+        
+        if (videosYoutubeAlta === null) return 
+        
+        const videosTotal = Number(videosYoutubeAlta)
+        console.log('v', videosTotal);
+           
+        if (videosTotal === countVideosAlta) return
+        
+        countVideosAlta = videosTotal
+            
+        const youtubeAlta = {
+            id: uuid,
+            type: 'YOUTUBE_VIDEOS_ALTA',
+            quanty: videosTotal,
+            status: 'success',
+            createAt: new Date()
+        }
+        
+        const payload = `event: notification\n` + `data: ${JSON.stringify(youtubeAlta)}\n\n`
+        
+        for (const client of clients) {
+
+            client.write(payload);
+
+        }
+        
+    } catch (error) {
+        console.error(error.message);
+    }
+})
 
 export default eventsRouter
