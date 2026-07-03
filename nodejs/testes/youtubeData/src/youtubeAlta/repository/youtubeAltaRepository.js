@@ -76,6 +76,14 @@ class YoutubeAltaRepository {
 
         return result
     }
+
+    async countVideosAlta() {
+        const result = await this.db.query(`
+            SELECT COUNT(*) AS total FROM youtube_videos;    
+        `)
+
+        return Number(result.rows[0].total)
+    }
 }
 
 export default YoutubeAltaRepository

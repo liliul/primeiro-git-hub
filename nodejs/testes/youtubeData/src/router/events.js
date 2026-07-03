@@ -2,11 +2,13 @@ import express from 'express'
 import crypto from 'crypto'
 import cron from 'node-cron'
 import pool from '../db/conection_db.js';
+import { redis } from '../db/redis.js';
 
 const eventsRouter = express.Router()
 const clients = new Set();
 
 let countVideosAlta = null
+let cacheKey = `youtube:alta:countVideos`
 
 eventsRouter.get('/events', async (req, res) => {
     res.setHeader("Content-Type", "text/event-stream");
@@ -25,13 +27,11 @@ eventsRouter.get('/events', async (req, res) => {
         try {
             const uuid = crypto.randomUUID()
 
-            const videosYoutubeAlta = await pool.query(`
-                select COUNT(*) AS total from youtube_videos    
-                `)
-                
-            const videosTotal = Number(videosYoutubeAlta.rows[0].total)
+            const videosYoutubeAlta = await redis.get(cacheKey)
+            
+            const videosTotal = Number(videosYoutubeAlta)
 
-            if (videosTotal === 0) return null
+            if (videosTotal === 0 || videosTotal === null) return 
               
             if (videosTotal === countVideosAlta) return
          
@@ -52,8 +52,6 @@ eventsRouter.get('/events', async (req, res) => {
                 client.write(payload);
 
             }
-            
-            console.log(countVideosAlta);
             
         } catch (error) {
             console.error(error.message);
