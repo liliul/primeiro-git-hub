@@ -1,9 +1,12 @@
 import express from 'express'
 import crypto from 'crypto'
+import cron from 'node-cron'
 import pool from '../db/conection_db.js';
 
 const eventsRouter = express.Router()
-const uuid = crypto.randomUUID()
+const clients = new Set();
+
+let countVideosAlta = null
 
 eventsRouter.get('/events', async (req, res) => {
     res.setHeader("Content-Type", "text/event-stream");
@@ -12,31 +15,54 @@ eventsRouter.get('/events', async (req, res) => {
 
     res.flushHeaders();
 
-    const videosYoutubeAlta = await pool.query(`
-        select * from youtube_videos    
-    `)
-    
-    if (videosYoutubeAlta.rowCount === 0) return null
-
-    console.log(videosYoutubeAlta.rowCount);
-    
-
-    const youtubeAlta = {
-        id: uuid,
-        type: 'YOUTUBE_VIDEOS_ALTA',
-        quanty: videosYoutubeAlta.rowCount,
-        status: 'success',
-        createAt: new Date()
-    }
-
-    const payload = `event: notification\n` + `data: ${JSON.stringify(youtubeAlta)}\n\n`
-
-    res.write(payload);
-
+    clients.add(res)
 
     req.on('close', () => {
-        res.end()
+        clients.delete(res)
+    })
+
+    cron.schedule("*/10 * * * * *", async () => {
+        try {
+            const uuid = crypto.randomUUID()
+
+            const videosYoutubeAlta = await pool.query(`
+                select COUNT(*) AS total from youtube_videos    
+                `)
+                
+            const videosTotal = Number(videosYoutubeAlta.rows[0].total)
+
+            if (videosTotal === 0) return null
+              
+            if (videosTotal === countVideosAlta) return
+         
+            countVideosAlta = videosTotal
+                
+            const youtubeAlta = {
+                id: uuid,
+                type: 'YOUTUBE_VIDEOS_ALTA',
+                quanty: videosTotal,
+                status: 'success',
+                createAt: new Date()
+            }
+            
+            const payload = `event: notification\n` + `data: ${JSON.stringify(youtubeAlta)}\n\n`
+            
+            for (const client of clients) {
+
+                client.write(payload);
+
+            }
+            
+            console.log(countVideosAlta);
+            
+        } catch (error) {
+            console.error(error.message);
+        }
     })
 })
+
+function youtubeVideosAltaCron() {
+    
+}
 
 export default eventsRouter
