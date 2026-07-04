@@ -64,17 +64,26 @@
         }
 
         .c-message {
-            width: 150px;
-            height: 89px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 250px;
+            height: 55px;
             position: absolute;
-            bottom: 10px;
+            bottom: 50px;
             right: 20px;
             background-color: wheat;
             border-radius: 10px;
         }
         .m-title {
             color: #191919;
+            margin: 0px 0px 2px 0px;
             text-align: center;
+            font-size: 15px;
+        }
+        .m-type {
+            color: #212121;
+            font-size: 12px;
         }
     </style>
 </head>
@@ -104,13 +113,27 @@
             notifyContainer.setAttribute('data-alta-id', data.id)
             notifyContainer.classList.add('c-message')
 
+            const notifyInfos = document.createElement('div')
+
             const notifyTitle = document.createElement('h1')
             notifyTitle.classList.add('m-title')
             notifyTitle.textContent = data.quanty
 
-            notifyContainer.appendChild(notifyTitle)
+            notifyInfos.appendChild(notifyTitle)
 
-            document.getElementById('notify').appendChild(notifyContainer)
+            const notifyType = document.createElement('span')
+            notifyType.classList.add('m-type')
+            notifyType.textContent = data.type 
+
+            notifyInfos.appendChild(notifyType)
+
+            notifyContainer.appendChild(notifyInfos)
+
+            document.querySelector('body').appendChild(notifyContainer)
+
+            setTimeout(() => {
+                notifyContainer.remove()
+            }, 15000)
         }
     </script>
 </body>
