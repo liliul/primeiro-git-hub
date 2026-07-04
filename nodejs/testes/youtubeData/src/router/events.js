@@ -40,7 +40,7 @@ cron.schedule("*/10 * * * * *", async () => {
         if (videosTotal === countVideosAlta) return
         
         countVideosAlta = videosTotal
-            
+    
         const youtubeAlta = {
             id: uuid,
             type: 'YOUTUBE_VIDEOS_ALTA',
@@ -49,17 +49,20 @@ cron.schedule("*/10 * * * * *", async () => {
             createAt: new Date()
         }
         
-        const payload = `event: notification\n` + `data: ${JSON.stringify(youtubeAlta)}\n\n`
-        
-        for (const client of clients) {
-
-            client.write(payload);
-
-        }
+        broadcast('notification', youtubeAlta)
         
     } catch (error) {
         console.error(error.message);
     }
 })
+
+async function broadcast(event, data) {
+    const payload = `event: ${event}\n` + `data: ${JSON.stringify(data)}\n\n`
+    
+    for (const client of clients) {
+
+        client.write(payload);
+    }
+}
 
 export default eventsRouter
