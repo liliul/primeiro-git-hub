@@ -85,6 +85,121 @@
             color: #212121;
             font-size: 12px;
         }
+        #toast-container{
+
+            /* position:fixed;
+
+            top:20px;
+            right:20px;
+
+            width:250px; */
+
+            display:flex;
+
+            flex-direction:column;
+
+            gap:12px;
+
+            z-index:9999;
+
+        }
+
+        .toast{
+            position: absolute;
+            bottom: 50px;
+            right: 20px;
+            width: 355px;
+            background:#191919;
+
+            border-radius:10px;
+
+            overflow:hidden;
+
+            box-shadow: 2px 2px 5px azure;
+
+            animation:toastShow .3s ease;
+
+        }
+
+        .toast-header{
+
+            display:flex;
+
+            justify-content:space-between;
+
+            align-items:center;
+
+            padding:12px 16px;
+
+            border-bottom:1px solid #eee;
+
+        }
+
+        .toast-body{
+
+            padding:16px;
+
+        }
+
+        .toast-close{
+
+            background:none;
+
+            border:none;
+
+            cursor:pointer;
+
+            font-size:18px;
+
+        }
+
+        .toast-progress{
+
+            height:4px;
+
+            width:100%;
+
+            background:#0d6efd;
+
+        }
+
+        .toast-hide{
+
+            animation:toastHide .3s forwards;
+
+        }
+
+        @keyframes toastShow{
+
+            from{
+
+                opacity:0;
+
+                transform:translateX(100%);
+
+            }
+
+            to{
+
+                opacity:1;
+
+                transform:translateX(0);
+
+            }
+
+        }
+
+        @keyframes toastHide{
+
+            to{
+
+                opacity:0;
+
+                transform:translateX(100%);
+
+            }
+
+        }
     </style>
 </head>
 <body>
@@ -100,40 +215,108 @@
 
     <script type="module" src="/scripts/me.js"></script>
     <script>
-        const eventSource = new EventSource("/events");
+        // const eventSource = new EventSource("/events");
 
-        eventSource.addEventListener('notification' , (event) => {
-            const data = JSON.parse(event.data)
-            console.log(data);
-            notify(data)
+        // eventSource.addEventListener('notification' , (event) => {
+        //     const data = JSON.parse(event.data)
+        //     console.log(data);
+        //     notify(data)
+        // })
+
+        // function notify(data) {
+        //     const notifyContainer = document.createElement('div')
+        //     notifyContainer.setAttribute('data-alta-id', data.id)
+        //     notifyContainer.classList.add('c-message')
+
+        //     const notifyInfos = document.createElement('div')
+
+        //     const notifyTitle = document.createElement('h1')
+        //     notifyTitle.classList.add('m-title')
+        //     notifyTitle.textContent = data.quanty
+
+        //     notifyInfos.appendChild(notifyTitle)
+
+        //     const notifyType = document.createElement('span')
+        //     notifyType.classList.add('m-type')
+        //     notifyType.textContent = data.type 
+
+        //     notifyInfos.appendChild(notifyType)
+
+        //     notifyContainer.appendChild(notifyInfos)
+
+        //     document.querySelector('body').appendChild(notifyContainer)
+
+        //     setTimeout(() => {
+        //         notifyContainer.remove()
+        //     }, 15000)
+        // }
+
+        const eventSource = new EventSource("/events")
+
+        const toastContainer = document.getElementById("notify")
+
+        const MAX_TOASTS = 5
+        const DURATION = 15000
+
+        eventSource.addEventListener("notification", (event) => {
+            createToast(JSON.parse(event.data))
         })
 
-        function notify(data) {
-            const notifyContainer = document.createElement('div')
-            notifyContainer.setAttribute('data-alta-id', data.id)
-            notifyContainer.classList.add('c-message')
+        function createToast(data) {
 
-            const notifyInfos = document.createElement('div')
+            if (toastContainer.children.length >= MAX_TOASTS) {
+                toastContainer.firstElementChild.remove()
+            }
 
-            const notifyTitle = document.createElement('h1')
-            notifyTitle.classList.add('m-title')
-            notifyTitle.textContent = data.quanty
+            const toast = document.createElement("div")
+            toast.className = "toast"
 
-            notifyInfos.appendChild(notifyTitle)
+            toast.innerHTML = `
+                <div class="toast-header">
+                    <strong>${data.type}</strong>
 
-            const notifyType = document.createElement('span')
-            notifyType.classList.add('m-type')
-            notifyType.textContent = data.type 
+                    <button class="toast-close">
+                        ✕
+                    </button>
+                </div>
 
-            notifyInfos.appendChild(notifyType)
+                <div class="toast-body">
+                    Total de vídeos: <strong>${data.quanty}</strong>
+                </div>
 
-            notifyContainer.appendChild(notifyInfos)
+                <div class="toast-progress"></div>
+            `
 
-            document.querySelector('body').appendChild(notifyContainer)
+            toastContainer.appendChild(toast)
 
-            setTimeout(() => {
-                notifyContainer.remove()
-            }, 15000)
+            const progress = toast.querySelector(".toast-progress")
+
+            progress.animate(
+                [
+                    { width: "100%" },
+                    { width: "0%" }
+                ],
+                {
+                    duration: DURATION,
+                    fill: "forwards",
+                    easing: "linear"
+                }
+            )
+
+            const removeToast = () => {
+
+                toast.classList.add("toast-hide")
+
+                setTimeout(() => toast.remove(), 300)
+
+            }
+
+            toast
+                .querySelector(".toast-close")
+                .addEventListener("click", removeToast)
+
+            setTimeout(removeToast, DURATION)
+
         }
     </script>
 </body>
