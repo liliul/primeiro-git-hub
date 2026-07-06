@@ -82,7 +82,7 @@ class YoutubeAltaRepository {
             SELECT COUNT(*) AS total FROM youtube_videos;    
         `)
 
-        return Number(result.rows[0].total)
+        return result.rows[0].total
     }
 }
 
