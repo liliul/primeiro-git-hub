@@ -12,6 +12,10 @@ class SseManager {
         this.clients.delete(res)
     }
 
+    checkClientsExists() {
+        return this.clients.size > 0
+    }
+
     broadcast(event, data) {
 
         const payload =

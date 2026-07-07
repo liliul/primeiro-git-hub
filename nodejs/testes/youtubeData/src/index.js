@@ -15,7 +15,8 @@ import routerAtividades from './router/routerAtividades.js';
 // import routerInjectDepedency from './router/loginAccount.js';
 import routerAuth from './admin/auth/routes.js';
 import { errorHandler } from './middleware/errorHandler.js';
-import eventsRouter from './router/events.js';
+// import eventsRouter from './router/events.js';
+import eventsRouter from './events/routes.js';
 
 // import './node_cron/index.js'
 
