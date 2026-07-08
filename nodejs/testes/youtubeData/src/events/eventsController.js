@@ -15,7 +15,7 @@ class EventsController {
         this.sseManager.add(res)
 
         req.on('close', () => {
-            this.sseManager.delete(res)
+            this.sseManager.remove(res)
         })
     }
 }
