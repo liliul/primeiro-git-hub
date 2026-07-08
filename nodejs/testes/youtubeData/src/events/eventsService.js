@@ -9,8 +9,6 @@ class EventsService {
     }
 
     async checkNotifyVideosAlta() {
-        const uuid = crypto.randomUUID()
-            
         if (!this.sseManager.checkClientsExists()) return
         
         const videosYoutubeAlta = await this.eventsRepository.getCountVideosAlta()
@@ -24,15 +22,15 @@ class EventsService {
         
         this.countVideosAlta = videosTotal
     
-        const youtubeAlta = {
-            id: uuid,
+        const notifyCountVideosAlta = {
+            id: crypto.randomUUID(),
             type: 'YOUTUBE_VIDEOS_ALTA',
             quanty: videosTotal,
             status: 'success',
             createAt: new Date()
         }
         
-        this.sseManager.broadcast('notification', youtubeAlta)
+        this.sseManager.broadcast('notification', notifyCountVideosAlta)
     }
 }
 
