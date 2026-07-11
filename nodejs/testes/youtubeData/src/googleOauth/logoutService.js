@@ -22,6 +22,7 @@ class LogoutService {
             }
             
             await this.googleOauthRepository.deletarRefreshTokenById(buscandoRefreshToken.id)
+            await this.googleOauthRepository.deletarGoogleOauthTokensBySub(buscandoRefreshToken.google_id)
 
             res.clearCookie("accessToken")
             res.clearCookie("refreshToken")

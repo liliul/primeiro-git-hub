@@ -136,6 +136,10 @@ class GoogleOauthRepository {
     async deletarRefreshTokenById(id) {
 		await this.pool.query(`DELETE FROM refresh_tokens WHERE id = $1`, [id]);
 	}
+
+    async deletarGoogleOauthTokensBySub(sub) {
+        await this.pool.query(`DELETE FROM google_oauth_tokens WHERE google_id = $1`, [sub]);
+    }
 }
 
 export default GoogleOauthRepository
