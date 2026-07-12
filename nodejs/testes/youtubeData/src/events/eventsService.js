@@ -27,6 +27,7 @@ class EventsService {
             type: 'YOUTUBE_VIDEOS_ALTA',
             quanty: videosTotal,
             status: 'success',
+            durationMsg: 15000,
             createAt: new Date()
         }
         

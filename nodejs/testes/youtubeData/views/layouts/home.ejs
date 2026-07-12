@@ -297,7 +297,7 @@
                     { width: "0%" }
                 ],
                 {
-                    duration: DURATION,
+                    duration: data.durationMsg,
                     fill: "forwards",
                     easing: "linear"
                 }
@@ -315,7 +315,7 @@
                 .querySelector(".toast-close")
                 .addEventListener("click", removeToast)
 
-            setTimeout(removeToast, DURATION)
+            setTimeout(removeToast, data.durationMsg)
 
         }
     </script>
