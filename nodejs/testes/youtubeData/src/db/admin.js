@@ -1,5 +1,5 @@
 import db from './conection_db.js'
-import bcrypt from 'bcrypt'
+import { HashService } from '../admin/utils/utils.js'
 import dotenv from 'dotenv'
 dotenv.config()
 
@@ -22,7 +22,8 @@ async function adminController() {
     );
   `);
 
-  const hashPassword = await hashed(ADMIN_PASSWORD, 10)
+  const hashService = new HashService()
+  const hashPassword = await hashService.hash(ADMIN_PASSWORD)
 
   await db.query(`
     INSERT INTO usuarios (name, email, password, role)
