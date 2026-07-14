@@ -15,7 +15,9 @@ const loginSchema = z.object({
 export default class AuthController {
   constructor(authService) {
     this.authService = authService
+  
     this.login = this.login.bind(this)
+    this.refresh = this.refresh.bind(this)
   }
 
   async login(req, res, next) {
@@ -35,6 +37,18 @@ export default class AuthController {
       }
 
       next(err)
+    }
+  }
+
+  async refresh(req, res, next) {
+    try {
+      const token = req.body.token 
+      
+      const resultado = await this.authService.fazendoRefreshToken(token)
+      
+      res.status(201).json({ message: resultado })
+    } catch (error) {
+      next(error)
     }
   }
 }

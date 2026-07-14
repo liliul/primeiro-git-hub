@@ -35,4 +35,57 @@ export default class AuthService {
             }
         }
     }
+
+    async fazendoRefreshToken(token) {
+        if(!token) {
+            throw new AppError('Token invalido.', 401)
+        }
+        
+        const verificandoToken = this.refreshTokenService.verify(token)
+        if(!verificandoToken) {
+            throw new AppError('Erro ao verificar token', 500)
+        }
+
+        const buscarUsuario = await this.authRepository.buscaUsuarioById(verificandoToken.id)
+        if (!buscarUsuario) {
+            throw new AppError('Usuario não existe.', 500)
+        }
+        
+        const buscarRefreshToken = await this.authRepository.buscarRefreshTokenByToken(token)
+        if (!buscarRefreshToken) {
+            throw new AppError(
+                "Refresh token inválido",
+                401
+            )
+        }
+
+        if (new Date(buscarRefreshToken.expires_at) < new Date()) {
+            throw new AppError(
+                "Refresh token expirado",
+                401
+            )
+        }
+
+        await this.authRepository.deletarRefreshTokenById(buscarRefreshToken.id)
+
+        const accessToken = this.tokenService.sign({
+            id: buscarUsuario.id, 
+            name: buscarUsuario.name, 
+            email: buscarUsuario.email, 
+            role: buscarUsuario.role
+        })
+
+        const refreshToken = this.refreshTokenService.sign({id: buscarUsuario.id})
+
+        await this.authRepository.atualizandoRefreshToken({
+            refreshToken: refreshToken,
+            expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+            id: buscarUsuario.id
+        })
+
+        return {
+            accessToken,
+            refreshToken
+        }
+    }
 }
