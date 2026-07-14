@@ -51,3 +51,18 @@ export class TokenService {
     return jwt.verify(token, this.secret)
   }
 }
+
+export class RefreshTokenService {
+  constructor({secret, expiresIn = '30d'}) {
+    this.secret = secret
+    this.expiresIn = expiresIn
+  }
+
+  sign(payload) {
+    return jwt.sign(payload, this.secret, { expiresIn: this.expiresIn })
+  }
+
+  verify(token) {
+    return jwt.verify(token, this.secret)
+  }
+}
