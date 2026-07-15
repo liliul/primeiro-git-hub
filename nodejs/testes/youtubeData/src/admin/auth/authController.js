@@ -48,7 +48,7 @@ export default class AuthController {
       
       const resultado = await this.authService.fazendoRefreshToken(token)
       
-      res.status(201).json({ message: resultado })
+      res.status(200).json({ message: resultado })
     } catch (error) {
       next(error)
     }
@@ -61,7 +61,7 @@ export default class AuthController {
       await this.authService.fazendoLogout(refresh)
 
       // res.redirect('/auth')
-      res.send()
+      res.status(204).send()
     } catch (error) {
       next(error)
     }

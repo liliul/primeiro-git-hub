@@ -43,12 +43,12 @@ export default class AuthService {
         
         const verificandoToken = this.refreshTokenService.verify(token)
         if(!verificandoToken) {
-            throw new AppError('Erro ao verificar token', 500)
+            throw new AppError('Erro ao verificar token', 401)
         }
 
         const buscarUsuario = await this.authRepository.buscaUsuarioById(verificandoToken.id)
         if (!buscarUsuario) {
-            throw new AppError('Usuario não existe.', 500)
+            throw new AppError('Usuario não existe.', 404)
         }
         
         const buscarRefreshToken = await this.authRepository.buscarRefreshTokenByToken(token)
@@ -96,7 +96,7 @@ export default class AuthService {
 
         const buscarRefreshToken = await this.authRepository.buscarRefreshTokenByToken(refreshToken)
         if (!buscarRefreshToken) {
-            throw new AppError('Erro na busca com refreh token.', 500)
+            throw new AppError('Erro na busca com refreh token.', 401)
         }
 
         await this.authRepository.deletarRefreshTokenById(buscarRefreshToken.id)
@@ -109,7 +109,7 @@ export default class AuthService {
 
         const buscarUsuario = await this.authRepository.buscaUsuarioById(userId)
         if (!buscarUsuario) {
-            throw new AppError('Erro usuario não encontrado.', 500)
+            throw new AppError('Erro usuario não encontrado.', 404)
         }
 
        return buscarUsuario
