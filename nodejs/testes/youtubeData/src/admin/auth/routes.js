@@ -23,10 +23,9 @@ const authenticate = authMiddleware(tokenService)
 
 const routerAuth = express.Router()
 
-routerAuth.post('/login', ipLimiter, loginLimiter, authController.login)
-
-routerAuth.post('/refresh', ipLimiter, authController.refresh)
-
+routerAuth.post('/admin/login', ipLimiter, loginLimiter, authController.login)
+routerAuth.post('/admin/refresh', ipLimiter, authController.refresh)
+routerAuth.post('/admin/logout', ipLimiter, authController.logout)
 routerAuth.get('/me', authenticate, (req, res) => {
   res.json({ user: req.user })
 })

@@ -88,4 +88,17 @@ export default class AuthService {
             refreshToken
         }
     }
+
+    async fazendoLogout(refreshToken) {
+        if (!refreshToken) {
+            throw new AppError('Token não existe.', 401)
+        }
+
+        const buscarRefreshToken = await this.authRepository.buscarRefreshTokenByToken(refreshToken)
+        if (!buscarRefreshToken) {
+            throw new AppError('Erro na busca com refreh token.', 500)
+        }
+
+        await this.authRepository.deletarRefreshTokenById(buscarRefreshToken.id)
+    }
 }
