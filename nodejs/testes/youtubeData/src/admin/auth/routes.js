@@ -26,9 +26,7 @@ const routerAuth = express.Router()
 routerAuth.post('/admin/login', ipLimiter, loginLimiter, authController.login)
 routerAuth.post('/admin/refresh', ipLimiter, authController.refresh)
 routerAuth.post('/admin/logout', ipLimiter, authController.logout)
-routerAuth.get('/me', authenticate, (req, res) => {
-  res.json({ user: req.user })
-})
+routerAuth.get('/admin/me', ipLimiter, authenticate, requireRole('admin'), authController.me)
 
 routerAuth.get('/admin', authenticate, requireRole('admin'), (req, res) => {
   res.json({ message: 'Área administrativa' })

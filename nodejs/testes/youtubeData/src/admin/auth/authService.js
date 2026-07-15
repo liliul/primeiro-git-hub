@@ -101,4 +101,17 @@ export default class AuthService {
 
         await this.authRepository.deletarRefreshTokenById(buscarRefreshToken.id)
     }
+
+    async fazendoMe(userId) {
+        if (!userId) {
+            throw new AppError('userId é obrigatorio.', 401)
+        }
+
+        const buscarUsuario = await this.authRepository.buscaUsuarioById(userId)
+        if (!buscarUsuario) {
+            throw new AppError('Erro usuario não encontrado.', 500)
+        }
+
+       return buscarUsuario
+    }
 }

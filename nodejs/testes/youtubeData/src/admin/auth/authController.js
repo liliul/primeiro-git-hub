@@ -19,6 +19,7 @@ export default class AuthController {
     this.login = this.login.bind(this)
     this.refresh = this.refresh.bind(this)
     this.logout = this.logout.bind(this)
+    this.me = this.me.bind(this)
   }
 
   async login(req, res, next) {
@@ -61,6 +62,18 @@ export default class AuthController {
 
       // res.redirect('/auth')
       res.send()
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  async me(req, res, next) {
+    try {
+      const userId = req.user
+
+      const user = await this.authService.fazendoMe(userId.id)
+
+      res.status(200).json({ me: user })
     } catch (error) {
       next(error)
     }
