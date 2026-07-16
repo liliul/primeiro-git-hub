@@ -9,8 +9,13 @@ export function authMiddleware(tokenService) {
     }
 
     try {
-      req.user = tokenService.verify(header)
-    
+      const decoded = tokenService.verify(header)
+      if (decoded.type !== 'access') {
+        return res.status(401).json({ error: 'Tipo de token inválido' });
+      }
+      
+      req.user = decoded
+      
       next()
     } catch {
       res.status(401).json({ error: 'Token inválido ou expirado' })

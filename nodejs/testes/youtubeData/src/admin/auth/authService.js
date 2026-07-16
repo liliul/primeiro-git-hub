@@ -10,13 +10,17 @@ export default class AuthService {
 
     async fazendoLogin(email, password) {
         const user = await this.authRepository.buscaPorEmail(email);
-        if (!user) throw new AppError('Email e senha obrigatoria.', 400);
+        if (!user) throw new AppError('Email ou senha invalidos.', 401);
 
         const valida = await this.hashService.compare(password, user.password);
         if (!valida) throw new AppError('Comparação de senhas invalidas.', 401);
 
-        const jwtAccessToken = this.tokenService.sign({id: user.id, name: user.name, email: user.email, role: user.role})
-        const jwtRefreshToken = this.refreshTokenService.sign({id: user.id})
+        if (user.role !== 'admin') {
+            throw new AppError('Email ou senha invalidos.', 401);
+        }
+
+        const jwtAccessToken = this.tokenService.sign({id: user.id, name: user.name, email: user.email, role: user.role, type: 'access'})
+        const jwtRefreshToken = this.refreshTokenService.sign({id: user.id,  type: 'refresh'})
 
         await this.authRepository.atualizandoRefreshToken({
             refreshToken: jwtRefreshToken,
@@ -72,10 +76,11 @@ export default class AuthService {
             id: buscarUsuario.id, 
             name: buscarUsuario.name, 
             email: buscarUsuario.email, 
-            role: buscarUsuario.role
+            role: buscarUsuario.role,
+            type: 'access'
         })
 
-        const refreshToken = this.refreshTokenService.sign({id: buscarUsuario.id})
+        const refreshToken = this.refreshTokenService.sign({id: buscarUsuario.id, type: 'refresh'})
 
         await this.authRepository.atualizandoRefreshToken({
             refreshToken: refreshToken,

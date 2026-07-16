@@ -9,8 +9,8 @@ import { loginLimiter, ipLimiter } from '../middleware/rateLimit.js'
 import dotenv from 'dotenv'
 dotenv.config()
 
-const expiresIn = process.env.NODE_ENV === "product" ? process.env.JWT_EXPIRES_ADMIN : "15m"
-const expiresInRefresh = process.env.NODE_ENV === "product" ? process.env.JWT_EXPIRES_REFRESH_ADMIN : "30d"
+const expiresIn = process.env.NODE_ENV === "production" ? process.env.JWT_EXPIRES_ADMIN : "15m"
+const expiresInRefresh = process.env.NODE_ENV === "production" ? process.env.JWT_EXPIRES_REFRESH_ADMIN : "30d"
 
 const hashService = new HashService()
 const tokenService = new TokenService(process.env.JWT_SECRET_ADMIN, expiresIn)

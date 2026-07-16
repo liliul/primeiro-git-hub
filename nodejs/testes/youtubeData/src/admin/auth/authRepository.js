@@ -4,7 +4,7 @@ export default class AuthRepository {
     }
 
     async buscaPorEmail(email) {
-        const resultado = await this.pool.query('SELECT name, password, email, criado_em, role, id FROM usuarios WHERE email = $1', [email]);
+        const resultado = await this.pool.query(`SELECT name, password, email, criado_em, role, id FROM usuarios WHERE email = $1 AND role = 'admin'`, [email]);
 
         return resultado.rows[0] ?? null;
     }
