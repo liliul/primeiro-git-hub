@@ -1,6 +1,7 @@
 export default class AuthRepository {
-    constructor(pool) {
+    constructor(pool, hashTokenService) {
         this.pool = pool;
+        this.hashTokenService = hashTokenService
     }
 
     async buscaPorEmail(email) {
@@ -10,6 +11,8 @@ export default class AuthRepository {
     }
 
     async atualizandoRefreshToken({refreshToken, expiresAt, id}) {
+        const hashRefreshToken = this.hashTokenService.hashRefreshToken(refreshToken)
+        
         await this.pool.query(
             `
             INSERT INTO usuarios_refresh_token (
@@ -23,7 +26,7 @@ export default class AuthRepository {
                 refresh_token = EXCLUDED.refresh_token,
                 expires_at = EXCLUDED.expires_at;
             `,
-            [id, refreshToken, expiresAt]
+            [id, hashRefreshToken, expiresAt]
         );
     }
 
@@ -37,9 +40,11 @@ export default class AuthRepository {
     }
 
     async buscarRefreshTokenByToken(token) {
+        const hashRefreshToken = this.hashTokenService.hashRefreshToken(token)
+
         const resultado = await this.pool.query(
             `SELECT * FROM usuarios_refresh_token WHERE refresh_token = $1`,
-            [token]
+            [hashRefreshToken]
         )
 
         return resultado.rows[0] ?? null;
