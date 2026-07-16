@@ -66,3 +66,11 @@ export class RefreshTokenService {
     return jwt.verify(token, this.secret, { algorithms: ['HS256'] })
   }
 }
+
+export class HashTokenService {
+  constructor() {}
+
+  hashRefreshToken(refreshToken) {
+    return crypto.createHash('sha256').update(refreshToken).digest('hex');
+  }
+}
