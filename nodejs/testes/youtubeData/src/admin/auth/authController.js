@@ -27,6 +27,23 @@ export default class AuthController {
       const { email, password } = loginSchema.parse(req.body)
       
       const result = await this.authService.fazendoLogin(email, password)
+
+      res.cookie("authAccessToken", result.jwtAccessToken, {
+          httpOnly: true,
+          secure: false,
+          sameSite: "lax",
+          path: "/",
+          maxAge: 15 * 60 * 1000
+      })
+
+      res.cookie("authRefreshToken", result.jwtRefreshToken, {
+          httpOnly: true,
+          secure: false,
+          sameSite: "lax",
+          path: "/",
+          maxAge: 30 * 24 * 60 * 60 * 1000
+      })
+
       res.json(result)
     } catch (err) {
       if (err instanceof ZodError) {
@@ -44,11 +61,27 @@ export default class AuthController {
 
   async refresh(req, res, next) {
     try {
-      const token = req.body.token 
+      const token = req.cookies.authRefreshToken
       
       const resultado = await this.authService.fazendoRefreshToken(token)
+
+      res.cookie("authAccessToken", resultado.accessToken, {
+          httpOnly: true,
+          secure: false,
+          sameSite: "lax",
+          path: "/",
+          maxAge: 15 * 60 * 1000
+      })
+
+      res.cookie("authRefreshToken", resultado.refreshToken, {
+          httpOnly: true,
+          secure: false,
+          sameSite: "lax",
+          path: "/",
+          maxAge: 30 * 24 * 60 * 60 * 1000
+      })
       
-      res.status(200).json({ message: resultado })
+      res.status(200).send()
     } catch (error) {
       next(error)
     }
@@ -56,12 +89,15 @@ export default class AuthController {
 
   async logout(req, res, next) {
     try {
-      const refresh = req.body.token
+      const refresh = req.cookies.authRefreshToken
 
       await this.authService.fazendoLogout(refresh)
 
-      // res.redirect('/auth')
-      res.status(204).send()
+      res.clearCookie("authAccessToken")
+      res.clearCookie("authRefreshToken")
+     
+      res.redirect('/auth/login')
+      // res.status(204).send()
     } catch (error) {
       next(error)
     }
@@ -70,7 +106,7 @@ export default class AuthController {
   async me(req, res, next) {
     try {
       const userId = req.user
-
+        
       const user = await this.authService.fazendoMe(userId.id)
 
       res.status(200).json({ me: user })

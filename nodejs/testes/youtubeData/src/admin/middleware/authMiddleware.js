@@ -1,14 +1,15 @@
 export function authMiddleware(tokenService) {
   return function authenticate(req, res, next) {
-    const header = req.headers.authorization
+    const header = req.cookies.authAccessToken
 
-    if (!header?.startsWith('Bearer ')) {
-      return res.status(401).json({ error: 'Token ausente' })
+    if (!header){
+      return res.status(401).json({
+        error: "Token ausente"
+      })
     }
 
     try {
-      const token = header.split(' ')[1]
-      req.user = tokenService.verify(token)
+      req.user = tokenService.verify(header)
     
       next()
     } catch {
