@@ -49,7 +49,7 @@ async function createTableYoutubeAlta() {
 
     CREATE TABLE IF NOT EXISTS usuarios_refresh_token (
         id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-        user_id VARCHAR(255) UNIQUE NOT NULL,
+        user_id UUID UNIQUE NOT NULL REFERENCES usuarios(id) ON DELETE CASCADE,
         refresh_token TEXT NOT NULL,
         expires_at TIMESTAMP NOT NULL,
         created_at TIMESTAMP DEFAULT NOW()
