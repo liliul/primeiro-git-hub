@@ -48,7 +48,7 @@ export class TokenService {
   }
 
   verify(token) {
-    return jwt.verify(token, this.secret)
+    return jwt.verify(token, this.secret, { algorithms: ['HS256'] })
   }
 }
 
@@ -63,6 +63,6 @@ export class RefreshTokenService {
   }
 
   verify(token) {
-    return jwt.verify(token, this.secret)
+    return jwt.verify(token, this.secret, { algorithms: ['HS256'] })
   }
 }
