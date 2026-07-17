@@ -10,7 +10,6 @@ class LogoutService {
     async logout(req, res, next) {
         try {
             const refreshToken = req.cookies.refreshToken
-            console.log('logout',refreshToken)
 
             if (!refreshToken) {
                 throw new AppError( "Refresh token obrigatório", 401)
@@ -24,10 +23,21 @@ class LogoutService {
             await this.googleOauthRepository.deletarRefreshTokenById(buscandoRefreshToken.id)
             await this.googleOauthRepository.deletarGoogleOauthTokensBySub(buscandoRefreshToken.google_id)
 
-            res.clearCookie("accessToken")
-            res.clearCookie("refreshToken")
-            // res.status(200).json({ message: true })
-            res.redirect("/")
+            res.clearCookie("accessToken", {
+                httpOnly: true,
+                secure: false,
+                sameSite: "lax",
+                path: "/", 
+            })
+
+            res.clearCookie("refreshToken", {
+                httpOnly: true,
+                secure: false,
+                sameSite: "lax",
+                path: "/",    
+            })
+            
+            res.status(204).send()
         } catch (error) {
          next(error)   
         }

@@ -87,6 +87,7 @@ class GoogleOauthAdapter {
                 expiresIn: this.JWT_EXPIRES,
                 issuer: "my-video-you",
                 audience: "my-video-you-web",
+                algorithm: 'HS256' 
             }
         );
     }

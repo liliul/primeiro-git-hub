@@ -17,6 +17,7 @@ class GenerateJwt {
                 expiresIn: process.env.JWT_EXPIRES,
                 issuer: "my-video-you",
                 audience: "my-video-you-web",
+                algorithm: 'HS256'
             }
         )
     }
@@ -31,6 +32,7 @@ class GenerateJwt {
                 expiresIn: process.env.JWT_REFRESH_EXPIRES,
                 issuer: "my-video-you",
                 audience: "my-video-you-web",
+                algorithm: 'HS256' 
             }
         )
     }

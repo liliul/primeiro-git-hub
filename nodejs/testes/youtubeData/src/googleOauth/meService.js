@@ -22,6 +22,7 @@ class MeService {
             {
                 issuer: "my-video-you",
                 audience: "my-video-you-web",
+                algorithms: ['HS256']
             }
         )
 

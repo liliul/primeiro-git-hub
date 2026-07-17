@@ -27,6 +27,7 @@ class RefreshTokenService {
                 {
                     issuer: "my-video-you",
                     audience: "my-video-you-web",
+                    algorithms: ['HS256']
                 }
             )
 
@@ -64,8 +65,9 @@ class RefreshTokenService {
                 newAccessToken,
                 {
                     httpOnly: true,
-                    sameSite: "lax",
                     secure: false,
+                    sameSite: "lax",
+                    path: "/",
                     maxAge: 15 * 60 * 1000
                 }
             )
@@ -75,13 +77,14 @@ class RefreshTokenService {
                 newRefreshToken,
                 {
                     httpOnly: true,
-                    sameSite: "lax",
                     secure: false,
+                    sameSite: "lax",
+                    path: "/",
                     maxAge: 7 * 24 * 60 * 60 * 1000
                 }
             )
 
-            res.status(201).json({ message: true })
+            res.status(200).send()
         } catch (error) {
             next(error)
         }

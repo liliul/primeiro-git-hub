@@ -16,6 +16,7 @@ function authRequirida(req, res, next) {
     const decoded = jwt.verify(token, process.env.JWT_SECRET, {
       issuer: "my-video-you",
       audience: "my-video-you-web",
+      algorithms: ['HS256']
     });
 
     req.user = {
