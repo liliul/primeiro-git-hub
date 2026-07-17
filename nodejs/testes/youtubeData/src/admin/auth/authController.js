@@ -9,7 +9,7 @@ const loginSchema = z.object({
     .regex(/[A-Z]/, "Deve conter pelo menos uma letra maiúscula")
     .regex(/[a-z]/, "Deve conter pelo menos uma letra minúscula")
     .regex(/[0-9]/, "Deve conter pelo menos um número")
-    .max(72),
+    .max(256),
 })
 
 export default class AuthController {
@@ -93,11 +93,22 @@ export default class AuthController {
 
       await this.authService.fazendoLogout(refresh)
 
-      res.clearCookie("authAccessToken")
-      res.clearCookie("authRefreshToken")
+      res.clearCookie("authAccessToken", {
+          httpOnly: true,
+          secure: false,
+          sameSite: "lax",
+          path: "/"
+      });
+
+      res.clearCookie("authRefreshToken", {
+          httpOnly: true,
+          secure: false,
+          sameSite: "lax",
+          path: "/"
+      });
      
-      res.redirect('/auth/login')
-      // res.status(204).send()
+      // res.redirect('/auth/login')
+      res.status(204).send()
     } catch (error) {
       next(error)
     }

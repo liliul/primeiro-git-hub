@@ -53,4 +53,43 @@ export default class AuthRepository {
     async deletarRefreshTokenById(id) {
 		await this.pool.query(`DELETE FROM usuarios_refresh_token WHERE id = $1`, [id]);
 	}
+
+    async rotacionarRefreshToken({
+        refreshTokenAntigo,
+        refreshTokenNovo,
+        expiresAt,
+        userId
+    }) {
+        const client = await this.pool.connect();
+
+        try {
+            await client.query("BEGIN");
+
+            await client.query(
+                `DELETE FROM usuarios_refresh_token
+                WHERE refresh_token = $1`,
+                [this.hashTokenService.hashRefreshToken(refreshTokenAntigo)]
+            );
+
+            await client.query(
+                `
+                INSERT INTO usuarios_refresh_token
+                    (user_id, refresh_token, expires_at)
+                VALUES ($1, $2, $3)
+                `,
+                [
+                    userId,
+                    this.hashTokenService.hashRefreshToken(refreshTokenNovo),
+                    expiresAt
+                ]
+            );
+
+            await client.query("COMMIT");
+        } catch (err) {
+            await client.query("ROLLBACK");
+            throw err;
+        } finally {
+            client.release();
+        }
+    }
 }

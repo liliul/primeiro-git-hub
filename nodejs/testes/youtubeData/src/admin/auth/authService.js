@@ -13,7 +13,7 @@ export default class AuthService {
         if (!user) throw new AppError('Email ou senha invalidos.', 401);
 
         const valida = await this.hashService.compare(password, user.password);
-        if (!valida) throw new AppError('Comparação de senhas invalidas.', 401);
+        if (!valida) throw new AppError('Email ou senha invalidos.', 401);
 
         if (user.role !== 'admin') {
             throw new AppError('Email ou senha invalidos.', 401);
@@ -46,6 +46,10 @@ export default class AuthService {
         }
         
         const verificandoToken = this.refreshTokenService.verify(token)
+        if (verificandoToken.type !== 'refresh') {
+            throw new AppError('Erro não é um refresh token valido.', 401)
+        }
+
         if(!verificandoToken) {
             throw new AppError('Erro ao verificar token', 401)
         }
@@ -100,11 +104,11 @@ export default class AuthService {
         }
 
         const buscarRefreshToken = await this.authRepository.buscarRefreshTokenByToken(refreshToken)
-        if (!buscarRefreshToken) {
-            throw new AppError('Erro na busca com refreh token.', 401)
+        
+        if (buscarRefreshToken) {
+            await this.authRepository.deletarRefreshTokenById(buscarRefreshToken.id)
         }
 
-        await this.authRepository.deletarRefreshTokenById(buscarRefreshToken.id)
     }
 
     async fazendoMe(userId) {
