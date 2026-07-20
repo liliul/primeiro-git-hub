@@ -11,6 +11,7 @@ import GoogleOauthRepository from "./googleOauthRepository.js"
 import RefreshTokenService from "./refreshTokenService.js"
 import LogoutService from "./logoutService.js"
 import MeService from "./meService.js"
+import HashTokenService from "../utils/hashTokenService.js"
 
 import GoogleOauthAdapter from "./googleOauthAdapter.js"
 
@@ -24,8 +25,9 @@ const REDIRECT_URI = "http://localhost:3001/auth/google/callback"
 const JWT_SECRET = process.env.JWT_SECRET
 const JWT_EXPIRES = process.env.JWT_EXPIRES
 
+const hashTokenService = new HashTokenService()
 const googleOauthAdapter = new GoogleOauthAdapter({CLIENT_ID, CLIENT_SECRET, REDIRECT_URI, JWT_SECRET, JWT_EXPIRES})
-const googleOauthRepository = new GoogleOauthRepository(db)
+const googleOauthRepository = new GoogleOauthRepository(db, hashTokenService)
 const googleOauthService = new GoogleOauthService(googleOauthAdapter, googleOauthRepository)
 const googleOauthController = new GoogleOauthController(googleOauthService)
 const refreshTokenService = new RefreshTokenService(googleOauthRepository)

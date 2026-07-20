@@ -1,6 +1,7 @@
 class GoogleOauthRepository {
-    constructor(pool) {
+    constructor(pool, hashTokenService) {
         this.pool = pool
+        this.hashTokenService = hashTokenService
     }
 
     async googleOauthTokens({ sub, email, accessToken, refreshToken, expiresAt }) { 
@@ -61,6 +62,8 @@ class GoogleOauthRepository {
     }
 
     async atualizandoRefreshToken({refreshToken, expiresAt, googleId}) {
+        const hashRefreshToken = this.hashTokenService.hashRefreshToken(refreshToken)
+
         await this.pool.query(
             `
             INSERT INTO refresh_tokens (
@@ -74,16 +77,18 @@ class GoogleOauthRepository {
                 token = EXCLUDED.token,
                 expires_at = EXCLUDED.expires_at;
             `,
-            [googleId, refreshToken, expiresAt]
+            [googleId, hashRefreshToken, expiresAt]
         );
     }
 
     async buscandoRefreshTokenByToken(refreshToken) {
+        const hashRefreshToken = this.hashTokenService.hashRefreshToken(refreshToken)
+
         const result = await this.pool.query(
             `
             SELECT * FROM refresh_tokens WHERE token = $1
             `,
-            [refreshToken]
+            [hashRefreshToken]
         );
 
         return result.rows[0] || null;
