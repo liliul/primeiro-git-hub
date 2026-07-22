@@ -23,6 +23,7 @@ import eventsRouter from './events/routes.js';
 const __dirname = path.resolve();
 
 const app = express()
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cors({
   origin: "http://localhost:8081",
