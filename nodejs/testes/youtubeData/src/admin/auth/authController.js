@@ -44,7 +44,7 @@ export default class AuthController {
           maxAge: 30 * 24 * 60 * 60 * 1000
       })
 
-      res.json(result)
+      res.status(200).send()
     } catch (err) {
       if (err instanceof ZodError) {
         return res.status(400).json({
