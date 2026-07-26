@@ -11,17 +11,35 @@ class RestaurarSenhaController {
 		this.resetPassword = this.resetPassword.bind(this);
 	}
 
-	async resetPassword(req, res) {
-		const { newPassword } = updatePasswordSchema.parse(req.body);
+	async resetPassword(req, res, next) {
+		try {
+			const { newPassword } = updatePasswordSchema.parse(req.body);
 
-		const token = req.body.token;
+			const token = req.body.token;
 
-		if (!token) {
-			throw new AppError("Token não informado", 401);
+			const response = await this.restaurarSenhaService.resetPasswordService(
+				token,
+				newPassword,
+			);
+
+			res.cookie("accessToken", response.newAccessToken, {
+				httpOnly: true,
+				secure: false,
+				sameSite: "lax",
+				maxAge: 15 * 60 * 1000,
+			});
+
+			res.cookie("refreshToken", response.newRefreshToken, {
+				httpOnly: true,
+				secure: false,
+				sameSite: "lax",
+				maxAge: 7 * 24 * 60 * 60 * 1000,
+			});
+
+			return res.status(204).send();
+		} catch (error) {
+			next(error);
 		}
-		await this.restaurarSenhaService.resetPasswordService(token, newPassword);
-
-		return res.status(204).send();
 	}
 }
 
