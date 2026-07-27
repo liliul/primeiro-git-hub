@@ -49,7 +49,7 @@ class UserService {
 		if (!user) {
 			logger.warn({
 				event: "USER_NOT_FOUND",
-				userId: user.id,
+				email,
 			});
 
 			throw new AppError("ErrorPostgres login user service", 401);
@@ -80,6 +80,7 @@ class UserService {
 			{
 				subject: user.id,
 				expiresIn: process.env.JWT_EXPIRES_IN || "15m",
+				algorithm: "HS256",
 			},
 		);
 
@@ -99,12 +100,6 @@ class UserService {
 		return {
 			accessToken: newAccessToken,
 			refreshToken: newRefreshToken,
-			user: {
-				id: user.id,
-				name: user.name,
-				email: user.email,
-				roles: user.roles,
-			},
 		};
 	}
 

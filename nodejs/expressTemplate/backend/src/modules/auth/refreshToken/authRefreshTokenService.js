@@ -43,6 +43,7 @@ class AuthRefreshTokenService {
 			{
 				subject: userId.id,
 				expiresIn: process.env.JWT_EXPIRES_IN,
+				algorithm: "HS256",
 			},
 		);
 

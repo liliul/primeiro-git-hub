@@ -17,8 +17,8 @@ class AuthRefreshTokenController {
 	}
 
 	async refresh(req, res) {
-		const { refreshToken } = refreshTokenSchema.parse(req.body);
-		// const refreshToken = req.cookies.refreshToken
+		// const { refreshToken } = refreshTokenSchema.parse(req.cookies.refreshToken);
+		const refreshToken = req.cookies.refreshToken;
 
 		if (!refreshToken) {
 			throw new AppError("Refresh token obrigatório", 400);
@@ -31,15 +31,24 @@ class AuthRefreshTokenController {
 			httpOnly: true,
 			secure: false,
 			sameSite: "lax",
+			path: "/",
 			maxAge: 15 * 60 * 1000,
 		});
 
-		return res.json(tokenData);
+		res.cookie("refreshToken", tokenData.refreshToken, {
+			httpOnly: true,
+			secure: false,
+			sameSite: "lax",
+			path: "/",
+			maxAge: 7 * 24 * 60 * 60 * 1000,
+		});
+
+		return res.status(200).send();
 	}
 
 	async logout(req, res) {
-		const { refreshToken } = refreshTokenSchema.parse(req.body);
-		// const refreshToken = req.cookies.refreshToken
+		// const { refreshToken } = refreshTokenSchema.parse(req.body);
+		const refreshToken = req.cookies.refreshToken;
 
 		if (!refreshToken) {
 			throw new AppError("Refresh token obrigatório", 400);
@@ -55,8 +64,19 @@ class AuthRefreshTokenController {
 		try {
 			await this.authRefreshTokenService.logoutService(refreshToken);
 
-			res.clearCookie("accessToken");
-			res.clearCookie("refreshToken");
+			res.clearCookie("accessToken", {
+				httpOnly: true,
+				secure: false,
+				sameSite: "lax",
+				path: "/",
+			});
+
+			res.clearCookie("refreshToken", {
+				httpOnly: true,
+				secure: false,
+				sameSite: "lax",
+				path: "/",
+			});
 		} finally {
 			try {
 				await this.auditoriaService.log({

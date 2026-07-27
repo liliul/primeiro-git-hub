@@ -11,10 +11,12 @@ class AuthRoutesJwt {
 			throw new AppError("Token não informado", 401);
 		}
 
-		const [, token] = authHeader.split(" ");
+		// const [, token] = authHeader.split(" ");
 
 		try {
-			const decoded = jwt.verify(token, process.env.JWT_SECRET);
+			const decoded = jwt.verify(authHeader, process.env.JWT_SECRET, {
+				algorithms: ["HS256"],
+			});
 
 			req.user = {
 				id: decoded.sub,
@@ -29,7 +31,7 @@ class AuthRoutesJwt {
 	}
 
 	authRefreshToken(req, res, next) {
-		const token = req.body.refreshToken;
+		const token = req.cookies.refreshToken;
 
 		if (!token) {
 			throw new AppError("Refresh token ausente", 401);

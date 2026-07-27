@@ -40,7 +40,7 @@ export const refreshRateLimit = (rotaLimitada) => {
 		windowMs: 15 * 60 * 1000,
 		max: 5,
 		keyGenerator: (req) =>
-			`refresh-${req.body.refreshToken || ipKeyGenerator(req.ip)}`,
+			`refresh-${req.cookies.refreshToken || ipKeyGenerator(req.ip)}`,
 		message: {
 			error: `Muitas tentativas de ${rotaLimitada}. Tente novamente em 15 minutos.`,
 		},

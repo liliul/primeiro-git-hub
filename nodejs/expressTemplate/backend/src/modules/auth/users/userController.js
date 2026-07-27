@@ -58,6 +58,7 @@ class UserController {
 				httpOnly: true,
 				secure: false,
 				sameSite: "lax",
+				path: "/",
 				maxAge: 15 * 60 * 1000,
 			});
 
@@ -65,6 +66,7 @@ class UserController {
 				httpOnly: true,
 				secure: false,
 				sameSite: "lax",
+				path: "/",
 				maxAge: 7 * 24 * 60 * 60 * 1000,
 			});
 
@@ -73,7 +75,7 @@ class UserController {
 				userId: response?.user?.id,
 			});
 
-			return res.status(200).json(response);
+			return res.status(200).send();
 		} catch (error) {
 			try {
 				await this.auditoriaService.log({
