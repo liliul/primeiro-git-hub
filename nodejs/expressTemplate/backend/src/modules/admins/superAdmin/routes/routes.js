@@ -12,7 +12,7 @@ const policies = new Policies();
 
 const superAdminController = new SuperAdminController(pool);
 
-superAdminRoutes.get(
+superAdminRoutes.post(
 	"/roles/:id",
 	JWT.auth,
 	authRateLimit(constsRateLimit.SUPERADMIN_NEWROLE_RATELIMIT),
