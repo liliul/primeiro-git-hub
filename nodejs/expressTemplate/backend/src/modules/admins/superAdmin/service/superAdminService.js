@@ -3,6 +3,7 @@ import AuditoriaService from "../../../auditoria/auditoriaService.js";
 import { AuditoriaAction } from "../../../auditoria/domain/auditoriaActive.js";
 import { RoleSchema, uuidSchema } from "../models/zodSchema.js";
 import SuperAdminRepository from "../repository/superAdminRepository.js";
+import AuthRefreshTokenRepository from "../../../auth/refreshToken/authRefreshTokenRepository.js";
 
 class SuperAdminService {
 	constructor(pool) {
@@ -10,6 +11,7 @@ class SuperAdminService {
 
 		this.auditoriaService = new AuditoriaService(pool);
 		this.superAdminRepository = new SuperAdminRepository();
+		this.authRefreshTokenRepository = new AuthRefreshTokenRepository(pool);
 	}
 
 	async alterarRoleService(req) {
@@ -43,6 +45,8 @@ class SuperAdminService {
 				ip: req.ip,
 				userAgent: req.headers["user-agent"],
 			});
+
+			await this.authRefreshTokenRepository.deleteByUserId(id);
 
 			await client.query("COMMIT");
 
