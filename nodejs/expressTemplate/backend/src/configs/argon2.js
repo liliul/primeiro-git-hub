@@ -12,8 +12,8 @@ class IsPasswordArgon2 {
 	async hashPassword(password) {
 		return argon2.hash(password, {
 			type: argon2.argon2id,
-			memoryCost: 2 ** 16,
-			timeCost: 3,
+			memoryCost: 19456,
+			timeCost: 2,
 			parallelism: 1,
 			secret: Buffer.from(this.PEPPER, "utf-8"),
 		});
