@@ -7,6 +7,10 @@ import {
 	updateUserSchema,
 } from "./userSchema.js";
 import UserService from "./userService.js";
+import {
+	authCookiesAccessTokenConfig,
+	authCookiesRefreshTokenConfig,
+} from "../../../configs/cookies.js";
 
 class UserController {
 	constructor(pool) {
@@ -54,21 +58,17 @@ class UserController {
 				console.error("Falha ao auditar LOGIN_SUCCESS", err);
 			}
 
-			res.cookie("accessToken", response.accessToken, {
-				httpOnly: true,
-				secure: false,
-				sameSite: "lax",
-				path: "/",
-				maxAge: 15 * 60 * 1000,
-			});
+			res.cookie(
+				"accessToken",
+				response.accessToken,
+				authCookiesAccessTokenConfig,
+			);
 
-			res.cookie("refreshToken", response.refreshToken, {
-				httpOnly: true,
-				secure: false,
-				sameSite: "lax",
-				path: "/",
-				maxAge: 7 * 24 * 60 * 60 * 1000,
-			});
+			res.cookie(
+				"refreshToken",
+				response.refreshToken,
+				authCookiesRefreshTokenConfig,
+			);
 
 			req.logger.info({
 				event: "AUTH_LOGIN_SUCCESS",

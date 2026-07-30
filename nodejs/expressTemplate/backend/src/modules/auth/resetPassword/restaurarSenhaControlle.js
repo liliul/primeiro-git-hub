@@ -1,6 +1,10 @@
 import { AppError } from "../../../errors/appErrors/index.js";
 import RestaurarSenhaService from "./restaurarSenhaService.js";
 import { updatePasswordSchema } from "./schemaZod.js";
+import {
+	authCookiesAccessTokenConfig,
+	authCookiesRefreshTokenConfig,
+} from "../../../configs/cookies.js";
 
 class RestaurarSenhaController {
 	constructor(pool) {
@@ -22,19 +26,17 @@ class RestaurarSenhaController {
 				newPassword,
 			);
 
-			res.cookie("accessToken", response.newAccessToken, {
-				httpOnly: true,
-				secure: false,
-				sameSite: "lax",
-				maxAge: 15 * 60 * 1000,
-			});
+			res.cookie(
+				"accessToken",
+				response.newAccessToken,
+				authCookiesAccessTokenConfig,
+			);
 
-			res.cookie("refreshToken", response.newRefreshToken, {
-				httpOnly: true,
-				secure: false,
-				sameSite: "lax",
-				maxAge: 7 * 24 * 60 * 60 * 1000,
-			});
+			res.cookie(
+				"refreshToken",
+				response.newRefreshToken,
+				authCookiesRefreshTokenConfig,
+			);
 
 			return res.status(204).send();
 		} catch (error) {

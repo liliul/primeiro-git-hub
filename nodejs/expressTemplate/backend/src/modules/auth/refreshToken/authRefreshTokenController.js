@@ -4,6 +4,11 @@ import { AuditoriaAction } from "../../auditoria/domain/auditoriaActive.js";
 import AuthRefreshTokenRepository from "./authRefreshTokenRepository.js";
 import { refreshTokenSchema } from "./authRefreshTokenSchema.js";
 import AuthRefreshTokenService from "./authRefreshTokenService.js";
+import {
+	authCookiesAccessTokenConfig,
+	authCookiesRefreshTokenConfig,
+	clearCookieConfig,
+} from "../../../configs/cookies.js";
 
 class AuthRefreshTokenController {
 	constructor(pool) {
@@ -27,21 +32,17 @@ class AuthRefreshTokenController {
 		const tokenData =
 			await this.authRefreshTokenService.refreshService(refreshToken);
 
-		res.cookie("accessToken", tokenData.accessToken, {
-			httpOnly: true,
-			secure: false,
-			sameSite: "lax",
-			path: "/",
-			maxAge: 15 * 60 * 1000,
-		});
+		res.cookie(
+			"accessToken",
+			tokenData.accessToken,
+			authCookiesAccessTokenConfig,
+		);
 
-		res.cookie("refreshToken", tokenData.refreshToken, {
-			httpOnly: true,
-			secure: false,
-			sameSite: "lax",
-			path: "/",
-			maxAge: 7 * 24 * 60 * 60 * 1000,
-		});
+		res.cookie(
+			"refreshToken",
+			tokenData.refreshToken,
+			authCookiesRefreshTokenConfig,
+		);
 
 		return res.status(200).send();
 	}
@@ -64,19 +65,9 @@ class AuthRefreshTokenController {
 		try {
 			await this.authRefreshTokenService.logoutService(refreshToken);
 
-			res.clearCookie("accessToken", {
-				httpOnly: true,
-				secure: false,
-				sameSite: "lax",
-				path: "/",
-			});
+			res.clearCookie("accessToken", clearCookieConfig);
 
-			res.clearCookie("refreshToken", {
-				httpOnly: true,
-				secure: false,
-				sameSite: "lax",
-				path: "/",
-			});
+			res.clearCookie("refreshToken", clearCookieConfig);
 		} finally {
 			try {
 				await this.auditoriaService.log({
