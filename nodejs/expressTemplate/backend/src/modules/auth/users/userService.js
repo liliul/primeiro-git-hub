@@ -100,6 +100,8 @@ class UserService {
 		return {
 			accessToken: newAccessToken,
 			refreshToken: newRefreshToken,
+			userId: user.id,
+			email,
 		};
 	}
 

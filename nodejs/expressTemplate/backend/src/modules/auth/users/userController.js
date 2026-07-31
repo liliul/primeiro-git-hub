@@ -48,8 +48,8 @@ class UserController {
 
 			try {
 				await this.auditoriaService.log({
-					userId: response.user.id,
-					email: response.user.email,
+					userId: response.userId,
+					email: response.email,
 					action: AuditoriaAction.LOGIN_SUCCESS,
 					ip: req.ip,
 					userAgent: req.headers["user-agent"],
@@ -72,7 +72,7 @@ class UserController {
 
 			req.logger.info({
 				event: "AUTH_LOGIN_SUCCESS",
-				userId: response?.user?.id,
+				userId: response?.userId,
 			});
 
 			return res.status(200).send();
