@@ -1,0 +1,13 @@
+<form method="POST" action="/user/email-verified">
+  <input type="hidden" name="token" id="tokenInput" />
+
+  <!-- <h1>Email Confirmado.</h1> -->
+  <button type="submit">Verificar email</button>
+</form>
+
+<script>
+  const params = new URLSearchParams(window.location.search);
+  const token = params.get("token");
+
+  document.getElementById("tokenInput").value = token;
+</script>

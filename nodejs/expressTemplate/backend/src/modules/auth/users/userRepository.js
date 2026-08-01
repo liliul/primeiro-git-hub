@@ -18,7 +18,7 @@ class UserRepository {
 
 	async loginUserRepository(email) {
 		const query = `
-      SELECT id, name, email, password, roles
+      SELECT id, name, email, password, roles, email_verified
       FROM users
       WHERE email = $1
       LIMIT 1
