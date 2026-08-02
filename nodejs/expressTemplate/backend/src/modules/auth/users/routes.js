@@ -68,19 +68,17 @@ userRoutes.put(
 
 userRoutes.get(
 	"/email-verified",
-	(req, res) => {
-		res.sendFile(path.join(__dirname, "public/verificandoEmail.html"));
-	},
+	emailVerifiedController.emailVerifield
 );
 
-userRoutes.get(
-	"/resend-verification",
-	(req, res) => {
-		res.sendFile(path.join(__dirname, "public/reenvioConfirmarEmail.html"));
-	},
-);
+// userRoutes.get(
+// 	"/resend-verification",
+// 	(req, res) => {
+// 		res.sendFile(path.join(__dirname, "public/reenvioConfirmarEmail.html"));
+// 	},
+// );
 
-userRoutes.post("/email-verified", emailVerifiedController.emailVerifield)
+// userRoutes.post("/email-verified", emailVerifiedController.emailVerifield)
 userRoutes.post("/resend-verification", emailVerifiedController.resendVerification)
 
 export default userRoutes;

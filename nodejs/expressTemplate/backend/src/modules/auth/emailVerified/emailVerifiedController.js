@@ -13,9 +13,8 @@ class EmailVerifiedController {
     }
 
     async emailVerifield(req, res) {
-        const {token} = req.body
+        const {token} = req.query
         
-        console.log('t', token);
         const tokenHash = crypto.createHash('sha256').update(token).digest('hex')
 
         const buscaByToken = await this.pool.query(`
@@ -23,7 +22,6 @@ class EmailVerifiedController {
             `, [tokenHash])
             
             const verification = await buscaByToken.rows[0]
-            console.log(verification);
             
         if (verification.expires_at < new Date()) {
             throw new AppError(
@@ -32,16 +30,16 @@ class EmailVerifiedController {
             );
         }
 
-        // await this.pool.query(`
-        //     UPDATE users
-        //     SET email_verified = true
-        //     WHERE id = $1
-        //     AND email_verified = false    
-        // `,[verification.user_id])
+        await this.pool.query(`
+            UPDATE users
+            SET email_verified = true
+            WHERE id = $1
+            AND email_verified = false    
+        `,[verification.user_id])
 
-        // await this.pool.query(`
-        //     delete from email_verification_tokens where user_id = $1`, 
-        //     [verification.user_id])
+        await this.pool.query(`
+            delete from email_verification_tokens where user_id = $1`, 
+            [verification.user_id])
 
         return res.status(200).json({message: 'Email verificado'})
     }
