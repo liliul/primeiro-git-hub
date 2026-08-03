@@ -1,6 +1,10 @@
 import crypto from 'crypto'
 import { AppError } from '../../../errors/appErrors/index.js'
 import logger from '../../../logger/pino.js'
+import { emailUserSchema } from './emailVerifiedSchema.js';
+import path from "node:path";
+
+const __dirname = path.resolve();
 
 class EmailVerifiedController {
     constructor(pool) {
@@ -41,11 +45,12 @@ class EmailVerifiedController {
             delete from email_verification_tokens where user_id = $1`, 
             [verification.user_id])
 
-        return res.status(200).json({message: 'Email verificado'})
+        // return res.status(200).json({message: 'Email verificado'})
+        return res.sendFile(path.join(__dirname, "public/emailVerificado.html"));
     }
 
     async resendVerification(req, res) {
-        const { email } = req.body
+        const { email } = emailUserSchema.parse(req.body)
 
         const buscaUserByEmail = await this.pool.query(`
             SELECT id,email,email_verified
