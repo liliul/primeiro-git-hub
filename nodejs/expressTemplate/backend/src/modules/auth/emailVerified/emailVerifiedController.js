@@ -2,6 +2,7 @@ import crypto from 'crypto'
 import { AppError } from '../../../errors/appErrors/index.js'
 import logger from '../../../logger/pino.js'
 import { emailUserSchema } from './emailVerifiedSchema.js';
+import MailResendEmailVerifiedService from '../../mail/services/MailResendEmailVerfifiedService.js';
 import path from "node:path";
 
 const __dirname = path.resolve();
@@ -13,7 +14,7 @@ class EmailVerifiedController {
         this.emailVerifield = this.emailVerifield.bind(this)
         this.resendVerification = this.resendVerification.bind(this)
 
-        this.mailService = new MailService(logger)
+        this.mailResendEmailVerifiedService = new MailResendEmailVerifiedService(logger)
     }
 
     async emailVerifield(req, res) {
@@ -91,72 +92,10 @@ class EmailVerifiedController {
         `, [user.id, tokenHash, expireAt])
 
 
-        await this.mailService.sendResetEmail(email, token)
+        await this.mailResendEmailVerifiedService.sendEmailVerified(email, token)
 
         res.status(200).json({ message: 'Se existir uma conta e ela ainda não estiver verificada, um novo e-mail será enviado.'})
 
     }
 }
 export default EmailVerifiedController
-
-import { Resend } from "resend";
-
-class MailService {
-	constructor(logger) {
-		this.logger = logger;
-		this.resend = new Resend(process.env.RESEND_API_KEY);
-	}
-
-	async sendResetEmail(email, rawToken) {
-		const resetUrl = `${process.env.APP_URL}/user/email-verified?token=${rawToken}`;
-
-		// if (process.env.NODE_ENV === "development") {
-		//   this.logger.info({
-		//     event: "DEV_PASSWORD_RESET_LINK",
-		//     email,
-		//     resetUrl,
-		//   });
-
-		//   throw new AppError('DEV: desenvolvimento', 401);
-		// }
-		console.log(process.env.MAIL_FROM);
-
-		try {
-			const { data, error } = await this.resend.emails.send({
-				from: process.env.MAIL_FROM,
-				to: email,
-				subject: "Confirmar e-mail",
-				html: this.resetTemplate(resetUrl),
-			});
-
-			this.logger.info({
-				event: "PASSWORD_RESET_EMAIL_SENT",
-				email,
-				data,
-				error,
-			});
-		} catch (err) {
-			this.logger.error({
-				event: "MAIL_SEND_ERROR",
-				error: err.message,
-			});
-
-			throw err;
-		}
-	}
-
-	resetTemplate(resetUrl) {
-		return `
-      <div style="font-family: Arial; max-width: 600px;">
-        <h2>Confirmar seu E-mail.</h2>
-        <p>Verificando email.</p>
-        <p>Clique no botão abaixo:</p>
-        <a href="${resetUrl}" 
-           style="background: #000; color: #fff; padding: 10px 15px; text-decoration: none;">
-           verificar
-        </a>
-        <p>Esse link expira em 15 minutos.</p>
-      </div>
-    `;
-	}
-}
