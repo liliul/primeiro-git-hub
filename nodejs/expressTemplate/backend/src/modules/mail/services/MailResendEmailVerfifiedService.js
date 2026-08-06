@@ -1,4 +1,5 @@
 import { Resend } from "resend";
+import EmailVerifiedTemplate from "../templates/emailVerified.js";
 
 class MailResendEmailVerifiedService {
 	constructor(logger) {
@@ -7,14 +8,14 @@ class MailResendEmailVerifiedService {
 	}
 
 	async sendEmailVerified(email, rawToken) {
-		const resetUrl = `${process.env.APP_URL}/user/email-verified?token=${rawToken}`;
+		const verifiedUrl = `${process.env.APP_URL}/user/email-verified?token=${rawToken}`;
 
 		try {
 			const { data, error } = await this.resend.emails.send({
 				from: process.env.MAIL_FROM,
 				to: email,
 				subject: "Confirmar e-mail",
-				html: this.resetTemplate(resetUrl),
+				html: EmailVerifiedTemplate(verifiedUrl),
 			});
 
 			this.logger.info({
@@ -31,22 +32,7 @@ class MailResendEmailVerifiedService {
 
 			throw err;
 		}
-	}
-
-	resetTemplate(resetUrl) {
-		return `
-      <div style="font-family: Arial; max-width: 600px;">
-        <h2>Confirmar seu E-mail.</h2>
-        <p>Verificando email.</p>
-        <p>Clique no botão abaixo:</p>
-        <a href="${resetUrl}" 
-           style="background: #000; color: #fff; padding: 10px 15px; text-decoration: none;">
-           verificar
-        </a>
-        <p>Esse link expira em 15 minutos.</p>
-      </div>
-    `;
-	}
+	}	
 }
 
 export default MailResendEmailVerifiedService
