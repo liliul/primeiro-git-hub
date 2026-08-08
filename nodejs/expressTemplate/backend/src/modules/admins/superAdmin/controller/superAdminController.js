@@ -8,9 +8,14 @@ class SuperAdminController {
 		this.alterarRole = this.alterarRole.bind(this);
 	}
 
-	async alterarRole(req, res) {
-		await this.superAdminService.alterarRoleService(req);
-		return res.status(200).send();
+	async alterarRole(req, res, next) {
+		try {
+			await this.superAdminService.alterarRoleService(req);
+			
+			return res.status(200).send();
+		} catch (error) {
+			next(error)
+		}
 	}
 }
 
