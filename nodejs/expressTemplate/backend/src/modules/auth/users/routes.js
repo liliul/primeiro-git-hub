@@ -7,13 +7,11 @@ import {
 	publicRateLimit,
 } from "../../../middlewares/rateLimit/rateLimit.js";
 import UserController from "./userController.js";
-import EmailVerifiedController from "../emailVerified/emailVerifiedController.js";
 import path from "node:path";
 
 const __dirname = path.resolve();
 
 const userRoutes = exepress.Router();
-const emailVerifiedController = new EmailVerifiedController(pool)
 const userController = new UserController(pool);
 const JWT = new AuthRoutesJwt();
 
@@ -65,20 +63,5 @@ userRoutes.put(
 	),
 	userController.updatePassword,
 );
-
-userRoutes.get(
-	"/email-verified",
-	emailVerifiedController.emailVerifield
-);
-
-// userRoutes.get(
-// 	"/resend-verification",
-// 	(req, res) => {
-// 		res.sendFile(path.join(__dirname, "public/reenvioConfirmarEmail.html"));
-// 	},
-// );
-
-// userRoutes.post("/email-verified", emailVerifiedController.emailVerifield)
-userRoutes.post("/resend-verification", emailVerifiedController.resendVerification)
 
 export default userRoutes;

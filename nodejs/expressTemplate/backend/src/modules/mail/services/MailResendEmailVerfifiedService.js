@@ -8,7 +8,7 @@ class MailResendEmailVerifiedService {
 	}
 
 	async sendEmailVerified(email, rawToken) {
-		const verifiedUrl = `${process.env.APP_URL}/user/email-verified?token=${rawToken}`;
+		const verifiedUrl = `${process.env.APP_URL}/auth/email-verified?token=${rawToken}`;
 
 		try {
 			const { data, error } = await this.resend.emails.send({

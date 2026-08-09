@@ -12,6 +12,7 @@ import authRefresToken from "./modules/auth/refreshToken/routes.js";
 import resetPassword from "./modules/auth/resetPassword/routes.js";
 import userRoutes from "./modules/auth/users/routes.js";
 import healthRoutes from "./modules/health/routes.js";
+import emailVerifiedRoutes from "./modules/auth/emailVerified/routes.js";
 
 const cronAgendamentos = new CronAgendamentos(pool, logger);
 cronAgendamentos.limpandoRefreshTokenExpirados();
@@ -34,6 +35,7 @@ app.use("/user", userRoutes);
 app.use("/auth", authRefresToken);
 app.use("/superadmin", superAdminRoutes);
 app.use("/auth", resetPassword);
+app.use("/auth", emailVerifiedRoutes);
 
 app.use(errorGlobal.errorHandler);
 
