@@ -19,6 +19,10 @@ class EmailVerifiedController {
 
     async emailVerifield(req, res) {
         const {token} = req.query
+
+        if(!token) {
+            throw new AppError("Token é obrigatorio.", 400)
+        }
         
         const tokenHash = crypto.createHash('sha256').update(token).digest('hex')
 
@@ -26,7 +30,11 @@ class EmailVerifiedController {
             select * from email_verification_tokens where token_hash = $1
             `, [tokenHash])
             
-            const verification = await buscaByToken.rows[0]
+        if(buscaByToken.rows.length === 0) {
+            throw new AppError("Token Invalido.")
+        }
+
+        const verification = buscaByToken.rows[0]
             
         if (verification.expires_at < new Date()) {
             throw new AppError(
@@ -35,19 +43,33 @@ class EmailVerifiedController {
             );
         }
 
-        await this.pool.query(`
-            UPDATE users
-            SET email_verified = true
-            WHERE id = $1
-            AND email_verified = false    
-        `,[verification.user_id])
+        const clients = await this.pool.connect()
+        
+        try {
+            await clients.query(`BEGIN`)
+                
+            await clients.query(`
+                UPDATE users
+                SET email_verified = true
+                WHERE id = $1
+                AND email_verified = false    
+            `,[verification.user_id])
 
-        await this.pool.query(`
-            delete from email_verification_tokens where user_id = $1`, 
-            [verification.user_id])
+            await clients.query(`
+                delete from email_verification_tokens where user_id = $1`, 
+                [verification.user_id])
 
-        // return res.status(200).json({message: 'Email verificado'})
-        return res.sendFile(path.join(__dirname, "public/emailVerificado.html"));
+            await clients.query("COMMIT")
+
+            // return res.status(200).json({message: 'Email verificado'})
+            return res.sendFile(path.join(__dirname, "public/emailVerificado.html"));            
+        } catch (error) {
+            await clients.query("ROLLBACK")
+            throw error
+        } finally {
+            clients.release()
+        }
+
     }
 
     async resendVerification(req, res) {
