@@ -31,13 +31,12 @@ class UserService {
 		if (!user) {
 			logger.warn({
 				event: "USER_NOT_FOUND",
-				userId: user.id,
 			});
 
 			throw new AppError("ErroPostgres criando user service", 500);
 		}
 
-		const verifiedEmail = await this.emailVerifiedService.verificationEmail(user.id, email)		
+		const verifiedEmail = await this.emailVerifiedService.verificationEmail(user.id, user.email)		
 
 		logger.info({
 			event: "CREATE_USER_SUCCESS",
@@ -122,7 +121,6 @@ class UserService {
 		if (!user) {
 			logger.warn({
 				event: "USER_NOT_FOUND",
-				userId: user.id,
 			});
 
 			throw new AppError(
@@ -148,7 +146,6 @@ class UserService {
 		if (!user) {
 			logger.warn({
 				event: "USER_NOT_FOUND",
-				userId: user.id,
 			});
 
 			throw new AppError("Usuário não encontrado", 404);
