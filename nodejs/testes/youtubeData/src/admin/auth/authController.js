@@ -1,4 +1,5 @@
 import z, { ZodError } from 'zod'
+import { cookiesConfig } from '../utils/cookiesConfig.js'
 
 const loginSchema = z.object({
   email: z.string().email("Email inválido"),
@@ -28,21 +29,9 @@ export default class AuthController {
       
       const result = await this.authService.fazendoLogin(email, password)
 
-      res.cookie("authAccessToken", result.jwtAccessToken, {
-          httpOnly: true,
-          secure: false,
-          sameSite: "lax",
-          path: "/",
-          maxAge: 15 * 60 * 1000
-      })
+      res.cookie("authAccessToken", result.jwtAccessToken, cookiesConfig.authAccessToken)
 
-      res.cookie("authRefreshToken", result.jwtRefreshToken, {
-          httpOnly: true,
-          secure: false,
-          sameSite: "lax",
-          path: "/",
-          maxAge: 30 * 24 * 60 * 60 * 1000
-      })
+      res.cookie("authRefreshToken", result.jwtRefreshToken, cookiesConfig.authRefreshToken)
 
       res.status(200).send()
     } catch (err) {
@@ -65,21 +54,9 @@ export default class AuthController {
       
       const resultado = await this.authService.fazendoRefreshToken(token)
 
-      res.cookie("authAccessToken", resultado.accessToken, {
-          httpOnly: true,
-          secure: false,
-          sameSite: "lax",
-          path: "/",
-          maxAge: 15 * 60 * 1000
-      })
+      res.cookie("authAccessToken", resultado.accessToken, cookiesConfig.authAccessToken)
 
-      res.cookie("authRefreshToken", resultado.refreshToken, {
-          httpOnly: true,
-          secure: false,
-          sameSite: "lax",
-          path: "/",
-          maxAge: 30 * 24 * 60 * 60 * 1000
-      })
+      res.cookie("authRefreshToken", resultado.refreshToken, cookiesConfig.authRefreshToken)
       
       res.status(200).send()
     } catch (error) {
@@ -93,19 +70,9 @@ export default class AuthController {
 
       await this.authService.fazendoLogout(refresh)
 
-      res.clearCookie("authAccessToken", {
-          httpOnly: true,
-          secure: false,
-          sameSite: "lax",
-          path: "/"
-      });
+      res.clearCookie("authAccessToken", cookiesConfig.clearCookieAuthAdmin);
 
-      res.clearCookie("authRefreshToken", {
-          httpOnly: true,
-          secure: false,
-          sameSite: "lax",
-          path: "/"
-      });
+      res.clearCookie("authRefreshToken", cookiesConfig.clearCookieAuthAdmin);
      
       // res.redirect('/auth/login')
       res.status(204).send()
