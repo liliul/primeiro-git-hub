@@ -2,6 +2,7 @@ import express from "express"
 import cookieParser from "cookie-parser"
 import dotenv from "dotenv"
 import db from "../db/conection_db.js"
+import authRequirida from "../middleware/autenticandoRotas.js"
 
 dotenv.config()
 
@@ -38,6 +39,6 @@ routerGoogleOauth2.get('/google', googleOauthController.construindoGoogleOauth2)
 routerGoogleOauth2.get('/google/callback', googleOauthController.handleGoogleCallback)
 routerGoogleOauth2.post('/refresh', refreshTokenService.refresh)
 routerGoogleOauth2.get('/gglogout', logoutService.logout)
-routerGoogleOauth2.get('/ggme', meService.me)
+routerGoogleOauth2.get('/ggme', authRequirida, meService.me)
 
 export default routerGoogleOauth2

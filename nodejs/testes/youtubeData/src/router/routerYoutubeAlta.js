@@ -5,6 +5,7 @@ import db from '../db/conection_db.js'
 import YoutubeAlta from '../youtubeAlta/controllers/youtubeAltaController.js'
 import ListandoVideosRegionCodeController from '../youtubeAlta/controllers/listandoVideosRegionCodeController.js'
 import GetTrendingVideos from '../youtubeAlta/utils/getTrendingVideos.js'
+import authRequirida from '../middleware/autenticandoRotas.js'
 
 const routerYoutubeAlta = express.Router()
 
@@ -12,13 +13,13 @@ const youtubeAlta = new YoutubeAlta(db)
 const listandoVideosRegionCode = new ListandoVideosRegionCodeController(db)
 const getTrendingVideos = new GetTrendingVideos()
 
-routerYoutubeAlta.get('/ytvideo/:id', youtubeAlta.infoDoYoutubeEmAlta.bind(youtubeAlta))
+routerYoutubeAlta.get('/ytvideo/:id', authRequirida, youtubeAlta.infoDoYoutubeEmAlta.bind(youtubeAlta))
 
-routerYoutubeAlta.get('/ytvideos', youtubeAlta.buscarDadosDoYoutubeAlta.bind(youtubeAlta))
+routerYoutubeAlta.get('/ytvideos', authRequirida, youtubeAlta.buscarDadosDoYoutubeAlta.bind(youtubeAlta))
 
-routerYoutubeAlta.get('/yaltavideos/:UF', listandoVideosRegionCode.listandoUF.bind(listandoVideosRegionCode))
+routerYoutubeAlta.get('/yaltavideos/:UF', authRequirida, listandoVideosRegionCode.listandoUF.bind(listandoVideosRegionCode))
 
-routerYoutubeAlta.get('/ytalta/:id', async (req, res) => {
+routerYoutubeAlta.get('/ytalta/:id', authRequirida, async (req, res) => {
   const { id: regionCode } = req.params
     try {
         const videos = await getTrendingVideos.getTrendingVideos(regionCode, 1)

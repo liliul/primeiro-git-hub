@@ -1,10 +1,11 @@
 import express from 'express'
 import YoutubeSearchController from '../youtubeSearch/controller/youtubeSearchController.js'
+import authRequirida from '../middleware/autenticandoRotas.js'
 
 const routerYoutubeSearch = express.Router()
 const searchController = new YoutubeSearchController()
 
-routerYoutubeSearch.post('/ytsearch', async (req, res) => {
+routerYoutubeSearch.post('/ytsearch', authRequirida, async (req, res) => {
     const { query } = req.body
     const search = await searchController.buscarNoYoutube(query, 3)
     console.log(search);
