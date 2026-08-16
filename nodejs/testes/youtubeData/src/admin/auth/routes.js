@@ -31,14 +31,22 @@ routerAuth.post('/admin/refresh', ipLimiter, authController.refresh)
 routerAuth.post('/admin/logout', ipLimiter, authController.logout)
 routerAuth.get('/admin/me', ipLimiter, authenticate, requireRole('admin'), authController.me)
 
-routerAuth.get('/admin', authenticate, requireRole('admin'), (req, res) => {
-  res.json({ message: 'Área administrativa' })
+routerAuth.get("/admin/login",  guest, (req, res) => {
+  res.render("dashboard/index")
 })
-routerAuth.get("/admin/login", ipLimiter, guest, (req, res) => {
-  res.render("dashboard/adminLogin")
+
+// routerAuth.use(
+//   '/admin',
+//   ipLimiter,
+//   authenticate,
+//   requireRole('admin')
+// )
+
+routerAuth.get('/admin', (req, res) => {
+  res.render("dashboard/layouts/dashboard")
 })
-routerAuth.get("/admin/user", (req, res) => {
-  res.render("dashboard/adminMe")
+routerAuth.get("/admin/user", ipLimiter, (req, res) => {
+  res.render("dashboard/partials/adminMe")
 })
 
 export default routerAuth

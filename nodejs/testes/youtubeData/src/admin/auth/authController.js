@@ -33,7 +33,7 @@ export default class AuthController {
 
       res.cookie("authRefreshToken", result.jwtRefreshToken, cookiesConfig.authRefreshToken)
 
-      res.status(200).send()
+      res.redirect("/admin")
     } catch (err) {
       if (err instanceof ZodError) {
         return res.status(400).json({
