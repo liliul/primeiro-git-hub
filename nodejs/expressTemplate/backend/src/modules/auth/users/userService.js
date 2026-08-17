@@ -22,28 +22,44 @@ class UserService {
 	async createUserService(name, email, password) {
 		const passwordHash = await this.IsPasswordArgon2.hashPassword(password);
 
-		const user = await this.userRepository.createUserRepository({
-			name,
-			email,
-			password: passwordHash,
-		});
-
-		if (!user) {
-			logger.warn({
-				event: "USER_NOT_FOUND",
+		try {
+			const user = await this.userRepository.createUserRepository({
+				name,
+				email,
+				password: passwordHash,
 			});
 
-			throw new AppError("ErroPostgres criando user service", 500);
+			if (!user) {
+				logger.warn({
+					event: "USER_NOT_FOUND",
+				});
+
+				throw new AppError("ErroPostgres criando user service", 500);
+			}
+
+			const verifiedEmail = await this.emailVerifiedService.verificationEmail(user.id, user.email)		
+
+			logger.info({
+				event: "CREATE_USER_SUCCESS",
+				userId: user.id,
+			});
+
+			return verifiedEmail;
+		} catch (error) {
+			if (error.code === "23505" && error.constraint === "users_email_key") {
+				logger.warn({
+					event: "USER_EMAIL_ALREADY_EXISTS",
+					email,
+				});
+
+				throw new AppError(
+					"Não foi possível criar a conta com esses dados.",
+					409
+				);
+			}
+
+			throw error;
 		}
-
-		const verifiedEmail = await this.emailVerifiedService.verificationEmail(user.id, user.email)		
-
-		logger.info({
-			event: "CREATE_USER_SUCCESS",
-			userId: user.id,
-		});
-
-		return verifiedEmail;
 	}
 
 	async loginUserService(email, password) {
