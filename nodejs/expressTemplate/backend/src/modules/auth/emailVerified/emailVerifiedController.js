@@ -1,123 +1,139 @@
-import crypto from 'crypto'
-import { AppError } from '../../../errors/appErrors/index.js'
-import logger from '../../../logger/pino.js'
-import { emailUserSchema } from './emailVerifiedSchema.js';
-import MailResendEmailVerifiedService from '../../mail/services/MailResendEmailVerfifiedService.js';
+import crypto from "crypto";
+import { AppError } from "../../../errors/appErrors/index.js";
+import logger from "../../../logger/pino.js";
+import { emailUserSchema } from "./emailVerifiedSchema.js";
+import MailResendEmailVerifiedService from "../../mail/services/MailResendEmailVerfifiedService.js";
 import path from "node:path";
 
 const __dirname = path.resolve();
 
 class EmailVerifiedController {
-    constructor(pool) {
-        this.pool= pool
+	constructor(pool) {
+		this.pool = pool;
 
-        this.emailVerifield = this.emailVerifield.bind(this)
-        this.resendVerification = this.resendVerification.bind(this)
+		this.emailVerifield = this.emailVerifield.bind(this);
+		this.resendVerification = this.resendVerification.bind(this);
 
-        this.mailResendEmailVerifiedService = new MailResendEmailVerifiedService(logger)
-    }
+		this.mailResendEmailVerifiedService = new MailResendEmailVerifiedService(
+			logger,
+		);
+	}
 
-    async emailVerifield(req, res) {
-        const {token} = req.query
+	async emailVerifield(req, res) {
+		const { token } = req.query;
 
-        if(!token) {
-            throw new AppError("Token é obrigatorio.", 400)
-        }
-        
-        const tokenHash = crypto.createHash('sha256').update(token).digest('hex')
+		if (!token) {
+			throw new AppError("Token é obrigatorio.", 400);
+		}
 
-        const buscaByToken = await this.pool.query(`
+		const tokenHash = crypto.createHash("sha256").update(token).digest("hex");
+
+		const buscaByToken = await this.pool.query(
+			`
             select * from email_verification_tokens where token_hash = $1
-            `, [tokenHash])
-            
-        if(buscaByToken.rows.length === 0) {
-            throw new AppError("Token Invalido.")
-        }
+            `,
+			[tokenHash],
+		);
 
-        const verification = buscaByToken.rows[0]
-            
-        if (verification.expires_at < new Date()) {
-            throw new AppError(
-                "Token expirado",
-                400
-            );
-        }
+		if (buscaByToken.rows.length === 0) {
+			throw new AppError("Token Invalido.");
+		}
 
-        const clients = await this.pool.connect()
-        
-        try {
-            await clients.query(`BEGIN`)
-                
-            await clients.query(`
+		const verification = buscaByToken.rows[0];
+
+		if (verification.expires_at < new Date()) {
+			throw new AppError("Token expirado", 400);
+		}
+
+		const clients = await this.pool.connect();
+
+		try {
+			await clients.query(`BEGIN`);
+
+			await clients.query(
+				`
                 UPDATE users
                 SET email_verified = true
                 WHERE id = $1
                 AND email_verified = false    
-            `,[verification.user_id])
+            `,
+				[verification.user_id],
+			);
 
-            await clients.query(`
-                delete from email_verification_tokens where user_id = $1`, 
-                [verification.user_id])
+			await clients.query(
+				`
+                delete from email_verification_tokens where user_id = $1`,
+				[verification.user_id],
+			);
 
-            await clients.query("COMMIT")
+			await clients.query("COMMIT");
 
-            // return res.status(200).json({message: 'Email verificado'})
-            return res.sendFile(path.join(__dirname, "public/emailVerificado.html"));            
-        } catch (error) {
-            await clients.query("ROLLBACK")
-            throw error
-        } finally {
-            clients.release()
-        }
+			// return res.status(200).json({message: 'Email verificado'})
+			return res.sendFile(path.join(__dirname, "public/emailVerificado.html"));
+		} catch (error) {
+			await clients.query("ROLLBACK");
+			throw error;
+		} finally {
+			clients.release();
+		}
+	}
 
-    }
+	async resendVerification(req, res) {
+		const { email } = emailUserSchema.parse(req.body);
 
-    async resendVerification(req, res) {
-        const { email } = emailUserSchema.parse(req.body)
-
-        const buscaUserByEmail = await this.pool.query(`
+		const buscaUserByEmail = await this.pool.query(
+			`
             SELECT id,email,email_verified
             FROM users
             WHERE email=$1;
-            `, [email])
-        
-            if (buscaUserByEmail.rows.length === 0) {
-                throw new AppError(
-                    "Se existir uma conta e ela ainda não estiver verificada, um novo e-mail será enviado.",
-                    400
-                );
-            }
-        const user = await buscaUserByEmail.rows[0]
+            `,
+			[email],
+		);
 
+		if (buscaUserByEmail.rows.length === 0) {
+			throw new AppError(
+				"Se existir uma conta e ela ainda não estiver verificada, um novo e-mail será enviado.",
+				400,
+			);
+		}
+		const user = await buscaUserByEmail.rows[0];
 
-        if (user.email_verified) {
-            return res.status(200).json({
-                message:
-                "Se necessário, enviaremos um novo e-mail."
-            });
-        }
+		if (user.email_verified) {
+			return res.status(200).json({
+				message: "Se necessário, enviaremos um novo e-mail.",
+			});
+		}
 
-        await this.pool.query(`
+		await this.pool.query(
+			`
             DELETE
             FROM email_verification_tokens
             WHERE user_id=$1;
-            `, [user.id])
+            `,
+			[user.id],
+		);
 
-        const token = crypto.randomBytes(32).toString('hex')
-        
-        const tokenHash = crypto.createHash('sha256').update(token).digest('hex')
+		const token = crypto.randomBytes(32).toString("hex");
 
-        const expireAt = new Date(Date.now() + 15 * 60 * 1000)
+		const tokenHash = crypto.createHash("sha256").update(token).digest("hex");
 
-        await this.pool.query(`
+		const expireAt = new Date(Date.now() + 15 * 60 * 1000);
+
+		await this.pool.query(
+			`
             insert into email_verification_tokens (user_id, token_hash, expires_at) values ($1, $2, $3)
-        `, [user.id, tokenHash, expireAt])
+        `,
+			[user.id, tokenHash, expireAt],
+		);
 
+		await this.mailResendEmailVerifiedService.sendEmailVerified(email, token);
 
-        await this.mailResendEmailVerifiedService.sendEmailVerified(email, token)
-
-        res.status(200).json({ message: 'Se existir uma conta e ela ainda não estiver verificada, um novo e-mail será enviado.'})
-
-    }
+		res
+			.status(200)
+			.json({
+				message:
+					"Se existir uma conta e ela ainda não estiver verificada, um novo e-mail será enviado.",
+			});
+	}
 }
-export default EmailVerifiedController
+export default EmailVerifiedController;

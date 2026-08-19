@@ -14,7 +14,7 @@ class UserService {
 
 		this.userRepository = new UserRepository(this.pool);
 		this.authRefreshTokenRepository = new AuthRefreshTokenRepository(pool);
-		this.emailVerifiedService = new EmailVerifiedService(this.pool)
+		this.emailVerifiedService = new EmailVerifiedService(this.pool);
 
 		this.IsPasswordArgon2 = new IsPasswordArgon2();
 	}
@@ -37,7 +37,10 @@ class UserService {
 				throw new AppError("ErroPostgres criando user service", 500);
 			}
 
-			const verifiedEmail = await this.emailVerifiedService.verificationEmail(user.id, user.email)		
+			const verifiedEmail = await this.emailVerifiedService.verificationEmail(
+				user.id,
+				user.email,
+			);
 
 			logger.info({
 				event: "CREATE_USER_SUCCESS",
@@ -54,7 +57,7 @@ class UserService {
 
 				throw new AppError(
 					"Não foi possível criar a conta com esses dados.",
-					409
+					409,
 				);
 			}
 
@@ -75,10 +78,7 @@ class UserService {
 		}
 
 		if (!user.email_verified) {
-			throw new AppError(
-				"Confirme seu e-mail antes de entrar.",
-				403
-			);
+			throw new AppError("Confirme seu e-mail antes de entrar.", 403);
 		}
 
 		const passwordMatch = await this.IsPasswordArgon2.verifyPassword(

@@ -1,5 +1,5 @@
 export default function EmailVerifiedTemplate(verifiedUrl) {
-    return `
+	return `
       <div style="font-family: Arial; max-width: 600px;">
         <h2>Confirmar seu E-mail.</h2>
         <p>Verificando email.</p>

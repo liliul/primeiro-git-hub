@@ -1,14 +1,14 @@
-import express from 'express'
-import EmailVerifiedController from './emailVerifiedController.js';
-import { pool } from '../../../database/postgres.js';
+import express from "express";
+import EmailVerifiedController from "./emailVerifiedController.js";
+import { pool } from "../../../database/postgres.js";
 
-const emailVerifiedRoutes = express.Router()
+const emailVerifiedRoutes = express.Router();
 
-const emailVerifiedController = new EmailVerifiedController(pool)
+const emailVerifiedController = new EmailVerifiedController(pool);
 
 emailVerifiedRoutes.get(
 	"/email-verified",
-	emailVerifiedController.emailVerifield
+	emailVerifiedController.emailVerifield,
 );
 
 // emailVerifiedRoutes.get(
@@ -19,6 +19,9 @@ emailVerifiedRoutes.get(
 // );
 
 // emailVerifiedRoutes.post("/email-verified", emailVerifiedController.emailVerifield)
-emailVerifiedRoutes.post("/resend-verification", emailVerifiedController.resendVerification)
+emailVerifiedRoutes.post(
+	"/resend-verification",
+	emailVerifiedController.resendVerification,
+);
 
-export default emailVerifiedRoutes
+export default emailVerifiedRoutes;

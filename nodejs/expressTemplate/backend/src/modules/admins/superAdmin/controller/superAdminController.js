@@ -11,10 +11,10 @@ class SuperAdminController {
 	async alterarRole(req, res, next) {
 		try {
 			await this.superAdminService.alterarRoleService(req);
-			
+
 			return res.status(200).send();
 		} catch (error) {
-			next(error)
+			next(error);
 		}
 	}
 }

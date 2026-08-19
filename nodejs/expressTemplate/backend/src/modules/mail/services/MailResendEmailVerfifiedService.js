@@ -32,7 +32,7 @@ class MailResendEmailVerifiedService {
 
 			throw err;
 		}
-	}	
+	}
 }
 
-export default MailResendEmailVerifiedService
+export default MailResendEmailVerifiedService;
