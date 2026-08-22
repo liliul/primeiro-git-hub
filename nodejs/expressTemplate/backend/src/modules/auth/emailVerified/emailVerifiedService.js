@@ -2,7 +2,7 @@ import crypto from "crypto";
 import logger from "../../../logger/pino.js";
 import MailResendEmailVerifiedService from "../../mail/services/MailResendEmailVerfifiedService.js";
 import { emailUserSchema, userIdSchema } from "./emailVerifiedSchema.js";
-import { AppError } from "../../../errors/appErrors/index.js";
+import EmailVerificadoRepository from "./emailVerificadoRepository.js";
 
 class EmailVerifiedService {
 	constructor(pool) {
@@ -11,6 +11,8 @@ class EmailVerifiedService {
 		this.mailResendEmailVerifiedService = new MailResendEmailVerifiedService(
 			logger,
 		);
+
+		this.emailVerificadoRepository = new EmailVerificadoRepository(this.pool);
 	}
 
 	async verificationEmail(userId, email) {
@@ -24,21 +26,13 @@ class EmailVerifiedService {
 
 		const expireAt = new Date(Date.now() + 15 * 60 * 1000);
 
-		await this.pool.query(
-			`
-			insert into email_verification_tokens (user_id, token_hash, expires_at) values ($1, $2, $3)
-		`,
-			[user_id, tokenHash, expireAt],
+		await this.emailVerificadoRepository.createEmailVerifiedTokens(
+			user_id,
+			tokenHash,
+			expireAt,
 		);
 
-		await this.pool.query(
-			`
-            UPDATE users
-            SET email_verified = false
-            WHERE id = $1    
-        `,
-			[user_id],
-		);
+		await this.emailVerificadoRepository.updateEmailVerifiedFalse(user_id);
 
 		await this.mailResendEmailVerifiedService.sendEmailVerified(
 			email_verified,
