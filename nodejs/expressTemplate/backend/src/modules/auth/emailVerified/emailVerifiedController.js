@@ -128,12 +128,10 @@ class EmailVerifiedController {
 
 		await this.mailResendEmailVerifiedService.sendEmailVerified(email, token);
 
-		res
-			.status(200)
-			.json({
-				message:
-					"Se existir uma conta e ela ainda não estiver verificada, um novo e-mail será enviado.",
-			});
+		res.status(200).json({
+			message:
+				"Se existir uma conta e ela ainda não estiver verificada, um novo e-mail será enviado.",
+		});
 	}
 }
 export default EmailVerifiedController;
