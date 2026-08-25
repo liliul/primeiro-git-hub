@@ -5,7 +5,7 @@ import { emailUserSchema, userIdSchema } from "./emailVerifiedSchema.js";
 import EmailVerificadoRepository from "./emailVerificadoRepository.js";
 
 class EmailVerificadoAdapter {
-    constructor(pool) {
+	constructor(pool) {
 		this.pool = pool;
 
 		this.mailResendEmailVerifiedService = new MailResendEmailVerifiedService(
@@ -14,36 +14,35 @@ class EmailVerificadoAdapter {
 
 		this.emailVerificadoRepository = new EmailVerificadoRepository(this.pool);
 	}
-    
-    async verificandoEmailUser(userId, email) {
-        const user_id = userIdSchema.parse(userId);
 
-        const email_verified = emailUserSchema.parse(email);
+	async verificandoEmailUser(userId, email) {
+		const user_id = userIdSchema.parse(userId);
 
-        const token = crypto.randomBytes(32).toString("hex");
+		const email_verified = emailUserSchema.parse(email);
 
-        const tokenHash = crypto.createHash("sha256").update(token).digest("hex");
+		const token = crypto.randomBytes(32).toString("hex");
 
-        const expireAt = new Date(Date.now() + 15 * 60 * 1000);
+		const tokenHash = crypto.createHash("sha256").update(token).digest("hex");
 
-        await this.emailVerificadoRepository.createEmailVerifiedTokens(
-            user_id,
-            tokenHash,
-            expireAt,
-        );
+		const expireAt = new Date(Date.now() + 15 * 60 * 1000);
 
-        await this.emailVerificadoRepository.updateEmailVerifiedFalse(user_id);
+		await this.emailVerificadoRepository.createEmailVerifiedTokens(
+			user_id,
+			tokenHash,
+			expireAt,
+		);
 
-        await this.mailResendEmailVerifiedService.sendEmailVerified(
-            email_verified,
-            token,
-        );
+		await this.emailVerificadoRepository.updateEmailVerifiedFalse(user_id);
 
-        return {
-            message: "Se o email existir, você receberá instruções.",
-        };
-    }
+		await this.mailResendEmailVerifiedService.sendEmailVerified(
+			email_verified,
+			token,
+		);
 
+		return {
+			message: "Se o email existir, você receberá instruções.",
+		};
+	}
 }
 
 export default EmailVerificadoAdapter;

@@ -6,7 +6,7 @@ import logger from "../../../logger/pino.js";
 import { resolvePermissionsJwt } from "../../../utils/resolvePermissions.js";
 import AuthRefreshTokenRepository from "../refreshToken/authRefreshTokenRepository.js";
 import UserRepository from "./userRepository.js";
-import EmailVerifiedService from "../emailVerified/emailVerifiedService.js";
+import EmailVerificadoAdapter from "../emailVerified/emailVerificadoAdapter.js";
 
 class UserService {
 	constructor(pool) {
@@ -14,7 +14,7 @@ class UserService {
 
 		this.userRepository = new UserRepository(this.pool);
 		this.authRefreshTokenRepository = new AuthRefreshTokenRepository(pool);
-		this.emailVerifiedService = new EmailVerifiedService(this.pool);
+		this.emailVerificadoAdapter = new EmailVerificadoAdapter(this.pool);
 
 		this.IsPasswordArgon2 = new IsPasswordArgon2();
 	}
@@ -37,10 +37,11 @@ class UserService {
 				throw new AppError("ErroPostgres criando user service", 500);
 			}
 
-			const verifiedEmail = await this.emailVerifiedService.verificationEmail(
-				user.id,
-				user.email,
-			);
+			const verifiedEmail =
+				await this.emailVerificadoAdapter.verificandoEmailUser(
+					user.id,
+					user.email,
+				);
 
 			logger.info({
 				event: "CREATE_USER_SUCCESS",
