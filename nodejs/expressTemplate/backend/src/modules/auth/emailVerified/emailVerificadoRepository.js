@@ -22,6 +22,19 @@ class EmailVerificadoRepository {
 			[user_id],
 		);
 	}
+
+	async searchUserByEmail(email) {
+		const { rows } = await this.pool.query(
+					`
+					SELECT id,email,email_verified
+					FROM users
+					WHERE email=$1;
+					`,
+					[email],
+				);
+
+		return  rows[0] 
+	}
 }
 
 export default EmailVerificadoRepository;
