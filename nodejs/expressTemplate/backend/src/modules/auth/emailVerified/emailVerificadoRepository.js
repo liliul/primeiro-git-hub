@@ -35,6 +35,17 @@ class EmailVerificadoRepository {
 
 		return rows[0];
 	}
+
+	async deleteEmailVerificationtokensById(userId) {
+		await this.pool.query(
+			`
+					DELETE
+					FROM email_verification_tokens
+					WHERE user_id=$1;
+					`,
+			[userId],
+		);
+	}
 }
 
 export default EmailVerificadoRepository;
