@@ -3,6 +3,7 @@ import { AppError } from "../../../errors/appErrors/index.js";
 import logger from "../../../logger/pino.js";
 import { emailUserSchema } from "./emailVerifiedSchema.js";
 import MailResendEmailVerifiedService from "../../mail/services/MailResendEmailVerfifiedService.js";
+import EmailVerificadoRepository from "./emailVerificadoRepository.js";
 import path from "node:path";
 
 const __dirname = path.resolve();
@@ -17,6 +18,8 @@ class EmailVerifiedController {
 		this.mailResendEmailVerifiedService = new MailResendEmailVerifiedService(
 			logger,
 		);
+
+		this.emailVerificadoRepository = new EmailVerificadoRepository(this.pool);
 	}
 
 	async emailVerifield(req, res) {
@@ -81,22 +84,16 @@ class EmailVerifiedController {
 	async resendVerification(req, res) {
 		const { email } = emailUserSchema.parse(req.body);
 
-		const buscaUserByEmail = await this.pool.query(
-			`
-            SELECT id,email,email_verified
-            FROM users
-            WHERE email=$1;
-            `,
-			[email],
-		);
+		const buscaUserByEmail =
+			this.emailVerificadoRepository.searchUserByEmail(email);
 
-		if (buscaUserByEmail.rows.length === 0) {
+		if (buscaUserByEmail.length === 0) {
 			throw new AppError(
 				"Se existir uma conta e ela ainda não estiver verificada, um novo e-mail será enviado.",
 				400,
 			);
 		}
-		const user = await buscaUserByEmail.rows[0];
+		const user = await buscaUserByEmail;
 
 		if (user.email_verified) {
 			return res.status(200).json({
@@ -104,13 +101,8 @@ class EmailVerifiedController {
 			});
 		}
 
-		await this.pool.query(
-			`
-            DELETE
-            FROM email_verification_tokens
-            WHERE user_id=$1;
-            `,
-			[user.id],
+		await this.emailVerificadoRepository.deleteEmailVerificationtokensById(
+			user.id,
 		);
 
 		const token = crypto.randomBytes(32).toString("hex");
@@ -119,11 +111,10 @@ class EmailVerifiedController {
 
 		const expireAt = new Date(Date.now() + 15 * 60 * 1000);
 
-		await this.pool.query(
-			`
-            insert into email_verification_tokens (user_id, token_hash, expires_at) values ($1, $2, $3)
-        `,
-			[user.id, tokenHash, expireAt],
+		await this.emailVerificadoRepository.createEmailVerifiedTokens(
+			user.id,
+			tokenHash,
+			expireAt,
 		);
 
 		await this.mailResendEmailVerifiedService.sendEmailVerified(email, token);
