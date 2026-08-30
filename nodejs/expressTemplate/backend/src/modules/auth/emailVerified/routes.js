@@ -21,7 +21,7 @@ emailVerifiedRoutes.get(
 // emailVerifiedRoutes.post("/email-verified", emailVerifiedController.emailVerifield)
 emailVerifiedRoutes.post(
 	"/resend-verification",
-	emailVerifiedController.resendVerification,
+	emailVerifiedController.reenviarEmailVerificado,
 );
 
 export default emailVerifiedRoutes;

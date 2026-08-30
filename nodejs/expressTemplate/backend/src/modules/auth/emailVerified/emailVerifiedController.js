@@ -5,6 +5,7 @@ import { emailUserSchema } from "./emailVerifiedSchema.js";
 import MailResendEmailVerifiedService from "../../mail/services/MailResendEmailVerfifiedService.js";
 import EmailVerificadoRepository from "./emailVerificadoRepository.js";
 import path from "node:path";
+import EmailVerifiedService from "./emailVerifiedService.js";
 
 const __dirname = path.resolve();
 
@@ -13,13 +14,14 @@ class EmailVerifiedController {
 		this.pool = pool;
 
 		this.emailVerifield = this.emailVerifield.bind(this);
-		this.resendVerification = this.resendVerification.bind(this);
+		this.reenviarEmailVerificado = this.reenviarEmailVerificado.bind(this);
 
 		this.mailResendEmailVerifiedService = new MailResendEmailVerifiedService(
 			logger,
 		);
 
 		this.emailVerificadoRepository = new EmailVerificadoRepository(this.pool);
+		this.emailVerifiedService = new EmailVerifiedService(this.pool);
 	}
 
 	async emailVerifield(req, res) {
@@ -81,48 +83,19 @@ class EmailVerifiedController {
 		}
 	}
 
-	async resendVerification(req, res) {
+	async reenviarEmailVerificado(req, res, next) {
 		const { email } = emailUserSchema.parse(req.body);
 
-		const buscaUserByEmail =
-			this.emailVerificadoRepository.searchUserByEmail(email);
+		try {
+			await this.emailVerifiedService.reenviarEmailVerificado(email);
 
-		if (buscaUserByEmail.length === 0) {
-			throw new AppError(
-				"Se existir uma conta e ela ainda não estiver verificada, um novo e-mail será enviado.",
-				400,
-			);
-		}
-		const user = await buscaUserByEmail;
-
-		if (user.email_verified) {
-			return res.status(200).json({
-				message: "Se necessário, enviaremos um novo e-mail.",
+			res.status(200).json({
+				message:
+					"Se existir uma conta e ela ainda não estiver verificada, um novo e-mail será enviado.",
 			});
+		} catch (error) {
+			next(error);
 		}
-
-		await this.emailVerificadoRepository.deleteEmailVerificationtokensById(
-			user.id,
-		);
-
-		const token = crypto.randomBytes(32).toString("hex");
-
-		const tokenHash = crypto.createHash("sha256").update(token).digest("hex");
-
-		const expireAt = new Date(Date.now() + 15 * 60 * 1000);
-
-		await this.emailVerificadoRepository.createEmailVerifiedTokens(
-			user.id,
-			tokenHash,
-			expireAt,
-		);
-
-		await this.mailResendEmailVerifiedService.sendEmailVerified(email, token);
-
-		res.status(200).json({
-			message:
-				"Se existir uma conta e ela ainda não estiver verificada, um novo e-mail será enviado.",
-		});
 	}
 }
 export default EmailVerifiedController;
