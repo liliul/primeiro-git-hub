@@ -46,6 +46,26 @@ class EmailVerificadoRepository {
 			[userId],
 		);
 	}
+
+	async updateUserEmailVerificadoTransitionById(clients, userId) {
+		await clients.query(
+			`
+                UPDATE users
+                SET email_verified = true
+                WHERE id = $1
+                AND email_verified = false    
+            `,
+			[userId],
+		);
+	}
+
+	async deleteEmailVerificationtokensTransitionById(clients, userId) {
+		await clients.query(
+			`
+                delete from email_verification_tokens where user_id = $1`,
+			[userId],
+		);
+	}
 }
 
 export default EmailVerificadoRepository;
