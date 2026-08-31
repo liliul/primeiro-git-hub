@@ -55,20 +55,14 @@ class EmailVerifiedController {
 		try {
 			await clients.query(`BEGIN`);
 
-			await clients.query(
-				`
-                UPDATE users
-                SET email_verified = true
-                WHERE id = $1
-                AND email_verified = false    
-            `,
-				[verification.user_id],
+			await this.emailVerificadoRepository.updateUserEmailVerificadoTransitionById(
+				clients,
+				verification.user_id,
 			);
 
-			await clients.query(
-				`
-                delete from email_verification_tokens where user_id = $1`,
-				[verification.user_id],
+			await this.emailVerificadoRepository.deleteEmailVerificationtokensTransitionById(
+				clients,
+				verification.user_id,
 			);
 
 			await clients.query("COMMIT");
