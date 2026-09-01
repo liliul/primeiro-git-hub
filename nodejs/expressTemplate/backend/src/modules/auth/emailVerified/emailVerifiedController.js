@@ -33,18 +33,16 @@ class EmailVerifiedController {
 
 		const tokenHash = crypto.createHash("sha256").update(token).digest("hex");
 
-		const buscaByToken = await this.pool.query(
-			`
-            select * from email_verification_tokens where token_hash = $1
-            `,
-			[tokenHash],
-		);
+		const buscaByToken =
+			await this.emailVerificadoRepository.searchEmailVerificationTokensByTokenHash(
+				tokenHash,
+			);
 
-		if (buscaByToken.rows.length === 0) {
+		if (buscaByToken.length === 0) {
 			throw new AppError("Token Invalido.");
 		}
 
-		const verification = buscaByToken.rows[0];
+		const verification = buscaByToken;
 
 		if (verification.expires_at < new Date()) {
 			throw new AppError("Token expirado", 400);
