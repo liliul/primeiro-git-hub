@@ -27,8 +27,12 @@ class EmailVerifiedController {
 	async emailVerifield(req, res) {
 		const { token } = req.query;
 
-		if (!token) {
+		if (!token || typeof token !== "string") {
 			throw new AppError("Token é obrigatorio.", 400);
+		}
+
+		if (!/^[a-f0-9]{64}$/i.test(token)) {
+			throw new AppError("Token inválido.", 400);
 		}
 
 		const tokenHash = crypto.createHash("sha256").update(token).digest("hex");
