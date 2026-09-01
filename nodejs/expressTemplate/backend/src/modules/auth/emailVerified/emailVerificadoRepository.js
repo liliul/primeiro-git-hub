@@ -66,6 +66,17 @@ class EmailVerificadoRepository {
 			[userId],
 		);
 	}
+
+	async searchEmailVerificationTokensByTokenHash(tokenHash) {
+		const { rows } = await this.pool.query(
+			`
+            select * from email_verification_tokens where token_hash = $1
+            `,
+			[tokenHash],
+		);
+
+		return rows[0];
+	}
 }
 
 export default EmailVerificadoRepository;
