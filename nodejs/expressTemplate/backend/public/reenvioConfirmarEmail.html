@@ -1,13 +1,12 @@
-<form method="POST" action="/user/email-verified">
-  <input type="hidden" name="token" id="tokenInput" />
+<form method="POST" action="/user/resend-verification">
+    <input
+        type="email"
+        name="email"
+        placeholder="Seu e-mail"
+        required
+    />
 
-  <h1>Reenvio email de Confirmação.</h1>
-  <button type="submit">enviar</button>
+    <button type="submit">
+        Reenviar e-mail de confirmação
+    </button>
 </form>
-
-<script>
-  const params = new URLSearchParams(window.location.search);
-  const token = params.get("token");
-
-  document.getElementById("tokenInput").value = token;
-</script>
