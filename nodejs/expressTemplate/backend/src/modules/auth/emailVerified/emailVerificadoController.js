@@ -1,9 +1,9 @@
 import logger from "../../../logger/pino.js";
-import { emailUserSchema } from "./emailVerifiedSchema.js";
+import { emailUserSchema } from "./emailVerificadoSchema.js";
 import MailResendEmailVerifiedService from "../../mail/services/MailResendEmailVerfifiedService.js";
 import EmailVerificadoRepository from "./emailVerificadoRepository.js";
 import path from "node:path";
-import EmailVerifiedService from "./emailVerifiedService.js";
+import EmailVerifiedService from "./emailVerificadoService.js";
 
 const __dirname = path.resolve();
 

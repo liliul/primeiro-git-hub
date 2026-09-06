@@ -1,7 +1,7 @@
 import crypto from "crypto";
 import logger from "../../../logger/pino.js";
 import MailResendEmailVerifiedService from "../../mail/services/MailResendEmailVerfifiedService.js";
-import { emailUserSchema, userIdSchema } from "./emailVerifiedSchema.js";
+import { emailUserSchema, userIdSchema } from "./emailVerificadoSchema.js";
 import EmailVerificadoRepository from "./emailVerificadoRepository.js";
 import { AppError } from "../../../errors/appErrors/index.js";
 

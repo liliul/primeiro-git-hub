@@ -1,5 +1,5 @@
 import express from "express";
-import EmailVerifiedController from "./emailVerifiedController.js";
+import EmailVerifiedController from "./emailVerificadoController.js";
 import { pool } from "../../../database/postgres.js";
 
 const emailVerifiedRoutes = express.Router();
