@@ -142,7 +142,7 @@ class UserController {
 	async updatePassword(req, res) {
 		const userId = req.user.id;
 
-		if (!userId) {
+		if (!userId || typeof userId !== "string") {
 			req.logger.warn({ event: "AUTH_REQUIRED" });
 
 			return res.status(401).json({ message: "Usuário não autenticado" });
