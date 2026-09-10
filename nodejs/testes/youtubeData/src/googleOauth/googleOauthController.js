@@ -1,3 +1,5 @@
+import { cookies } from "./cookies.js"
+
 class GoogleOauthController {
     constructor(googleOauthService) {
         this.googleOauthService =  googleOauthService
@@ -27,21 +29,9 @@ class GoogleOauthController {
 
         const token = await this.googleOauthService.googleCallbackService(code)
         
-        res.cookie("accessToken", token.accessToken, {
-            httpOnly: true,
-            secure: false,
-            sameSite: "lax",
-            path: "/",
-            maxAge: 15 * 60 * 1000
-        })
+        res.cookie("accessToken", token.accessToken, cookies.accessTokenGoogleOauth)
 
-        res.cookie("refreshToken", token.refreshToken, {
-            httpOnly: true,
-            secure: false,
-            sameSite: "lax",
-            path: "/",
-            maxAge: 7 * 24 * 60 * 60 * 1000
-        })
+        res.cookie("refreshToken", token.refreshToken, cookies.refreshTokenGoogleOauth)
             
         return res.redirect("/home")
        } catch (error) {
