@@ -1,6 +1,7 @@
 import jwt from "jsonwebtoken";
 import { AppError } from "../errors/AppError.js";
 import GenerateJwt from "../utils/generateJwt.js";
+import { cookies } from "./cookies.js";
 
 class RefreshTokenService {
     constructor(googleOauthRepository) {
@@ -63,25 +64,13 @@ class RefreshTokenService {
             res.cookie(
                 "accessToken",
                 newAccessToken,
-                {
-                    httpOnly: true,
-                    secure: false,
-                    sameSite: "lax",
-                    path: "/",
-                    maxAge: 15 * 60 * 1000
-                }
+                cookies.refreshAccessToken
             )
 
             res.cookie(
                 "refreshToken",
                 newRefreshToken,
-                {
-                    httpOnly: true,
-                    secure: false,
-                    sameSite: "lax",
-                    path: "/",
-                    maxAge: 7 * 24 * 60 * 60 * 1000
-                }
+                cookies.refreshRefreshToken
             )
 
             res.status(200).send()
