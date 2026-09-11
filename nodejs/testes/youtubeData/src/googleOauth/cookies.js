@@ -14,7 +14,23 @@ const refreshTokenGoogleOauth =  {
     maxAge: 7 * 24 * 60 * 60 * 1000
 }
 
+const logoutRefreshToken = {
+    httpOnly: true,
+    secure: false,
+    sameSite: "lax",
+    path: "/",    
+}
+
+const logoutAccessToken = {
+    httpOnly: true,
+    secure: false,
+    sameSite: "lax",
+    path: "/", 
+}
+
 export const cookies = {
     accessTokenGoogleOauth,
-    refreshTokenGoogleOauth
+    refreshTokenGoogleOauth,
+    logoutAccessToken,
+    logoutRefreshToken
 }

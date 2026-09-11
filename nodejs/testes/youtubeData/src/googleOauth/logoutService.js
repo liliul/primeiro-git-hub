@@ -1,4 +1,5 @@
 import { AppError } from "../errors/AppError.js"
+import { cookies } from "./cookies.js"
 
 class LogoutService {
     constructor(googleOauthRepository) {
@@ -23,19 +24,9 @@ class LogoutService {
             await this.googleOauthRepository.deletarRefreshTokenById(buscandoRefreshToken.id)
             await this.googleOauthRepository.deletarGoogleOauthTokensBySub(buscandoRefreshToken.google_id)
 
-            res.clearCookie("accessToken", {
-                httpOnly: true,
-                secure: false,
-                sameSite: "lax",
-                path: "/", 
-            })
+            res.clearCookie("accessToken", cookies.logoutAccessToken)
 
-            res.clearCookie("refreshToken", {
-                httpOnly: true,
-                secure: false,
-                sameSite: "lax",
-                path: "/",    
-            })
+            res.clearCookie("refreshToken", cookies.logoutRefreshToken)
             
             res.status(204).send()
         } catch (error) {
