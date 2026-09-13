@@ -1,5 +1,27 @@
 <div class="c-auth" id="auth">
-    <a href="/auth/gglogout">
-        <button>LOGUOT</button>
-    </a>
+    <button type="button" id="logout">
+        LOGUOT
+    </button>
 </div>
+
+<script>
+    const logoutButton = document.getElementById("logout");
+
+    logoutButton.addEventListener("click", async () => {
+        try {
+            const response = await fetch("/auth/gglogout", {
+                method: "GET",
+                credentials: "include"
+            });
+
+            if (response.status === 204) {
+                window.location.href = "/";
+                return;
+            }
+
+            console.error("Erro ao fazer logout");
+        } catch (error) {
+            console.error("Erro na requisição de logout:", error);
+        }
+    });
+</script>
