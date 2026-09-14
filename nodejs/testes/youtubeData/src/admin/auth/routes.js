@@ -31,7 +31,7 @@ routerAuth.post('/admin/refresh', ipLimiter, authController.refresh)
 routerAuth.post('/admin/logout', ipLimiter, authController.logout)
 routerAuth.get('/admin/me', ipLimiter, authenticate, requireRole('admin'), authController.me)
 
-routerAuth.get("/admin/login",  guest, (req, res) => {
+routerAuth.get("/admin/login", ipLimiter, guest, (req, res) => {
   res.render("dashboard/index")
 })
 
