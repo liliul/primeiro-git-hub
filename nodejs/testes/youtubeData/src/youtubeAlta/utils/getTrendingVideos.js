@@ -8,7 +8,7 @@ class GetTrendingVideos {
         this.BASE_URL = 'https://www.googleapis.com/youtube/v3/videos';
     }
     
-    async getTrendingVideos(regionCode = 'BR', maxResults = 2) {
+    async getTrendingVideos(regionCode = 'BR', maxResults = 1) {
         try {
             const response = await axios.get(this.BASE_URL, {
             params: {
