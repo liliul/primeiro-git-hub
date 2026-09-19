@@ -1,0 +1,7 @@
+// @use '../abstracts/variables' as *;
+// color: variables.$primary-color;
+
+@use 'abstracts/variables';
+@use 'abstracts/mixins';
+
+@use 'base/reset';
