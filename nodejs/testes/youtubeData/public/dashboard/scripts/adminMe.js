@@ -5,69 +5,65 @@ async function me() {
     const response = await me.json()
 
     if (!response) {
-        return document.getElementById('me').textContent = 'Erro na resposta do ME.'
+        return document.getElementById('ul-infos').textContent = 'Erro na resposta do ME.'
     }
     
     console.log(response);
-    
-    document.getElementById('me').innerHTML = `
-        <ul>
-    
-            <li class="li-infos">
-                <span class="icon">🏠</span>
-                <span class="text">
-                    ${response.me.id}
-                </span>    
-            </li>
 
-            <li class="li-infos">
-                <span class="icon">▶️</span>
-                <span class="text">
-                    ${response.me.name}
-                </span>
-            </li>
-                
-            <li class="li-infos">
-                <span class="icon">📺</span>
-                <span class="text">
-                    ${response.me.email}
-                </span>
-            </li>
+    document.getElementById('ul-infos').innerHTML = `
+        <li class="li-infos">
+            <span class="icon">🏠</span>
+            <span class="text">
+                ${response.me.id ?? 'Sem conteudo.'}
+            </span>    
+        </li>
 
-            <hr class="separator">
+        <li class="li-infos">
+            <span class="icon">▶️</span>
+            <span class="text">
+                ${response.me.name ?? 'Sem contaudo.'}
+            </span>
+        </li>
+            
+        <li class="li-infos">
+            <span class="icon">📺</span>
+            <span class="text">
+                ${response.me.email ?? 'Sem conteudo.'}
+            </span>
+        </li>
 
-            <li class="li-infos">
-                <span class="icon">📚</span>
-                <span class="text">
-                    ${response.me.role}
-                </span>
-            </li>
+        <hr class="separator">
 
-            <li class="li-infos">
-                <span class="icon">🕘</span>
-                <span class="text">
-                    ${response.me.criado_em}
-                </span>
-            </li>
+        <li class="li-infos">
+            <span class="icon">📚</span>
+            <span class="text">
+                ${response.me.role ?? 'Sem conteudo.'}
+            </span>
+        </li>
 
-            <li class="li-infos">
-                <span class="icon">🎬</span>
-                <span class="text">Seus vídeos</span>
-            </li>
+        <li class="li-infos">
+            <span class="icon">🕘</span>
+            <span class="text">
+                ${response.me.criado_em ?? 'Sem conteudo.'}
+            </span>
+        </li>
 
-            <li class="li-infos">
-                <span class="icon">⏱️</span>
-                <span class="text">Assistir mais tarde</span>
-            </li>
+        <li class="li-infos">
+            <span class="icon">🎬</span>
+            <span class="text">Seus vídeos</span>
+        </li>
 
-            <hr class="separator">
+        <li class="li-infos">
+            <span class="icon">⏱️</span>
+            <span class="text">Assistir mais tarde</span>
+        </li>
 
-            <li class="li-infos">
-                <span class="icon">👍</span>
-                <span class="text">Vídeos marcados</span>
-            </li>
+        <hr class="separator">
 
-        </ul>
+        <li class="li-infos">
+            <span class="icon">👍</span>
+            <span class="text">Vídeos marcados</span>
+        </li>
     `
 }
 me()
