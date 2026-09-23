@@ -1,0 +1,71 @@
+<section class="content-container">
+ <div class="content-menu">
+        <div class="content-infos-user">
+
+            <button class="menu-btn" id="menuYoutube">
+                ☰
+            </button>
+            <aside class="sidebar open" id="sidebarYoutube">
+                <%- include("../partial/menuYoutube") %>
+            </aside>
+
+        </div>
+    </div>
+</section>
+
+<script>
+  const menuYoutube = document.getElementById("menuYoutube");
+  const sidebarYoutube = document.getElementById("sidebarYoutube");
+
+  menuYoutube.addEventListener("click", () => {
+  
+    if (window.innerWidth <= 700) {
+      sidebarYoutube.classList.toggle("open");
+      sidebarYoutube.classList.toggle("closed");
+      
+    } else {
+      sidebarYoutube.classList.toggle("open");
+
+      sidebarYoutube.classList.toggle("closed");
+    }
+
+  })
+</script>
+<!-- <script>
+    const menuBtn = document.getElementById("menuBtn");
+    const sidebar = document.getElementById("sidebar");
+    const content = document.getElementById("content");
+
+    menuBtn.addEventListener("click", () => {
+
+      if (window.innerWidth <= 700) {
+
+        sidebar.classList.toggle("open");
+
+      } else {
+
+        sidebar.classList.toggle("closed");
+        // content.classList.toggle("expanded");
+
+      }
+
+    });
+
+
+    // Categorias
+    const categories = document.querySelectorAll(".category");
+
+    categories.forEach(category => {
+
+      category.addEventListener("click", () => {
+
+        categories.forEach(item => {
+          item.classList.remove("active");
+        });
+
+        category.classList.add("active");
+
+      });
+
+    });
+  </script> -->

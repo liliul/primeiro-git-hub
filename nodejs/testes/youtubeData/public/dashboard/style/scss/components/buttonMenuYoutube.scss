@@ -1,0 +1,13 @@
+@mixin menu-btn {
+    border: none;
+    background: transparent;
+    font-size: 19px;
+    cursor: pointer;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+
+    &:hover {
+      background: #eee;
+    }
+}
