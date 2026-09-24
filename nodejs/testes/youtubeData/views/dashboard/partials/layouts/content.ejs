@@ -18,17 +18,13 @@
   const sidebarYoutube = document.getElementById("sidebarYoutube");
 
   menuYoutube.addEventListener("click", () => {
-  
-    if (window.innerWidth <= 700) {
-      sidebarYoutube.classList.toggle("open");
-      sidebarYoutube.classList.toggle("closed");
-      
-    } else {
-      sidebarYoutube.classList.toggle("open");
-
+    if (window.innerWidth >= 700) {
       sidebarYoutube.classList.toggle("closed");
     }
 
+    if (window.innerWidth <= 700) {
+      sidebarYoutube.classList.toggle("expanded");
+    } 
   })
 </script>
 <!-- <script>
