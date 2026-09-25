@@ -25,7 +25,29 @@
     if (window.innerWidth <= 700) {
       sidebarYoutube.classList.toggle("expanded");
     } 
+
+    const menuClosed = sidebarYoutube.classList.contains("closed") 
+      ? "closed" 
+      : null;
+
+    const menuExpanded =  sidebarYoutube.classList.contains("expanded")
+      ? "expanded"
+      : null;
+
+    localStorage.setItem('closed', menuClosed);
+    localStorage.setItem('expanded', menuExpanded);
   })
+  
+  const menuClosed = localStorage.getItem('closed'); 
+  const menuExpanded = localStorage.getItem('expanded'); 
+
+  if (menuClosed === 'closed') {
+    sidebarYoutube.classList.add('closed');
+  }
+
+  if (menuExpanded === 'expanded') {
+    sidebarYoutube.classList.add('expanded');
+  }
 </script>
 <!-- <script>
     const menuBtn = document.getElementById("menuBtn");
