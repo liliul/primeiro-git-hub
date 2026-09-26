@@ -19,17 +19,8 @@
 <script>
     const menuBtn = document.getElementById("menuBtn");
     const sidebar = document.getElementById("sidebar");
-    const menuOverlay = document.querySelector(".header-menu");
-
-    // if (menuOverlay) menuOverlay.remove();
-
+    
     menuBtn.addEventListener("click", () => {
       sidebar.classList.toggle("open");
-    })
-
-    menuOverlay.addEventListener('click', (e) => {
-        if (sidebar.classList.contains('open')) {
-            sidebar.classList.remove('open');
-        }
     })
   </script>

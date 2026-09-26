@@ -11,6 +11,8 @@ async function me() {
     console.log(response);
 
     document.getElementById('ul-infos').innerHTML = `
+        <div class="ul-infos-close">✕</div>
+
         <li class="li-infos">
             <span class="icon">🏠</span>
             <span class="text">
@@ -65,5 +67,8 @@ async function me() {
             <span class="text">Vídeos marcados</span>
         </li>
     `
+    document.querySelector('.ul-infos-close').addEventListener('click', () => {
+        document.querySelector('.sidebar').classList.toggle('open')
+    })
 }
 me()
