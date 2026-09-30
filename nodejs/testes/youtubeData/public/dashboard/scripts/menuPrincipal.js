@@ -1,59 +1,33 @@
-async function menu() {
-        document.getElementById('ul-menu').innerHTML = `
-            <li class="li-infos">
-                <span class="icon">🏠</span>
-                <span class="text">
-                    contuedo menu
-                </span>    
-            </li>
+const menuYoutube = document.getElementById("menuYoutube");
+const sidebarYoutube = document.getElementById("sidebarYoutube");
 
-            <li class="li-infos">
-                <span class="icon">▶️</span>
-                <span class="text">
-                    contuedo menu
-                </span>
-            </li>
-                
-            <li class="li-infos">
-                <span class="icon">📺</span>
-                <span class="text">
-                    contuedo menu
-                </span>
-            </li>
+menuYoutube.addEventListener("click", () => {
+if (window.innerWidth >= 700) {
+    sidebarYoutube.classList.toggle("closed");
+}
 
-            <hr class="separator">
+if (window.innerWidth <= 700) {
+    sidebarYoutube.classList.toggle("expanded");
+} 
 
-            <li class="li-infos">
-                <span class="icon">📚</span>
-                <span class="text">
-                    contuedo menu
-                </span>
-            </li>
+const menuClosed = sidebarYoutube.classList.contains("closed") 
+    ? "closed" 
+    : "open";
+const menuExpanded =  sidebarYoutube.classList.contains("expanded")
+    ? "expanded"
+    : "open";
 
-            <li class="li-infos">
-                <span class="icon">🕘</span>
-                <span class="text">
-                    contuedo menu
-                </span>
-            </li>
+localStorage.setItem('closed', menuClosed);
+localStorage.setItem('expanded', menuExpanded);
+})
 
-            <li class="li-infos">
-                <span class="icon">🎬</span>
-                <span class="text">Seus vídeos</span>
-            </li>
+const menuClosed = localStorage.getItem('closed'); 
+const menuExpanded = localStorage.getItem('expanded'); 
 
-            <li class="li-infos">
-                <span class="icon">⏱️</span>
-                <span class="text">Assistir mais tarde</span>
-            </li>
+if (menuClosed === 'closed') {
+sidebarYoutube.classList.add('closed');
+}
 
-            <hr class="separator">
-
-            <li class="li-infos">
-                <span class="icon">👍</span>
-                <span class="text">Vídeos marcados</span>
-            </li>
-        `
-    }
-
-    menu()
+if (menuExpanded === 'expanded') {
+sidebarYoutube.classList.add('expanded');
+}
