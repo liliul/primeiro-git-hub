@@ -1,0 +1,63 @@
+@use "./buttonMenuYoutube.scss";
+
+@mixin menuUser {
+     .sidebar {
+        position: fixed;
+        top: 60px;
+        right: 0;
+        bottom: 0;
+        width: 0px;
+        background: #fff;
+        overflow-y: auto;
+        transition: 0.25s;
+        z-index: 900;
+    
+        &.open {
+            width: 250px;
+        }
+
+        ul {
+            list-style: none;
+            position: relative;
+
+            .ul-infos-close {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+
+                @include buttonMenuYoutube.menu-btn; 
+            }
+
+            .li-infos {
+                display: flex;
+                align-items: center;
+                gap: 22px;
+                margin-bottom: 4px;
+                height: 48px;
+                padding: 0 15px;
+                color: #0f0f0f;
+                text-decoration: none;
+                border-radius: 10px;
+                white-space: nowrap;
+                overflow: hidden;
+                
+                &:hover {
+                    background: #eee;
+                }
+            }
+            
+        }
+
+        .icon {
+            min-width: 25px;
+            text-align: center;
+            font-size: 20px;
+        }
+
+        .separator {
+            border: none;
+            border-top: 1px solid #ddd;
+            margin: 15px 0;
+        }
+    }
+}
