@@ -17,7 +17,7 @@ import routerAuth from './admin/auth/routes.js';
 import { errorHandler } from './middleware/errorHandler.js';
 // import eventsRouter from './router/events.js';
 import eventsRouter from './events/routes.js';
-
+import adminModulesRoutes from './admin/modules/routes.js';
 // import './node_cron/index.js'
 
 const __dirname = path.resolve();
@@ -39,6 +39,7 @@ app.use(express.static(path.join(__dirname, "/public")));
 
 app.use(routerHealth)
 app.use(routerAccount)
+app.use(adminModulesRoutes)
 app.use('/', eventsRouter)
 app.use(routerAuth)
 app.use('/youtube/v1', routerYoutubeAlta)
