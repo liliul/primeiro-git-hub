@@ -7,7 +7,13 @@ class UserController {
     }
 
     async searchUserAll(req, res) {
-        const user = await this.pool.query(`select * from google_users;`)
+        const user = await this.pool.query(`
+            select 
+            id, sub, email, email_verified, name, given_name, family_name, picture, created_at 
+            from 
+            google_users;
+        `)
+
         if (!user.rows[0]) {
             return res.status(401).json({error: 'Usuario não existe.'})
         }
@@ -23,7 +29,14 @@ class UserController {
             return res.status(401).json({ erro: 'Id é obrigatorio.' })
         }
 
-        const user = await this.pool.query(`select * from google_users where id = $1;`, [id])
+        const user = await this.pool.query(` 
+            select 
+            id, sub, email, email_verified, name, given_name, family_name, picture, created_at 
+            from 
+            google_users
+            where id = $1;`, [id]
+        )
+        
         if (!user.rows[0]) {
             return res.status(401).json({ error: 'Usuario não existe.' })
         }
