@@ -3,6 +3,7 @@ import UserController from "./usersController.js";
 import db from '../../../db/conection_db.js';
 import { TokenService } from "../../utils/utils.js";
 import { authMiddleware, requireRole } from "../../middleware/authMiddleware.js";
+import { ipLimiter } from "../../middleware/rateLimit.js";
 import env from 'dotenv'
 
 env.config()
@@ -15,7 +16,7 @@ const tokenService = new TokenService(process.env.JWT_SECRET_ADMIN, expiresIn);
 const user = new UserController(db);
 const authenticate = authMiddleware(tokenService);
 
-routerUsers.get('/admin/users', authenticate, requireRole('admin'), user.searchUserAll);
-routerUsers.get('/admin/users/:id', authenticate, requireRole('admin'), user.searchUserById);
+routerUsers.get('/admin/users', ipLimiter, authenticate, requireRole('admin'), user.searchUserAll);
+routerUsers.get('/admin/users/:id', ipLimiter, authenticate, requireRole('admin'), user.searchUserById);
 
 export default routerUsers;
