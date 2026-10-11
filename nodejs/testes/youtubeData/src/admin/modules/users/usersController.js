@@ -1,26 +1,17 @@
 class UserController {
-    constructor(pool) {
+    constructor(pool, serviceInject) {
         this.pool = pool;
+        this.serviceInject = serviceInject
 
-        this.searchUserAll = this.searchUserAll.bind(this);
+        this.searchUsersAll = this.searchUsersAll.bind(this);
         this.searchUserById = this.searchUserById.bind(this);
     }
 
-    async searchUserAll(req, res, next) {
+    async searchUsersAll(req, res, next) {
         try {
-            const user = await this.pool.query(`
-                select 
-                id, sub, email, email_verified, name, given_name, family_name, picture, created_at 
-                from 
-                google_users;
-            `)
-
-            if (!user.rows[0]) {
-                return res.status(401).json({error: 'Usuario não existe.'})
-            }
-            console.log(user.rows);
+            const users = await this.serviceInject.searchUsersAll()
             
-            return res.status(200).json({ userAll: user.rows, message: 'Success' })
+            return res.status(200).json({ userAll: users, message: 'Success' })
         } catch (error) {
             console.error('Error searchUserAll: ', error)
             next(error)

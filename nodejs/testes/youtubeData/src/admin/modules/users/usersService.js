@@ -5,8 +5,8 @@ class UsersService {
         this.usersRepositoryInject = usersRepositoryInject
     }
 
-    async searchUserAll() {
-        const user = await this.usersRepositoryInject.searchUserAll()
+    async searchUsersAll() {
+        const user = await this.usersRepositoryInject.searchUsersAll()
 
         if (!user) {
             throw new AppError('Usuario não existe.', 401)
