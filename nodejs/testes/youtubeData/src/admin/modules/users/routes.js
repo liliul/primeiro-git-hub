@@ -17,7 +17,7 @@ const tokenService = new TokenService(process.env.JWT_SECRET_ADMIN, expiresIn);
 
 const repository = new UsersRepository(db);
 const service = new UsersService(repository);
-const user = new UserController(db, service);
+const user = new UserController(service);
 
 const authenticate = authMiddleware(tokenService);
 
