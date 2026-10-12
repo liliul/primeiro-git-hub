@@ -11,7 +11,7 @@ class UsersRepository {
             google_users;
         `)
 
-        return result.rows[0] ?? null
+        return result.rows
     }
 
     async searchUserById(id) {
