@@ -10,9 +10,8 @@ class UserController {
         try {
             const users = await this.serviceInject.searchUsersAll()
             
-            return res.status(200).json({ userAll: users, message: 'Success' })
+            return res.status(200).json({ users, message: 'Success' })
         } catch (error) {
-            console.error('Error searchUsersAll: ', error)
             next(error)
         }
     }

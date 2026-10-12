@@ -8,10 +8,6 @@ class UsersService {
     async searchUsersAll() {
         const user = await this.usersRepositoryInject.searchUsersAll()
 
-        if (!user) {
-            throw new AppError('Usuario não existe.', 401)
-        }
-
         return user
     }
 
