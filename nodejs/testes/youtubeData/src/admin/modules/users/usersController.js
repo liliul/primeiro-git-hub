@@ -22,9 +22,8 @@ class UserController {
 
             const user = await this.serviceInject.searchUserById(id)
 
-            return res.status(200).json({ userId: user, message: 'Success' })
+            return res.status(200).json({ user, message: 'Success' })
         } catch (error) {
-            console.error('Error searchUserById: ', error)
             next(error)
         }
     }
