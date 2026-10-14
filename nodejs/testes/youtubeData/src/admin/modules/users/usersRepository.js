@@ -5,10 +5,11 @@ class UsersRepository {
 
     async searchUsersAll() {
         const result = await this.DBInject.query(`
-            select 
+            SELECT 
             id, sub, email, email_verified, name, given_name, family_name, picture, created_at 
-            from 
-            google_users;
+            From 
+            google_users 
+            ORDER BY created_at DESC;
         `)
 
         return result.rows
