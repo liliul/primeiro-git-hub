@@ -17,11 +17,11 @@ class UsersRepository {
 
     async searchUserById(id) {
         const result = await this.DBInject.query(` 
-            select 
+            SELECT 
             id, sub, email, email_verified, name, given_name, family_name, picture, created_at 
-            from 
+            FROM 
             google_users
-            where id = $1;`, [id]
+            WHERE id = $1;`, [id]
         )
 
         return result.rows[0] ?? null
