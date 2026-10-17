@@ -21,7 +21,7 @@ export async function authFetch(url, options = {}) {
         const refreshed = await refreshToken()
     
         if (!refreshed) {
-            window.location.href = "/"
+            window.location.href = "/admin/login"
             return null
         }
 
