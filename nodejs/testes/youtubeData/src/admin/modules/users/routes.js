@@ -24,4 +24,8 @@ const authenticate = authMiddleware(tokenService);
 routerUsers.get('/admin/users', ipLimiter, authenticate, requireRole('admin'), user.searchUsersAll);
 routerUsers.get('/admin/users/:id', ipLimiter, authenticate, requireRole('admin'), user.searchUserById);
 
+routerUsers.get('/admin-users', (req, res) => {
+    res.render('dashboard/pages/users')
+});
+
 export default routerUsers;
