@@ -3,6 +3,10 @@ import { authFetch } from "../core/authFetchAdmin.js";
 async function buscandoUsersGet() {
     const usersContainer = document.getElementById('users-container')
     
+    if (!usersContainer) return
+
+    usersContainer.textContent = 'Carregando'
+
     try {
         const users = await authFetch('/admin/users')
 
@@ -32,7 +36,7 @@ async function buscandoUsersGet() {
                     </div>
                 </div>
             `)
-        })
+        }).join("")
 
         usersContainer.innerHTML = usersMapHtml
         
