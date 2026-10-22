@@ -1,5 +1,7 @@
 import { authFetch } from "../core/authFetchAdmin.js";
 
+const searchUsersAll = document.getElementById('search-users')
+
 async function buscandoUsersGet() {
     const usersContainer = document.getElementById('users-container')
     
@@ -46,4 +48,4 @@ async function buscandoUsersGet() {
     }
 }
 
-buscandoUsersGet()
+searchUsersAll.addEventListener('click', buscandoUsersGet)
