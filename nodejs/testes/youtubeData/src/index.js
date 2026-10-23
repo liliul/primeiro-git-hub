@@ -19,6 +19,7 @@ import { errorHandler } from './middleware/errorHandler.js';
 import eventsRouter from './events/routes.js';
 import adminModulesRoutes from './admin/modules/routes.js';
 // import './node_cron/index.js'
+import expressLayouts from "express-ejs-layouts";
 
 const __dirname = path.resolve();
 
@@ -36,6 +37,9 @@ app.use(cookieParser());
 app.set("view engine", "ejs");
 app.set("views", path.join(process.cwd(), "views"));
 app.use(express.static(path.join(__dirname, "/public")));
+app.use(expressLayouts);
+
+app.set("layout", "dashboard/layouts/dashboard");
 
 app.use(routerHealth)
 app.use(routerAccount)
