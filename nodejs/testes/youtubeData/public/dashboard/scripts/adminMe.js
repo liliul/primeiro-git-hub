@@ -2,13 +2,14 @@ import { authFetch } from "../core/authFetchAdmin.js";
 
 const menuBtn = document.getElementById("menuBtn");
 const sidebar = document.getElementById("sidebar");
+const ulInfos = document.getElementById('ul-infos');
 
 menuBtn.addEventListener("click", () => {
     sidebar.classList.toggle("open");
 })
 
 async function me() {
-    const ulInfos = document.getElementById('ul-infos')
+    if (!ulInfos) return
 
     try {
         const me = await authFetch('/admin/me')
@@ -22,12 +23,23 @@ async function me() {
         
         if (!response?.me) {
             ulInfos.textContent = 'Erro na resposta do ME.'
+            return
         }
 
         const user = response.me
         console.log(user);
         
-        ulInfos.innerHTML = `
+        renderInfosAdminMenu(user)
+    } catch (error) {
+        console.error("Erro ao carregar admin/me: ", error)
+        ulInfos.textContent = 'Erro ao carregar informações do usuario.'
+    }
+}
+
+function renderInfosAdminMenu(user) {
+    ulInfos.replaceChildren()
+
+    ulInfos.innerHTML = `
             <div class="ul-infos-close">✕</div>
 
             <li class="li-infos">
@@ -70,10 +82,6 @@ async function me() {
         document.querySelector('.ul-infos-close').addEventListener('click', () => {
             document.querySelector('.sidebar').classList.remove('open')
         })
-    } catch (error) {
-        console.error("Erro ao carregar admin/me: ", error)
-        ulInfos.textContent = 'Erro ao carregar informações do usuario.'
-    }
 }
 
 me()
