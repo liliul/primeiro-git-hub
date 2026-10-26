@@ -21,11 +21,11 @@ const user = new UserController(service);
 
 const authenticate = authMiddleware(tokenService);
 
-routerUsers.get('/admin/users', ipLimiter, authenticate, requireRole('admin'), user.searchUsersAll);
-routerUsers.get('/admin/users/:id', ipLimiter, authenticate, requireRole('admin'), user.searchUserById);
+routerUsers.get('/api/admin/users', ipLimiter, authenticate, requireRole('admin'), user.searchUsersAll);
+routerUsers.get('/api/admin/users/:id', ipLimiter, authenticate, requireRole('admin'), user.searchUserById);
 
-routerUsers.get('/admin-users', (req, res) => {
-    res.render('dashboard/pages/users')
+routerUsers.get('/admin/users', (req, res) => {
+    res.render('dashboard/layouts/dashboard')
 });
 
 export default routerUsers;
