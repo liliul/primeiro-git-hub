@@ -42,7 +42,7 @@ routerAuth.get("/admin/login", ipLimiter, guest, (req, res) => {
 //   requireRole('admin')
 // )
 
-routerAuth.get('/admin', (req, res) => {
+routerAuth.get('/admin/home', (req, res) => {
   res.render("dashboard/layouts/dashboard")
 })
 routerAuth.get("/admin/user", ipLimiter, (req, res) => {
