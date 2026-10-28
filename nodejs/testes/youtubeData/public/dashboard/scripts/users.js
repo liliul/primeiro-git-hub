@@ -1,10 +1,10 @@
 import { authFetch } from "../core/authFetchAdmin.js";
 import { PersistRoute } from "../core/persistRoute.js";
 
-const searchUsersAll = document.getElementById('search-users')
+const searchUsersAll = document.getElementById('search-users');
+const usersContainer = document.getElementById('users-content-container');
 
 async function buscandoUsersGet() {
-    const usersContainer = document.getElementById('users-container')
     
     if (!usersContainer) return
 
@@ -26,7 +26,13 @@ async function buscandoUsersGet() {
         }
 
         console.log(response.users);
+
         usersContainer.replaceChildren()
+
+        const h1 = document.createElement('h1')
+        h1.textContent = 'Usuario no sistema.'
+        const p = document.createElement('p')
+        p.textContent = 'Buscando Usuarios no sistema.'
 
         const usersCardContainerDiv = document.createElement('div')
         usersCardContainerDiv.className = 'users-card-container'
@@ -45,6 +51,7 @@ async function buscandoUsersGet() {
             `)
         }).join("")
 
+        usersContainer.append(h1, p)
         usersCardContainerDiv.innerHTML = usersMapHtml
         usersContainer.appendChild(usersCardContainerDiv)
         
