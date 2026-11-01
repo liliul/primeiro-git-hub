@@ -1,5 +1,12 @@
 import { randomUUID } from "node:crypto";
 import { writeFile, readFile } from "node:fs/promises";
+import { createInterface } from "node:readline/promises";
+import { stdin, stdout } from "node:process";
+
+const terminal = createInterface({
+    input: stdin,
+    output: stdout
+});
 
 type Pedido = {
     id: string;
@@ -10,22 +17,10 @@ type Pedido = {
 interface RepositorioPedidos {
     salvar(pedido: Pedido): Promise<void>;
     buscar(id: string): Promise<Pedido | null>;
+    buscarTodos(): Promise<Pedido[]>;
 }
 
 const dbpedidos: Pedido[] = [];
-
-class pedidosService {
-    constructor(private repositorio: RepositorioPedidos) {
-    }
-
-    async create(pedido: Pedido): Promise<void> {
-        await this.repositorio.salvar(pedido);
-    }
-
-    async buscarPedido(id: string): Promise<Pedido | null> {
-        return this.repositorio.buscar(id);
-    }
-}
 
 class pedidosRepository implements RepositorioPedidos {
     async salvar(pedido: Pedido): Promise<void> {
@@ -39,6 +34,29 @@ class pedidosRepository implements RepositorioPedidos {
 
         return JSON.parse(data).find((p: {id: string}) => p.id === id) || null;
     }
+
+    async buscarTodos(): Promise<Pedido[]> {
+        const data = await readFile('./database/dbpedidos.json', 'utf-8');
+
+        return JSON.parse(data);
+    }
+}
+
+class pedidosService {
+    constructor(private repositorio: RepositorioPedidos) {
+    }
+
+    async create(pedido: Pedido): Promise<void> {
+        await this.repositorio.salvar(pedido);
+    }
+
+    async buscarPedido(id: string): Promise<Pedido | null> {
+        return this.repositorio.buscar(id);
+    }
+
+    async buscarTodosPedidos(): Promise<Pedido[]> {
+        return this.repositorio.buscarTodos();
+    }
 }
 
 async function main() {
@@ -46,10 +64,10 @@ async function main() {
     const service = new pedidosService(repositorio);
     const uuid = randomUUID();
     
-    await service.create({ id: uuid, item: 'Produto A', quantidade: 2 });
+    // await service.create({ id: uuid, item: 'Produto A', quantidade: 2 });
     // await service.create({ id: randomUUID(), item: 'Produto B', quantidade: 5 });
     
-    console.log('Buscando: ', await service.buscarPedido(uuid));
+    console.log('Buscando: ', await service.buscarTodosPedidos());
     // console.log(dbpedidos);
 }
 
