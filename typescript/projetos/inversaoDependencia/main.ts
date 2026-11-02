@@ -59,19 +59,56 @@ class pedidosService {
     }
 }
 
+class pedidosController {
+    constructor(private service: pedidosService) {
+    }
+
+    async criarPedido() {
+        const item = await terminal.question('Digite o nome do item: ');
+        const quantidade = await terminal.question('Digite a quantidade: ');
+
+        const pedido: Pedido = {
+            id: randomUUID(),
+            item,
+            quantidade: parseInt(quantidade)
+        };
+
+        await this.service.create(pedido);
+        console.log('Pedido criado com sucesso!');
+    }
+
+    async buscarPedido() {
+        const id = await terminal.question('Digite o ID do pedido: ');
+        const pedido = await this.service.buscarPedido(id);
+
+        if (pedido) {
+            console.log('Pedido encontrado:', pedido);
+        } else {
+            console.log('Pedido não encontrado.');
+        }
+    }
+
+    async listarPedidos() {
+        const pedidos = await this.service.buscarTodosPedidos();
+        console.log('Todos os pedidos:', pedidos);
+    }
+}
+
 async function main() {
     const repositorio = new pedidosRepository();
     const service = new pedidosService(repositorio);
-    const uuid = randomUUID();
+    const controller = new pedidosController(service);
+    // const uuid = randomUUID();
     
     // await service.create({ id: uuid, item: 'Produto A', quantidade: 2 });
     // await service.create({ id: randomUUID(), item: 'Produto B', quantidade: 5 });
     
+    await controller.criarPedido();
+    
     console.log('Buscando: ', await service.buscarTodosPedidos());
     // console.log(dbpedidos);
 }
-
-// await main();
-for (let i = 0; i < 5; i++) {
-    await main();
-}
+await main();
+// for (let i = 0; i < 5; i++) {
+//     await main();
+// }
