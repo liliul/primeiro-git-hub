@@ -20,13 +20,24 @@ interface RepositorioPedidos {
     buscarTodos(): Promise<Pedido[]>;
 }
 
-const dbpedidos: Pedido[] = [];
-
 class pedidosRepository implements RepositorioPedidos {
     async salvar(pedido: Pedido): Promise<void> {
-        console.log('Salvando pedido no banco de dados...', pedido);
-        dbpedidos.push(pedido);
-        await writeFile('./database/dbpedidos.json', JSON.stringify([...dbpedidos, pedido], null, 2));
+        console.log('Salvando pedido no banco de dados...');
+        let pedidos: Pedido[];
+
+        try {
+            const data = await readFile('./database/dbpedidos.json', 'utf-8');
+            pedidos = JSON.parse(data);
+        } catch (error) {
+            if (error instanceof Error && 'code' in error && error.code === 'ENOENT') {
+                pedidos = [];
+            } else {
+                throw error;
+            }
+        }
+
+        pedidos.push(pedido);
+        await writeFile('./database/dbpedidos.json', JSON.stringify(pedidos, null, 2));
     }
 
     async buscar(id: string): Promise<Pedido | null> {
