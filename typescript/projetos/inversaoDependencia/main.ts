@@ -20,7 +20,18 @@ interface RepositorioPedidos {
     buscarTodos(): Promise<Pedido[]>;
 }
 
-class pedidosRepository implements RepositorioPedidos {
+interface ServicoPedidos {
+    create(pedido: Pedido): Promise<void>;
+    buscarPedido(id: string): Promise<Pedido | null>;
+    buscarTodosPedidos(): Promise<Pedido[]>;
+}
+
+interface Terminal {
+    question(pergunta: string): Promise<string>;
+    close(): void;
+}
+
+class JsonPedidosRepository implements RepositorioPedidos {
     async salvar(pedido: Pedido): Promise<void> {
         console.log('Salvando pedido no banco de dados...');
         let pedidos: Pedido[];
@@ -53,7 +64,7 @@ class pedidosRepository implements RepositorioPedidos {
     }
 }
 
-class pedidosService {
+class PedidosService implements ServicoPedidos {
     constructor(private repositorio: RepositorioPedidos) {
     }
 
@@ -70,13 +81,16 @@ class pedidosService {
     }
 }
 
-class pedidosController {
-    constructor(private service: pedidosService) {
+class PedidosController {
+    constructor(
+        private service: ServicoPedidos,
+        private terminal: Terminal
+    ) {
     }
 
     async criarPedido() {
-        const item = await terminal.question('Digite o nome do item: ');
-        const quantidade = await terminal.question('Digite a quantidade: ');
+        const item = await this.terminal.question('Digite o nome do item: ');
+        const quantidade = await this.terminal.question('Digite a quantidade: ');
 
         const pedido: Pedido = {
             id: randomUUID(),
@@ -86,10 +100,11 @@ class pedidosController {
 
         await this.service.create(pedido);
         console.log('Pedido criado com sucesso!');
+        this.terminal.close();
     }
 
     async buscarPedido() {
-        const id = await terminal.question('Digite o ID do pedido: ');
+        const id = await this.terminal.question('Digite o ID do pedido: ');
         const pedido = await this.service.buscarPedido(id);
 
         if (pedido) {
@@ -97,27 +112,30 @@ class pedidosController {
         } else {
             console.log('Pedido não encontrado.');
         }
+        this.terminal.close();
     }
 
     async listarPedidos() {
         const pedidos = await this.service.buscarTodosPedidos();
         console.log('Todos os pedidos:', pedidos);
+        this.terminal.close();
     }
 }
 
 async function main() {
-    const repositorio = new pedidosRepository();
-    const service = new pedidosService(repositorio);
-    const controller = new pedidosController(service);
+    const repositorio = new JsonPedidosRepository();
+    const service = new PedidosService(repositorio);
+    const controller = new PedidosController(service, terminal);
     // const uuid = randomUUID();
     
     // await service.create({ id: uuid, item: 'Produto A', quantidade: 2 });
     // await service.create({ id: randomUUID(), item: 'Produto B', quantidade: 5 });
     
-    await controller.criarPedido();
+    // await controller.criarPedido();
+    // await controller.buscarPedido();
+    await controller.listarPedidos();
     
-    console.log('Buscando: ', await service.buscarTodosPedidos());
-    // console.log(dbpedidos);
+    // console.log('Buscando: ', await service.buscarTodosPedidos());
 }
 await main();
 // for (let i = 0; i < 5; i++) {
