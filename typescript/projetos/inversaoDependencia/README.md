@@ -1,23 +1,45 @@
 # inversaodependencia
 
-To install dependencies:
+Exemplo de inversão de dependência com repositórios de pedidos em JSON e MongoDB.
+O schema Mongoose grava os pedidos na coleção `pedidos`.
+
+Instale as dependências:
 
 ```bash
 bun install
 ```
 
-To run:
+Configure a conexão com o MongoDB e execute:
 
 ```bash
-bun run 
-```
+## criando mongoDB
 
-To type check:
+docker run -d \
+  --name mongotestes \
+  -p 27017:27017 \
+  -e MONGO_INITDB_ROOT_USERNAME=admin \
+  -e MONGO_INITDB_ROOT_PASSWORD=admin \
+  -v mongodb_pedidos:/data/db \
+  mongo:7.0
+
+## entrar no mongoDB
+
+docker exec -it mongotestes mongosh -u admin -p admin --authenticationDatabase admin
+
+## criar banco
+
+use pedidos
+```
 
 ```bash
-bun check
+## criar .env
+MONGODB_URI="mongodb://admin:admin@localhost:27017/pedidos?authSource=admin";
+
+bun run main.ts
 ```
 
-Run `bun fmt` to format the code.
+Verifique os tipos:
 
-This project was created using `bun init` in bun v1.4.4. [Bun](https://bun.com) is a fast all-in-one JavaScript runtime.
+```bash
+bun run typecheck
+```

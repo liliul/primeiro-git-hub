@@ -9,5 +9,8 @@
   },
   "peerDependencies": {
     "typescript": "^7"
+  },
+  "dependencies": {
+    "mongoose": "^9.11.4"
   }
 }
