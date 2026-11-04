@@ -31,6 +31,22 @@ interface Terminal {
     close(): void;
 }
 
+class MongoDbPedidosRepository implements RepositorioPedidos {
+    async salvar(pedido: Pedido): Promise<void> {
+        console.log('Salvando pedido no MongoDB...');
+    }
+
+    async buscar(id: string): Promise<Pedido | null> {
+        console.log('Buscando pedido no MongoDB...');
+        return null;
+    }
+
+    async buscarTodos(): Promise<Pedido[]> {
+        console.log('Buscando todos os pedidos no MongoDB...');
+        return [];
+    }
+}
+
 class JsonPedidosRepository implements RepositorioPedidos {
     async salvar(pedido: Pedido): Promise<void> {
         console.log('Salvando pedido no banco de dados...');
@@ -123,7 +139,8 @@ class PedidosController {
 }
 
 async function main() {
-    const repositorio = new JsonPedidosRepository();
+    // const repositorio = new JsonPedidosRepository();
+    const repositorio = new MongoDbPedidosRepository();
     const service = new PedidosService(repositorio);
     const controller = new PedidosController(service, terminal);
     // const uuid = randomUUID();
@@ -131,9 +148,9 @@ async function main() {
     // await service.create({ id: uuid, item: 'Produto A', quantidade: 2 });
     // await service.create({ id: randomUUID(), item: 'Produto B', quantidade: 5 });
     
-    // await controller.criarPedido();
+    await controller.criarPedido();
     // await controller.buscarPedido();
-    await controller.listarPedidos();
+    // await controller.listarPedidos();
     
     // console.log('Buscando: ', await service.buscarTodosPedidos());
 }
