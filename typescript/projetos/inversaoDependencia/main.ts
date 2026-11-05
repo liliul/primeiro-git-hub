@@ -2,6 +2,7 @@ import { randomUUID } from "node:crypto";
 import { writeFile, readFile } from "node:fs/promises";
 import { createInterface } from "node:readline/promises";
 import { stdin, stdout } from "node:process";
+import { connect, disconnect, model, Schema } from "mongoose";
 
 const terminal = createInterface({
     input: stdin,
@@ -31,19 +32,39 @@ interface Terminal {
     close(): void;
 }
 
+const pedidoSchema = new Schema<Pedido>({
+    id: { type: String, required: true, unique: true, immutable: true },
+    item: { type: String, required: true, trim: true },
+    quantidade: {
+        type: Number,
+        required: true,
+        min: 1,
+        validate: {
+            validator: Number.isInteger,
+            message: 'A quantidade deve ser um número inteiro.'
+        }
+    }
+}, { versionKey: false });
+
+const PedidoModel = model<Pedido>("Pedido", pedidoSchema, "pedidos");
+
 class MongoDbPedidosRepository implements RepositorioPedidos {
     async salvar(pedido: Pedido): Promise<void> {
-        console.log('Salvando pedido no MongoDB...');
+        await PedidoModel.create(pedido);
     }
 
     async buscar(id: string): Promise<Pedido | null> {
-        console.log('Buscando pedido no MongoDB...');
-        return null;
+        return PedidoModel.findOne({ id })
+            .select({ _id: 0 })
+            .lean<Pedido>()
+            .exec();
     }
 
     async buscarTodos(): Promise<Pedido[]> {
-        console.log('Buscando todos os pedidos no MongoDB...');
-        return [];
+        return PedidoModel.find()
+            .select({ _id: 0 })
+            .lean<Pedido[]>()
+            .exec();
     }
 }
 
@@ -116,7 +137,6 @@ class PedidosController {
 
         await this.service.create(pedido);
         console.log('Pedido criado com sucesso!');
-        this.terminal.close();
     }
 
     async buscarPedido() {
@@ -128,31 +148,32 @@ class PedidosController {
         } else {
             console.log('Pedido não encontrado.');
         }
-        this.terminal.close();
     }
 
     async listarPedidos() {
         const pedidos = await this.service.buscarTodosPedidos();
         console.log('Todos os pedidos:', pedidos);
-        this.terminal.close();
     }
 }
 
 async function main() {
-    // const repositorio = new JsonPedidosRepository();
-    const repositorio = new MongoDbPedidosRepository();
-    const service = new PedidosService(repositorio);
-    const controller = new PedidosController(service, terminal);
-    // const uuid = randomUUID();
-    
-    // await service.create({ id: uuid, item: 'Produto A', quantidade: 2 });
-    // await service.create({ id: randomUUID(), item: 'Produto B', quantidade: 5 });
-    
-    await controller.criarPedido();
-    // await controller.buscarPedido();
-    // await controller.listarPedidos();
-    
-    // console.log('Buscando: ', await service.buscarTodosPedidos());
+    try {
+        const mongoUri = process.env.MONGODB_URI;
+        if (!mongoUri) {
+            throw new Error('Defina a variável de ambiente MONGODB_URI para conectar ao MongoDB.');
+        }
+
+        await connect(mongoUri);
+        const repositorio = new MongoDbPedidosRepository();
+        const service = new PedidosService(repositorio);
+        const controller = new PedidosController(service, terminal);
+
+        // await controller.criarPedido();
+        await controller.listarPedidos();
+    } finally {
+        await disconnect();
+        terminal.close();
+    }
 }
 await main();
 // for (let i = 0; i < 5; i++) {
