@@ -15,16 +15,20 @@ type Pedido = {
     quantidade: number;
 }
 
+type AtualizacaoPedido = Partial<Pick<Pedido, "item" | "quantidade">>;
+
 interface RepositorioPedidos {
     salvar(pedido: Pedido): Promise<void>;
     buscar(id: string): Promise<Pedido | null>;
     buscarTodos(): Promise<Pedido[]>;
+    atualizar(id: string, atualizacao: AtualizacaoPedido): Promise<Pedido | null>;
 }
 
 interface ServicoPedidos {
     create(pedido: Pedido): Promise<void>;
     buscarPedido(id: string): Promise<Pedido | null>;
     buscarTodosPedidos(): Promise<Pedido[]>;
+    atualizarPedido(id: string, atualizacao: AtualizacaoPedido): Promise<Pedido | null>;
 }
 
 interface Terminal {
@@ -66,6 +70,17 @@ class MongoDbPedidosRepository implements RepositorioPedidos {
             .lean<Pedido[]>()
             .exec();
     }
+
+    async atualizar(id: string, atualizacao: AtualizacaoPedido): Promise<Pedido | null> {
+        return PedidoModel.findOneAndUpdate(
+            { id },
+            { $set: atualizacao },
+            { returnDocument: "after", runValidators: true }
+        )
+            .select({ _id: 0 })
+            .lean<Pedido>()
+            .exec();
+    }
 }
 
 class JsonPedidosRepository implements RepositorioPedidos {
@@ -99,6 +114,20 @@ class JsonPedidosRepository implements RepositorioPedidos {
 
         return JSON.parse(data);
     }
+
+    async atualizar(id: string, atualizacao: AtualizacaoPedido): Promise<Pedido | null> {
+        const data = await readFile('./database/dbpedidos.json', 'utf-8');
+        const pedidos: Pedido[] = JSON.parse(data);
+        const pedido = pedidos.find((p) => p.id === id);
+
+        if (!pedido) {
+            return null;
+        }
+
+        Object.assign(pedido, atualizacao);
+        await writeFile('./database/dbpedidos.json', JSON.stringify(pedidos, null, 2));
+        return pedido;
+    }
 }
 
 class PedidosService implements ServicoPedidos {
@@ -115,6 +144,10 @@ class PedidosService implements ServicoPedidos {
 
     async buscarTodosPedidos(): Promise<Pedido[]> {
         return this.repositorio.buscarTodos();
+    }
+
+    async atualizarPedido(id: string, atualizacao: AtualizacaoPedido): Promise<Pedido | null> {
+        return this.repositorio.atualizar(id, atualizacao);
     }
 }
 
@@ -153,6 +186,27 @@ class PedidosController {
     async listarPedidos() {
         const pedidos = await this.service.buscarTodosPedidos();
         console.log('Todos os pedidos:', pedidos);
+    }
+
+    async atualizarPedido() {
+        const id = await this.terminal.question('Digite o ID do pedido a ser atualizado: ');
+        const item = await this.terminal.question('Digite o novo nome do item (ou pressione Enter para manter o atual): ');
+        const quantidadeStr = await this.terminal.question('Digite a nova quantidade (ou pressione Enter para manter a atual): ');
+
+        const atualizacao: AtualizacaoPedido = {};
+        if (item) {
+            atualizacao.item = item;
+        }
+        if (quantidadeStr) {
+            atualizacao.quantidade = parseInt(quantidadeStr);
+        }
+
+        const pedidoAtualizado = await this.service.atualizarPedido(id, atualizacao);
+        if (pedidoAtualizado) {
+            console.log('Pedido atualizado com sucesso:', pedidoAtualizado);
+        } else {
+            console.log('Pedido não encontrado.');
+        }
     }
 }
 
